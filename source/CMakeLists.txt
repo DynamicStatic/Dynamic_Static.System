@@ -5,6 +5,7 @@ set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
 set(INCLUDE_FILES
     ${INCLUDE_PATH}/Application.hpp
     ${INCLUDE_PATH}/Defines.hpp
+    ${INCLUDE_PATH}/GLInclude.hpp
     ${INCLUDE_PATH}/Monitor.hpp
     ${INCLUDE_PATH}/Object.hpp
     ${INCLUDE_PATH}/Resolution.hpp

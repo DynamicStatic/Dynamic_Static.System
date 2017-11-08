@@ -9,7 +9,7 @@
 
 #include "Dynamic_Static/Core/Algorithm.hpp"
 #include "Dynamic_Static/System/Window.hpp"
-// #include "Dynamic_Static/System/OpenGL/GLEWInclude.hpp"
+#include "Dynamic_Static/System/GLInclude.hpp"
 #include "GLFWInclude.hpp"
 
 #include <iostream>
@@ -272,13 +272,13 @@ namespace System {
             if (!sGLEWInitialized) {
                 glfwMakeContextCurrent(handle);
                 #if defined(DYNAMIC_STATIC_WINDOWS)
-                // glewExperimental = true;
-                // auto error = glewInit();
-                // if (error) {
-                //     destroy_glfw_window(handle);
-                //     // TODO : Get error for exception...
-                //     throw std::runtime_error("Failed to initialize GLEW");
-                // }
+                glewExperimental = true;
+                auto error = glewInit();
+                if (error) {
+                    destroy_glfw_window(handle);
+                    // TODO : Get error for exception...
+                    throw std::runtime_error("Failed to initialize GLEW");
+                }
                 #endif
 
                 sGLEWInitialized = true;
