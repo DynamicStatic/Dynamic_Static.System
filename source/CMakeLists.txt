@@ -31,6 +31,8 @@ if (MSVC)
     )
 
     set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
+        glu32.lib
+        opengl32.lib
         ${glew.LIBRARY}
     )
 else()
