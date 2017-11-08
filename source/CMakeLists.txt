@@ -42,9 +42,9 @@ else()
     )
 endif()
 
-set(TARGET Dynamic_Static.Graphics)
+set(TARGET Dynamic_Static.System)
 add_library(${TARGET} ${INCLUDE_FILES} ${SOURCE_FILES})
-set_target_properties(Dynamic_Static.Graphics PROPERTIES PREFIX "")
+set_target_properties(Dynamic_Static.System PROPERTIES PREFIX "")
 # TODO : Why doesn't transitive linking work when we let CMake auto link and include Dynamic_Static.Core?
 #        It's OK to do it explicitly for now, but this will need to be addressed sooner or later.
 # NOTE : This comment is duplicated in Dynamic_Static.Core.cmake
@@ -53,7 +53,7 @@ set_target_properties(Dynamic_Static.Graphics PROPERTIES PREFIX "")
         ${TARGET}
         PUBLIC ${PROJECT_SOURCE_DIR}/include/
         PUBLIC ${Dynamic_Static.Core.INCLUDE}
-        PUBLIC ${GLFW.INCLUDE}
+        PUBLIC ${glfw.INCLUDE}
     )
 
     # TODO : It's super annoying that order matters for listing link dependencies here...
@@ -62,13 +62,13 @@ set_target_properties(Dynamic_Static.Graphics PROPERTIES PREFIX "")
         PUBLIC ${SYSTEM_INSTALL_DEPENDENCIES}
         # PUBLIC Dynamic_Static.Core
         PUBLIC ${Dynamic_Static.Core.LIBRARY}
-        PUBLIC ${GLFW.LIBRARY}
+        PUBLIC ${glfw.LIBRARY}
         PUBLIC ${SYSTEM_INSTALL_DEPENDENCIES}
     )
 
     # add_dependencies(${TARGET} Dynamic_Static.Core)
     add_dependencies(${TARGET} Dynamic_Static.Core.package)
-    add_dependencies(${TARGET} GLFW)
+    add_dependencies(${TARGET} glfw)
 
     export(
         TARGETS ${TARGET}

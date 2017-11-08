@@ -9,7 +9,7 @@
 
 #include "Dynamic_Static/Core/Algorithm.hpp"
 #include "Dynamic_Static/System/Window.hpp"
-#include "Dynamic_Static/System/OpenGL/GLEWInclude.hpp"
+// #include "Dynamic_Static/System/OpenGL/GLEWInclude.hpp"
 #include "GLFWInclude.hpp"
 
 #include <iostream>
