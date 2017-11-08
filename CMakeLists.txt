@@ -41,6 +41,7 @@ endfunction()
 
 include(ExternalProject)
 include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
+include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
 
 add_subdirectory("source/")

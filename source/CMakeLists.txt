@@ -25,10 +25,18 @@ create_file_group("${INCLUDE_FILES}")
 create_file_group("${SOURCE_FILES}")
 
 if (MSVC)
-    set(SYSTEM_INSTALL_DEPENDENCIES
+    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
+        ${glew.INCLUDE}
+    )
+
+    set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
     )
 else()
-    set(SYSTEM_INSTALL_DEPENDENCIES
+    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
+        ${glew.LIBRARY}
+    )
+
+    set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
         EGL
         X11
         Xcursor
@@ -51,6 +59,7 @@ set_target_properties(Dynamic_Static.System PROPERTIES PREFIX "")
 # if (EXISTS ${Dynamic_Static.Core.PACKAGE})
     target_include_directories(
         ${TARGET}
+        PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
         PUBLIC ${PROJECT_SOURCE_DIR}/include/
         PUBLIC ${Dynamic_Static.Core.INCLUDE}
         PUBLIC ${glfw.INCLUDE}
@@ -59,11 +68,11 @@ set_target_properties(Dynamic_Static.System PROPERTIES PREFIX "")
     # TODO : It's super annoying that order matters for listing link dependencies here...
     target_link_libraries(
         ${TARGET}
-        PUBLIC ${SYSTEM_INSTALL_DEPENDENCIES}
+        PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
         # PUBLIC Dynamic_Static.Core
         PUBLIC ${Dynamic_Static.Core.LIBRARY}
         PUBLIC ${glfw.LIBRARY}
-        PUBLIC ${SYSTEM_INSTALL_DEPENDENCIES}
+        PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
     )
 
     # add_dependencies(${TARGET} Dynamic_Static.Core)
