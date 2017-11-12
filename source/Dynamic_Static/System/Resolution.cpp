@@ -10,6 +10,7 @@
 #include "Dynamic_Static/System/Resolution.hpp"
 
 namespace Dynamic_Static {
+namespace System {
 
     float Resolution::aspect_ratio() const
     {
@@ -23,4 +24,5 @@ namespace Dynamic_Static {
         return std::to_string(width) + " x " + std::to_string(height);
     }
 
+} // namespace System
 } // namespace Dynamic_Static

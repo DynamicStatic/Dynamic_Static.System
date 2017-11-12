@@ -14,6 +14,7 @@
 #include <string>
 
 namespace Dynamic_Static {
+namespace System {
 
     /**
      * Represents a width and height.
@@ -38,4 +39,5 @@ namespace Dynamic_Static {
         std::string to_string() const;
     };
 
+} // namespace System
 } // namespace Dynamic_Static
