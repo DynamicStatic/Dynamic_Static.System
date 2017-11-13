@@ -41,6 +41,7 @@ else()
 
     set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
         EGL
+        GL
         X11
         Xcursor
         Xi
