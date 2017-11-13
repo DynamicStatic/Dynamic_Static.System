@@ -16,4 +16,12 @@
     #define GLEW_STATIC
     #endif
     #include "GL/glew.h"
+#elif DYNAMIC_STATIC_LINUX
+    #ifndef GLFW_INCLUDE_GLCOREARB
+    #define GLFW_INCLUDE_GLCOREARB
+    #endif
+    #ifndef GL_GLEXT_PROTOTYPES
+    #define GL_GLEXT_PROTOTYPES
+    #endif
+    #include "GLFW/glfw3.h"
 #endif
