@@ -3,9 +3,12 @@
 
 set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
 set(INCLUDE_FILES
+    ${INCLUDE_PATH}/Input/Keyboard.hpp
+    ${INCLUDE_PATH}/Input/Mouse.hpp
     ${INCLUDE_PATH}/Application.hpp
     ${INCLUDE_PATH}/Defines.hpp
     ${INCLUDE_PATH}/GLInclude.hpp
+    ${INCLUDE_PATH}/Input.hpp
     ${INCLUDE_PATH}/Monitor.hpp
     ${INCLUDE_PATH}/Object.hpp
     ${INCLUDE_PATH}/Resolution.hpp
@@ -14,6 +17,10 @@ set(INCLUDE_FILES
 
 set(SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Dynamic_Static/System)
 set(SOURCE_FILES
+    ${SOURCE_PATH}/Input/Input.cpp
+    ${SOURCE_PATH}/Input/Input.Manager.cpp
+    ${SOURCE_PATH}/Input/Keyboard.cpp
+    ${SOURCE_PATH}/Input/Mouse.cpp
     ${SOURCE_PATH}/Application.cpp
     ${SOURCE_PATH}/GLFWInclude.hpp
     ${SOURCE_PATH}/Monitor.cpp
