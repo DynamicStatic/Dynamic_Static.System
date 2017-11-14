@@ -52,15 +52,15 @@ namespace System {
         shutdown();
     }
 
-    void Application::pre_update(const dst::Clock& clock, const dst::Input& input)
+    void Application::pre_update(const dst::Clock& clock, const Input& input)
     {
     }
 
-    void Application::update(const dst::Clock& clock, const dst::Input& input)
+    void Application::update(const dst::Clock& clock, const Input& input)
     {
     }
 
-    void Application::post_update(const dst::Clock& clock, const dst::Input& input)
+    void Application::post_update(const dst::Clock& clock, const Input& input)
     {
     }
 

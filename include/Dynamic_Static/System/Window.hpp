@@ -11,11 +11,11 @@
 
 #include "Dynamic_Static/Core/Callback.hpp"
 #include "Dynamic_Static/Core/Defines.hpp"
-#include "Dynamic_Static/Core/Input.hpp"
 #include "Dynamic_Static/Core/Object.hpp"
 #include "Dynamic_Static/Core/Version.hpp"
 #include "Dynamic_Static/Core/Math/Vector2.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
+#include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Resolution.hpp"
 
 #if defined(DYNAMIC_STATIC_LINUX)

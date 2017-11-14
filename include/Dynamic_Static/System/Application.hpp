@@ -10,10 +10,10 @@
 #pragma once
 
 #include "Dynamic_Static/Core/Time.hpp"
-#include "Dynamic_Static/Core/Input.hpp"
 #include "Dynamic_Static/Core/Object.hpp"
 #include "Dynamic_Static/Core/Version.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
+#include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Window.hpp"
 
 #include <memory>
@@ -61,17 +61,17 @@ namespace System {
         /**
          * TODO : Documentation.
          */
-        virtual void pre_update(const dst::Clock& clock, const dst::Input& input);
+        virtual void pre_update(const dst::Clock& clock, const Input& input);
 
         /**
          * TODO : Documentation.
          */
-        virtual void update(const dst::Clock& clock, const dst::Input& input);
+        virtual void update(const dst::Clock& clock, const Input& input);
 
         /**
          * TODO : Documentation.
          */
-        virtual void post_update(const dst::Clock& clock, const dst::Input& input);
+        virtual void post_update(const dst::Clock& clock, const Input& input);
 
         /**
          * TODO : Documentation.
