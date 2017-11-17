@@ -19,9 +19,9 @@ ExternalProject_Add(
 
 ExternalProject_Get_Property(glfw SOURCE_DIR)
 ExternalProject_Get_Property(glfw BINARY_DIR)
-set(glfw.INCLUDE "${SOURCE_DIR}/include/")
+set(glfw.include "${SOURCE_DIR}/include/")
 if (MSVC)
-    set(glfw.LIBRARY "${BINARY_DIR}/src/$(Configuration)/glfw3.lib")
+    set(glfw.library "${BINARY_DIR}/src/$(Configuration)/glfw3.lib")
 else()
-    set(glfw.LIBRARY "${BINARY_DIR}/src/libglfw3.a")
+    set(glfw.library "${BINARY_DIR}/src/libglfw3.a")
 endif()

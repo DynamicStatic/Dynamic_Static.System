@@ -1,10 +1,10 @@
 
 ################################################################################
 include(CheckCXXCompilerFlag)
-function(dst_set_cxx_flag CXX_FLAG)
-    CHECK_CXX_COMPILER_FLAG(CXX_FLAG CXX_FLAG_AVAILABLE)
+function(dst_set_cxx_flag cxxFlag)
+    CHECK_CXX_COMPILER_FLAG(cxxFlag CXX_FLAG_AVAILABLE)
     if (CXX_FLAG_AVAILABLE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} CXX_FLAG")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} cxxFlag")
     endif()
 endfunction()
 ################################################################################
@@ -106,7 +106,28 @@ function(dst_create_shared_library includeFiles sourceFiles)
     )
 endfunction()
 ################################################################################
-macro(dst_install_library)
+macro(dst_list_include_directories)
+    get_property(
+        includeDirectories
+        TARGET ${CMAKE_PROJECT_NAME}
+        PROPERTY INCLUDE_DIRECTORIES
+    )
+
+    message("${CMAKE_PROJECT_NAME} include directories")
+    foreach(includeDirectory ${includeDirectories})
+        message("    ${includeDirectory}")
+    endforeach()
+endmacro()
+################################################################################
+macro(dst_install_library includeDirectories)
+    set(packageDirectory "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/")
+    foreach(includeDirectory ${includeDirectories})
+        install(
+            DIRECTORY "${includeDirectory}"
+            DESTINATION "${packageDirectory}/include/"
+        )
+    endforeach()
+
     get_property(
         addtionalIncludeDirectories
         TARGET ${CMAKE_PROJECT_NAME}
@@ -116,20 +137,15 @@ macro(dst_install_library)
     foreach(additionalIncludeDirectory ${addtionalIncludeDirectories})
         install(
             DIRECTORY "${additionalIncludeDirectory}"
-            DESTINATION "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/include/"
+            DESTINATION "${packageDirectory}/include/"
         )
     endforeach()
 
-    if (MSVC)
-        install(
-            TARGETS ${CMAKE_PROJECT_NAME}
-            RUNTIME DESTINATION "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/bin/"
-        )
-    else()
-        install(
-            TARGETS ${CMAKE_PROJECT_NAME}
-            LIBRARY DESTINATION "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/bin/"
-        )
-    endif()
+    install(
+        TARGETS ${CMAKE_PROJECT_NAME}
+        ARCHIVE DESTINATION "${packageDirectory}/lib/"
+        LIBRARY DESTINATION "${packageDirectory}/bin/"
+        RUNTIME DESTINATION "${packageDirectory}/bin/"
+    )
 endmacro()
 ################################################################################

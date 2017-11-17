@@ -11,20 +11,25 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
 )
 
-# # NOTE : We're setting up the INCLUDE and LIBRARY variables for dst::core because without the INCLUDE
-# #        it won't get added to the build target's INCLUDE_DIRECTORIES property...super annoying.
-# # NOTE : There's a comment with some more detail in source/CMakeLists.txt.
-# ExternalProject_Get_Property(Dynamic_Static.Core.package BINARY_DIR)
-# set(Dynamic_Static.Core.PACKAGE ${BINARY_DIR}/Dynamic_Static.Core.package.cmake)
-# if (EXISTS ${Dynamic_Static.Core.PACKAGE})
-#     include(${Dynamic_Static.Core.PACKAGE})
-# endif()
-
-ExternalProject_Get_Property(Dynamic_Static.Core.package SOURCE_DIR)
+# NOTE : We're setting up the INCLUDE and LIBRARY variables for dst::core because without the INCLUDE
+#        it won't get added to the build target's INCLUDE_DIRECTORIES property...super annoying.
+# NOTE : There's a comment with some more detail in source/CMakeLists.txt.
 ExternalProject_Get_Property(Dynamic_Static.Core.package BINARY_DIR)
-set(Dynamic_Static.Core.INCLUDE "${SOURCE_DIR}/include/")
-if (MSVC)
-    set(Dynamic_Static.Core.LIBRARY "${BINARY_DIR}/source/$(Configuration)/Dynamic_Static.Core.lib")
-else()
-    set(Dynamic_Static.Core.LIBRARY "${BINARY_DIR}/source/Dynamic_Static.Core.a")
+set(Dynamic_Static.Core.configuration ${BINARY_DIR}/Dynamic_Static.Core.package.cmake)
+if (EXISTS ${Dynamic_Static.Core.configuration})
+    include(${Dynamic_Static.Core.configuration})
+    get_target_property(
+        Dynamic_Static.Core.includeDirectories
+        Dynamic_Static.Core
+        INTERFACE_INCLUDE_DIRECTORIES
+    )
 endif()
+
+# ExternalProject_Get_Property(Dynamic_Static.Core.package SOURCE_DIR)
+# ExternalProject_Get_Property(Dynamic_Static.Core.package BINARY_DIR)
+# set(Dynamic_Static.Core.INCLUDE "${SOURCE_DIR}/include/")
+# if (MSVC)
+#     set(Dynamic_Static.Core.LIBRARY "${BINARY_DIR}/source/$(Configuration)/Dynamic_Static.Core.lib")
+# else()
+#     set(Dynamic_Static.Core.LIBRARY "${BINARY_DIR}/source/Dynamic_Static.Core.a")
+# endif()

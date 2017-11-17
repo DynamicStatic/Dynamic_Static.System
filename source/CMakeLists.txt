@@ -1,46 +1,44 @@
 
-# CMake configuration for Dynamic_Static.System
-
-set(INCLUDE_PATH ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
-set(INCLUDE_FILES
-    ${INCLUDE_PATH}/Input/Keyboard.hpp
-    ${INCLUDE_PATH}/Input/Mouse.hpp
-    ${INCLUDE_PATH}/Application.hpp
-    ${INCLUDE_PATH}/Defines.hpp
-    ${INCLUDE_PATH}/GLInclude.hpp
-    ${INCLUDE_PATH}/Input.hpp
-    ${INCLUDE_PATH}/Monitor.hpp
-    ${INCLUDE_PATH}/Object.hpp
-    ${INCLUDE_PATH}/Resolution.hpp
-    ${INCLUDE_PATH}/Window.hpp
+set(includePath ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
+set(includeFiles
+    ${includePath}/Input/Keyboard.hpp
+    ${includePath}/Input/Mouse.hpp
+    ${includePath}/Application.hpp
+    ${includePath}/Defines.hpp
+    ${includePath}/GLInclude.hpp
+    ${includePath}/Input.hpp
+    ${includePath}/Monitor.hpp
+    ${includePath}/Object.hpp
+    ${includePath}/Resolution.hpp
+    ${includePath}/Window.hpp
 )
 
-set(SOURCE_PATH ${PROJECT_SOURCE_DIR}/source/Dynamic_Static/System)
-set(SOURCE_FILES
-    ${SOURCE_PATH}/Input/Input.cpp
-    ${SOURCE_PATH}/Input/Input.Manager.cpp
-    ${SOURCE_PATH}/Input/Keyboard.cpp
-    ${SOURCE_PATH}/Input/Mouse.cpp
-    ${SOURCE_PATH}/Application.cpp
-    ${SOURCE_PATH}/GLFWInclude.hpp
-    ${SOURCE_PATH}/Monitor.cpp
-    ${SOURCE_PATH}/Object.cpp
-    ${SOURCE_PATH}/Resolution.cpp
-    ${SOURCE_PATH}/Window.cpp
+set(sourcePath ${PROJECT_SOURCE_DIR}/source/Dynamic_Static/System)
+set(sourceFiles
+    ${sourcePath}/Input/Input.cpp
+    ${sourcePath}/Input/Input.Manager.cpp
+    ${sourcePath}/Input/Keyboard.cpp
+    ${sourcePath}/Input/Mouse.cpp
+    ${sourcePath}/Application.cpp
+    ${sourcePath}/GLFWInclude.hpp
+    ${sourcePath}/Monitor.cpp
+    ${sourcePath}/Object.cpp
+    ${sourcePath}/Resolution.cpp
+    ${sourcePath}/Window.cpp
 )
 
-dst_create_static_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
-# dst_create_shared_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
+dst_create_static_library("${includeFiles}" "${sourceFiles}")
+# dst_create_shared_library("${includeFiles}" "${sourceFiles}")
 
 if (MSVC)
     set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
-        ${glew.INCLUDE}
+        ${glew.include}
     )
 
     set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
         glu32.lib
         opengl32.lib
-        ${glew.LIBRARY}
+        ${glew.library}
     )
 else()
     set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES)
@@ -65,17 +63,41 @@ endif()
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
-    PUBLIC ${Dynamic_Static.Core.INCLUDE}
-    PUBLIC ${glfw.INCLUDE}
+    PUBLIC ${glfw.include}
 )
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
-    # PUBLIC Dynamic_Static.Core
-    PUBLIC ${Dynamic_Static.Core.LIBRARY}
-    PUBLIC ${glfw.LIBRARY}
+    PUBLIC Dynamic_Static.Core
+    PUBLIC ${glfw.library}
     # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
 )
+
+# dst_install_library("${Dynamic_Static.Core.includeDirectories}")
+
+# message("Dynamic_Static.Core include directories")
+# foreach(includeDirectory ${Dynamic_Static.Core.includeDirectories})
+#     message("    ${includeDirectory}")
+# endforeach()
+
+# if (# EXISTS Dynamic_Static.Core AND
+#     EXISTS glfw)
+    # add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
+    # add_dependencies(${CMAKE_PROJECT_NAME} glfw)
+    
+    ############ # if (EXISTS ${Dynamic_Static.Core.configuration})
+    ############ # include(${Dynamic_Static.Core.configuration})
+    ############ message("hit")
+    ############ get_property(
+    ############     Dynamic_Static.Core.addtionalIncludeDirectories
+    ############     TARGET ${Dynamic_Static.Core}
+    ############     PROPERTY INCLUDE_DIRECTORIES
+    ############ )
+    ############ foreach(additionalIncludeDirectory ${Dynamic_Static.Core.addtionalIncludeDirectories})
+    ############     message("additionalIncludeDirectory=${additionalIncludeDirectory}")
+    ############ endforeach()
+    ############ # endif()
+# endif()
 
 # dst_install_library()
