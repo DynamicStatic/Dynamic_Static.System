@@ -36,7 +36,7 @@ function(dst_create_file_group fileGroup)
 endfunction()
 ################################################################################
 function(dst_create_static_library includeFiles sourceFiles)
-    add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
+    # add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
     set_target_properties(
         ${CMAKE_PROJECT_NAME}
         PROPERTIES
@@ -69,7 +69,7 @@ function(dst_create_static_library includeFiles sourceFiles)
 endfunction()
 ################################################################################
 function(dst_create_shared_library includeFiles sourceFiles)
-    add_library(${CMAKE_PROJECT_NAME} SHARED ${includeFiles} ${sourceFiles})
+    # add_library(${CMAKE_PROJECT_NAME} SHARED ${includeFiles} ${sourceFiles})
     set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD 1)
     set_target_properties(
         ${CMAKE_PROJECT_NAME}

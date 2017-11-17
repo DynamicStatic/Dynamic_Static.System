@@ -27,6 +27,13 @@ set(sourceFiles
     ${sourcePath}/Window.cpp
 )
 
+add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
+include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
+include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
+include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
+add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
+add_dependencies(${CMAKE_PROJECT_NAME} glm)
+add_dependencies(${CMAKE_PROJECT_NAME} gsl)
 dst_create_static_library("${includeFiles}" "${sourceFiles}")
 # dst_create_shared_library("${includeFiles}" "${sourceFiles}")
 
@@ -62,15 +69,15 @@ endif()
 #        includes to the final build target...this seems like an oversight.
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
-    PUBLIC ${glfw.include}
+    PUBLIC INTERFACE ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
+    PUBLIC INTERFACE ${glfw.include}
 )
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
-    PUBLIC Dynamic_Static.Core
-    PUBLIC ${glfw.library}
+    PUBLIC INTERFACE ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+    PUBLIC INTERFACE Dynamic_Static.Core
+    PUBLIC INTERFACE ${glfw.library}
     # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
 )
 
