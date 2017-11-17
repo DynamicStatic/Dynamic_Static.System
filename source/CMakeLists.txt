@@ -68,15 +68,15 @@ endif()
 #        includes to the final build target...this seems like an oversight.
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC INTERFACE ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
-    PUBLIC INTERFACE ${glfw.include}
+    PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
+    PUBLIC ${glfw.include}
 )
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC INTERFACE ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
-    PUBLIC INTERFACE Dynamic_Static.Core
-    PUBLIC INTERFACE ${glfw.library}
+    PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+    PUBLIC Dynamic_Static.Core
+    PUBLIC ${glfw.library}
     # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
 )
 
