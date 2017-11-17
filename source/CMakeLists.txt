@@ -69,9 +69,9 @@ target_include_directories(
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    ${platformSpecificLibraryDependencies}
-    Dynamic_Static.Core
-    ${glfw.library}
+    PUBLIC ${platformSpecificLibraryDependencies}
+    PUBLIC Dynamic_Static.Core
+    PUBLIC ${glfw.library}
 )
 
 dst_export_library()
