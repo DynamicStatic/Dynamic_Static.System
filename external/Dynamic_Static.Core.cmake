@@ -20,4 +20,10 @@ if (EXISTS ${Dynamic_Static.Core.configuration})
         Dynamic_Static.Core
         INTERFACE_INCLUDE_DIRECTORIES
     )
+
+    # get_target_property(
+    #     Dynamic_Static.Core.linkLibraries
+    #     Dynamic_Static.Core
+    #     INTERFACE_LINK_LIBRARIES
+    # )
 endif()

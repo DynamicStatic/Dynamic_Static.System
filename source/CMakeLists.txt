@@ -70,6 +70,7 @@ target_link_libraries(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${platformSpecificLibraryDependencies}
     PUBLIC Dynamic_Static.Core
+    # PUBLIC ${Dynamic_Static.Core.linkLibraries}
     PUBLIC ${glfw.library}
 )
 

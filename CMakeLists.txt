@@ -1,6 +1,7 @@
 
 # CMake configuration for Dynamic_Static.System
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
+cmake_policy(SET CMP0060 NEW)
 include("${PROJECT_SOURCE_DIR}/Dynamic_Static.cmake")
 dst_create_project(Dynamic_Static.System)
 add_subdirectory("source/")
