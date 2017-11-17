@@ -80,6 +80,8 @@ target_link_libraries(
     # PUBLIC ${platformSpecificLibraryDependencies}
 )
 
+dst_export_library()
+
 # dst_install_library("${Dynamic_Static.Core.includeDirectories}")
 
 # message("Dynamic_Static.Core include directories")
