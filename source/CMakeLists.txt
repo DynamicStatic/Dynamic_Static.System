@@ -37,18 +37,18 @@ dst_create_static_library("${includeFiles}" "${sourceFiles}")
 # dst_create_shared_library("${includeFiles}" "${sourceFiles}")
 
 if (MSVC)
-    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
+    set(platformSpecificIncludeDependencies
         ${glew.include}
     )
 
-    set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
+    set(platformSpecificLibraryDependencies
         glu32.lib
         opengl32.lib
         ${glew.library}
     )
 else()
-    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES)
-    set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
+    set(platformSpecificIncludeDependencies)
+    set(platformSpecificLibraryDependencies
         EGL
         GL
         X11
@@ -68,16 +68,16 @@ endif()
 #        includes to the final build target...this seems like an oversight.
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
+    PUBLIC ${platformSpecificIncludeDependencies}
     PUBLIC ${glfw.include}
 )
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+    PUBLIC ${platformSpecificLibraryDependencies}
     PUBLIC Dynamic_Static.Core
     PUBLIC ${glfw.library}
-    # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+    # PUBLIC ${platformSpecificLibraryDependencies}
 )
 
 # dst_install_library("${Dynamic_Static.Core.includeDirectories}")
