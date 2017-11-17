@@ -29,7 +29,8 @@ set(SOURCE_FILES
     ${SOURCE_PATH}/Window.cpp
 )
 
-dst_create_shared_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
+dst_create_static_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
+# dst_create_shared_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
 
 if (MSVC)
     set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
@@ -77,4 +78,4 @@ target_link_libraries(
     # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
 )
 
-dst_install_library()
+# dst_install_library()
