@@ -3,6 +3,7 @@
 cmake_minimum_required(VERSION 3.3)
 include("${PROJECT_SOURCE_DIR}/Dynamic_Static.cmake")
 dst_create_project(Dynamic_Static.System)
+set(CMAKE_CXX_STANDARD 14)
 add_subdirectory("source/")
 
 # option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" OFF)

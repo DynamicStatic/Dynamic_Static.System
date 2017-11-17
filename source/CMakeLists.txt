@@ -62,9 +62,9 @@ endif()
 
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC INTERFACE ${platformSpecificIncludeDependencies}
-    PUBLIC INTERFACE ${Dynamic_Static.Core.includeDirectories}
-    PUBLIC INTERFACE ${glfw.include}
+    PUBLIC ${platformSpecificIncludeDependencies}
+    PUBLIC ${Dynamic_Static.Core.includeDirectories}
+    PUBLIC ${glfw.include}
 )
 
 target_link_libraries(
