@@ -1,6 +1,5 @@
 
 add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
-cmake_policy(SET CMP0060 NEW)
 include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
