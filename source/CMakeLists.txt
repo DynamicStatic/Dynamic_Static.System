@@ -69,6 +69,7 @@ endif()
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${platformSpecificIncludeDependencies}
+    PUBLIC ${Dynamic_Static.Core.includeDirectories}
     PUBLIC ${glfw.include}
 )
 
