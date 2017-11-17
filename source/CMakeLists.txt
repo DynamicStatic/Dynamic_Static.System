@@ -66,6 +66,7 @@ target_include_directories(
     PUBLIC ${glfw.include}
 )
 
+cmake_policy(SET CMP0060 NEW)
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${platformSpecificLibraryDependencies}
