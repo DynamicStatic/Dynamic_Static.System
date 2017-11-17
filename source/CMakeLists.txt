@@ -1,10 +1,7 @@
 
-add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
 include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
-add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core.package)
-add_dependencies(${CMAKE_PROJECT_NAME} glfw)
 
 set(includePath ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
 set(includeFiles
@@ -34,6 +31,9 @@ set(sourceFiles
     ${sourcePath}/Window.cpp
 )
 
+add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
+add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core.package)
+add_dependencies(${CMAKE_PROJECT_NAME} glfw)
 dst_setup_library("${includeFiles}" "${sourceFiles}")
 
 if (MSVC)
