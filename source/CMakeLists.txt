@@ -28,6 +28,7 @@ set(sourceFiles
 )
 
 add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
+cmake_policy(SET CMP0060 NEW)
 include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
@@ -66,13 +67,11 @@ target_include_directories(
     PUBLIC ${glfw.include}
 )
 
-cmake_policy(SET CMP0060 NEW)
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${platformSpecificLibraryDependencies}
-    PUBLIC Dynamic_Static.Core
-    # PUBLIC ${Dynamic_Static.Core.linkLibraries}
-    PUBLIC ${glfw.library}
+    ${platformSpecificLibraryDependencies}
+    Dynamic_Static.Core
+    ${glfw.library}
 )
 
 dst_export_library()
