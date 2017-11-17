@@ -62,16 +62,16 @@ endif()
 
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${platformSpecificIncludeDependencies}
-    PUBLIC ${Dynamic_Static.Core.includeDirectories}
-    PUBLIC ${glfw.include}
+    PUBLIC INTERFACE ${platformSpecificIncludeDependencies}
+    PUBLIC INTERFACE ${Dynamic_Static.Core.includeDirectories}
+    PUBLIC INTERFACE ${glfw.include}
 )
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    PUBLIC ${platformSpecificLibraryDependencies}
-    PUBLIC Dynamic_Static.Core
-    PUBLIC ${glfw.library}
+    PUBLIC INTERFACE ${platformSpecificLibraryDependencies}
+    PUBLIC INTERFACE Dynamic_Static.Core
+    PUBLIC INTERFACE ${glfw.library}
 )
 
 dst_export_library()
