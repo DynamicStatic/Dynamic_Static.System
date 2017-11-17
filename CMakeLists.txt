@@ -3,9 +3,6 @@
 cmake_minimum_required(VERSION 3.2)
 include("${PROJECT_SOURCE_DIR}/Dynamic_Static.cmake")
 dst_create_project(Dynamic_Static.System)
-# include("${CMAKE_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
-# include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
-# include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
 add_subdirectory("source/")
 
 # option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" OFF)

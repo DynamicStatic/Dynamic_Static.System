@@ -35,37 +35,7 @@ function(dst_create_file_group fileGroup)
     endforeach()
 endfunction()
 ################################################################################
-function(dst_create_static_library includeFiles sourceFiles)
-    # add_library(${CMAKE_PROJECT_NAME} STATIC ${includeFiles} ${sourceFiles})
-    set_target_properties(
-        ${CMAKE_PROJECT_NAME}
-        PROPERTIES
-            PREFIX ""
-            LINKER_LANGUAGE CXX
-            # PUBLIC_HEADER "${includeFiles}"
-    )
-
-    dst_create_file_group("${includeFiles}")
-    dst_create_file_group("${sourceFiles}")
-
-    target_include_directories(
-        ${CMAKE_PROJECT_NAME}
-        PUBLIC ${PROJECT_SOURCE_DIR}/include/
-    )
-
-    if (NOT MSVC)
-        target_link_libraries(
-            ${CMAKE_PROJECT_NAME}
-            PUBLIC dl
-            PUBLIC pthread
-            PUBLIC stdc++fs
-        )
-    endif()
-endfunction()
-################################################################################
-function(dst_create_shared_library includeFiles sourceFiles)
-    # add_library(${CMAKE_PROJECT_NAME} SHARED ${includeFiles} ${sourceFiles})
-    set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD 1)
+function(dst_create_setup_library includeFiles sourceFiles)
     set_target_properties(
         ${CMAKE_PROJECT_NAME}
         PROPERTIES
@@ -116,21 +86,14 @@ macro(dst_list_include_directories)
     endforeach()
 endmacro()
 ################################################################################
-macro(dst_install_library includeDirectories)
-    set(packageDirectory "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/")
-    foreach(includeDirectory ${includeDirectories})
-        install(
-            DIRECTORY "${includeDirectory}"
-            DESTINATION "${packageDirectory}/include/"
-        )
-    endforeach()
-
+macro(dst_install_library)
     get_property(
         addtionalIncludeDirectories
         TARGET ${CMAKE_PROJECT_NAME}
         PROPERTY INCLUDE_DIRECTORIES
     )
 
+    set(packageDirectory "${PROJECT_SOURCE_DIR}/../packages/${CMAKE_PROJECT_NAME}/")
     foreach(additionalIncludeDirectory ${addtionalIncludeDirectories})
         install(
             DIRECTORY "${additionalIncludeDirectory}"

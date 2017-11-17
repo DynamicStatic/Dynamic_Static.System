@@ -33,8 +33,7 @@ include("${CMAKE_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_SOURCE_DIR}/external/glfw.cmake")
 add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core.package)
 add_dependencies(${CMAKE_PROJECT_NAME} glfw)
-dst_create_static_library("${includeFiles}" "${sourceFiles}")
-# dst_create_shared_library("${includeFiles}" "${sourceFiles}")
+dst_setup_library("${includeFiles}" "${sourceFiles}")
 
 if (MSVC)
     set(platformSpecificIncludeDependencies
@@ -60,12 +59,6 @@ else()
     )
 endif()
 
-# NOTE : There shouldn't be a need to list Dynamic_Static.Core.INCLUDE here...
-#        Adding `PUBLIC Dynamic_Static.Core` to target_link_libraries() should
-#        take care of the include as well...it does, in fact compile, the issue
-#        is that for whatever reason it doesn't add the includes to the target's
-#        INCLUDE_DIRECTORIES property which is what we're using to forward the
-#        includes to the final build target...this seems like an oversight.
 target_include_directories(
     ${CMAKE_PROJECT_NAME}
     PUBLIC ${platformSpecificIncludeDependencies}
@@ -78,35 +71,6 @@ target_link_libraries(
     PUBLIC ${platformSpecificLibraryDependencies}
     PUBLIC Dynamic_Static.Core
     PUBLIC ${glfw.library}
-    # PUBLIC ${platformSpecificLibraryDependencies}
 )
 
 dst_export_library()
-
-# dst_install_library("${Dynamic_Static.Core.includeDirectories}")
-
-# message("Dynamic_Static.Core include directories")
-# foreach(includeDirectory ${Dynamic_Static.Core.includeDirectories})
-#     message("    ${includeDirectory}")
-# endforeach()
-
-# if (# EXISTS Dynamic_Static.Core AND
-#     EXISTS glfw)
-    # add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
-    # add_dependencies(${CMAKE_PROJECT_NAME} glfw)
-    
-    ############ # if (EXISTS ${Dynamic_Static.Core.configuration})
-    ############ # include(${Dynamic_Static.Core.configuration})
-    ############ message("hit")
-    ############ get_property(
-    ############     Dynamic_Static.Core.addtionalIncludeDirectories
-    ############     TARGET ${Dynamic_Static.Core}
-    ############     PROPERTY INCLUDE_DIRECTORIES
-    ############ )
-    ############ foreach(additionalIncludeDirectory ${Dynamic_Static.Core.addtionalIncludeDirectories})
-    ############     message("additionalIncludeDirectory=${additionalIncludeDirectory}")
-    ############ endforeach()
-    ############ # endif()
-# endif()
-
-# dst_install_library()
