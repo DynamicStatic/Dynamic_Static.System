@@ -35,7 +35,7 @@ function(dst_create_file_group fileGroup)
     endforeach()
 endfunction()
 ################################################################################
-function(dst_create_setup_library includeFiles sourceFiles)
+function(dst_setup_library includeFiles sourceFiles)
     set_target_properties(
         ${CMAKE_PROJECT_NAME}
         PROPERTIES
