@@ -1,6 +1,5 @@
 
-# CMake configuration for external/glfw
-
+include(ExternalProject)
 ExternalProject_Add(
     glfw
     PREFIX external

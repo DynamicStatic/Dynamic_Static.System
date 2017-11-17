@@ -43,7 +43,7 @@ namespace System {
         cursor_mode(configuration.cursorMode);
         position(configuration.position);
         visible(configuration.visible);
-        name(configuration.name);
+        set_name(configuration.name);
     }
 
     Window::Window(Window&& other)
@@ -71,15 +71,15 @@ namespace System {
         return *this;
     }
 
-    const std::string& Window::name() const
+    const std::string& Window::get_name() const
     {
-        return Object::name();
+        return Object::get_name();
     }
 
-    void Window::name(const std::string& name)
+    void Window::set_name(const std::string& name)
     {
-        if (Object::name() != name) {
-            Object::name(name);
+        if (Object::get_name() != name) {
+            Object::set_name(name);
             glfwSetWindowTitle(glfw_handle(mHandle), name.c_str());
         }
     }

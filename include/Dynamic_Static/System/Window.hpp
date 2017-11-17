@@ -102,13 +102,13 @@ namespace System {
          * Gets this Window's name.
          * @return This Window's name
          */
-        const std::string& name() const final override;
+        const std::string& get_name() const final override;
 
         /**
          * Sets this Window's name.
          * @param [in] name This Window's name
          */
-        void name(const std::string& name) final override;
+        void set_name(const std::string& name) final override;
             
         /**
          * Gets this Window's OS Display.

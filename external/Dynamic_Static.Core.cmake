@@ -1,6 +1,5 @@
 
-# CMake configuration for external/Dynamic_Static.Core
-
+include(ExternalProject)
 ExternalProject_Add(
     Dynamic_Static.Core.package
     PREFIX external
@@ -12,9 +11,9 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
 )
 
-# TODO : Why doesn't transitive linking work when we let CMake auto link and include Dynamic_Static.Core?
-#        It's OK to do it explicitly for now, but this will need to be addressed sooner or later.
-# NOTE : This comment is duplicated in Dynamic_Static.Graphics/source/CMakeLists.txt
+# # NOTE : We're setting up the INCLUDE and LIBRARY variables for dst::core because without the INCLUDE
+# #        it won't get added to the build target's INCLUDE_DIRECTORIES property...super annoying.
+# # NOTE : There's a comment with some more detail in source/CMakeLists.txt.
 # ExternalProject_Get_Property(Dynamic_Static.Core.package BINARY_DIR)
 # set(Dynamic_Static.Core.PACKAGE ${BINARY_DIR}/Dynamic_Static.Core.package.cmake)
 # if (EXISTS ${Dynamic_Static.Core.PACKAGE})

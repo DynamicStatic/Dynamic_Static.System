@@ -15,7 +15,7 @@ set(INCLUDE_FILES
     ${INCLUDE_PATH}/Window.hpp
 )
 
-set(SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Dynamic_Static/System)
+set(SOURCE_PATH ${PROJECT_SOURCE_DIR}/source/Dynamic_Static/System)
 set(SOURCE_FILES
     ${SOURCE_PATH}/Input/Input.cpp
     ${SOURCE_PATH}/Input/Input.Manager.cpp
@@ -29,8 +29,7 @@ set(SOURCE_FILES
     ${SOURCE_PATH}/Window.cpp
 )
 
-create_file_group("${INCLUDE_FILES}")
-create_file_group("${SOURCE_FILES}")
+dst_create_shared_library("${INCLUDE_FILES}" "${SOURCE_FILES}")
 
 if (MSVC)
     set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
@@ -43,9 +42,7 @@ if (MSVC)
         ${glew.LIBRARY}
     )
 else()
-    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES
-    )
-
+    set(PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES)
     set(PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES
         EGL
         GL
@@ -55,43 +52,29 @@ else()
         Xinerama
         Xrandr
         Xxf86vm
-        dl
-        pthread
-        stdc++fs
     )
 endif()
 
-set(TARGET Dynamic_Static.System)
-add_library(${TARGET} ${INCLUDE_FILES} ${SOURCE_FILES})
-set_target_properties(Dynamic_Static.System PROPERTIES PREFIX "")
-# TODO : Why doesn't transitive linking work when we let CMake auto link and include Dynamic_Static.Core?
-#        It's OK to do it explicitly for now, but this will need to be addressed sooner or later.
-# NOTE : This comment is duplicated in Dynamic_Static.Core.cmake
-# if (EXISTS ${Dynamic_Static.Core.PACKAGE})
-    target_include_directories(
-        ${TARGET}
-        PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
-        PUBLIC ${PROJECT_SOURCE_DIR}/include/
-        PUBLIC ${Dynamic_Static.Core.INCLUDE}
-        PUBLIC ${glfw.INCLUDE}
-    )
+# NOTE : There shouldn't be a need to list Dynamic_Static.Core.INCLUDE here...
+#        Adding `PUBLIC Dynamic_Static.Core` to target_link_libraries() should
+#        take care of the include as well...it does, in fact compile, the issue
+#        is that for whatever reason it doesn't add the includes to the target's
+#        INCLUDE_DIRECTORIES property which is what we're using to forward the
+#        includes to the final build target...this seems like an oversight.
+target_include_directories(
+    ${CMAKE_PROJECT_NAME}
+    PUBLIC ${PLATFORM_SPECIFIC_INCLUDE_DEPENDENCIES}
+    PUBLIC ${Dynamic_Static.Core.INCLUDE}
+    PUBLIC ${glfw.INCLUDE}
+)
 
-    # TODO : It's super annoying that order matters for listing link dependencies here...
-    target_link_libraries(
-        ${TARGET}
-        PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
-        # PUBLIC Dynamic_Static.Core
-        PUBLIC ${Dynamic_Static.Core.LIBRARY}
-        PUBLIC ${glfw.LIBRARY}
-        PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
-    )
+target_link_libraries(
+    ${CMAKE_PROJECT_NAME}
+    PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+    # PUBLIC Dynamic_Static.Core
+    PUBLIC ${Dynamic_Static.Core.LIBRARY}
+    PUBLIC ${glfw.LIBRARY}
+    # PUBLIC ${PLATFORM_SPECIFIC_LIBRARY_DEPENDENCIES}
+)
 
-    # add_dependencies(${TARGET} Dynamic_Static.Core)
-    add_dependencies(${TARGET} Dynamic_Static.Core.package)
-    add_dependencies(${TARGET} glfw)
-
-    export(
-        TARGETS ${TARGET}
-        FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.package.cmake
-    )
-# endif()
+dst_install_library()

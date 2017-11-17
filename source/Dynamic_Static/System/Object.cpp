@@ -14,7 +14,7 @@ namespace System {
 
     Object::Object()
     {
-        name("Dynamic_Static::System::Object");
+        set_name("System::Object");
     }
 
     Object::Object(Object && other)
