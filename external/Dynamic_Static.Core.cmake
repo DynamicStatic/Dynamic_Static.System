@@ -11,6 +11,7 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
 )
 
+set(Dynamic_Static.Core.ready FALSE)
 ExternalProject_Get_Property(Dynamic_Static.Core.package BINARY_DIR)
 set(Dynamic_Static.Core.configuration ${BINARY_DIR}/Dynamic_Static.Core.package.cmake)
 if (EXISTS ${Dynamic_Static.Core.configuration})
@@ -20,4 +21,6 @@ if (EXISTS ${Dynamic_Static.Core.configuration})
         Dynamic_Static.Core
         INTERFACE_INCLUDE_DIRECTORIES
     )
+
+    set(Dynamic_Static.Core.ready TRUE)
 endif()
