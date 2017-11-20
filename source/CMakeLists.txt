@@ -37,7 +37,7 @@ set(sourceFiles
     ${sourcePath}/Window.cpp
 )
 
-add_library(${CMAKE_PROJECT_NAME} OBJECT "${includeFiles}" "${sourceFiles}")
+add_library(${CMAKE_PROJECT_NAME} STATIC "${includeFiles}" "${sourceFiles}")
 add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
 add_dependencies(${CMAKE_PROJECT_NAME} glfw)
 dst_setup_target(${CMAKE_PROJECT_NAME} "${includeFiles}" "${sourceFiles}")
