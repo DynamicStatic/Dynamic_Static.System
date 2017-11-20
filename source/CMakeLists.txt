@@ -38,12 +38,6 @@ set(sourceFiles
 )
 
 add_library(${CMAKE_PROJECT_NAME} STATIC "${includeFiles}" "${sourceFiles}")
-set_target_properties(
-    ${CMAKE_PROJECT_NAME}
-    PROPERTIES
-        LINK_FLAGS "-fPIC"
-)
-
 add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
 add_dependencies(${CMAKE_PROJECT_NAME} glfw)
 dst_setup_target(${CMAKE_PROJECT_NAME} "${includeFiles}" "${sourceFiles}")
