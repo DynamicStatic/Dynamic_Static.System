@@ -11,9 +11,9 @@ file(
     ${catch.include}/catch.hpp
 )
 
-set(TARGET Dynamic_Static.System.Tests)
-add_executable(${TARGET} "${sourceFiles}")
-add_dependencies(${TARGET} Dynamic_Static.System)
-dst_setup_target(${TARGET} "" "${sourceFiles}")
-target_include_directories(${TARGET} PUBLIC ${catch.include})
-target_link_libraries(${TARGET} Dynamic_Static.System)
+set(target Dynamic_Static.System.Tests)
+add_executable(${target} "${sourceFiles}")
+add_dependencies(${target} Dynamic_Static.System)
+dst_setup_target(${target} "" "${sourceFiles}")
+target_include_directories(${target} PUBLIC ${catch.include})
+target_link_libraries(${target} Dynamic_Static.System)
