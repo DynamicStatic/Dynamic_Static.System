@@ -22,15 +22,15 @@ namespace System {
     struct Resolution final
     {
     public:
-        uint32_t width { 0 };
-        uint32_t height { 0 };
+        uint32_t width { 0 };  /*!< TODO : Documentation. */
+        uint32_t height { 0 }; /*!< TODO : Documentation. */
 
     public:
         /**
          * Gets this Resolution's aspect ratio.
          * @return This Resolution's aspect ratio
          */
-        float aspect_ratio() const;
+        float get_aspect_ratio() const;
 
         /**
          * Gets this Resolution's std::string representation.

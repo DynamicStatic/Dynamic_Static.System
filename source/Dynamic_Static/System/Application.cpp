@@ -37,7 +37,7 @@ namespace System {
             Window::update();
             mClock.update();
 
-            const auto& input = mWindow->input();
+            const auto& input = mWindow->get_input();
             pre_update(mClock, input);
             update(mClock, input);
             post_update(mClock, input);
@@ -46,7 +46,7 @@ namespace System {
             render(mClock);
             post_render(mClock);
 
-            mWindow->swap_buffers();
+            mWindow->swap();
         }
 
         shutdown();

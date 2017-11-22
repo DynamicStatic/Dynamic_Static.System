@@ -39,9 +39,9 @@ namespace System {
          */
         enum class CursorMode
         {
-            Normal,
-            Hidden,
-            Disabled,
+            Normal,   /*!< TODO : Documentation. */
+            Hidden,   /*!< TODO : Documentation. */
+            Disabled, /*!< TODO : Documentation. */
         };
 
         /**
@@ -50,15 +50,15 @@ namespace System {
         class Configuration final
         {
         public:
-            API api { API::Unknown };
-            Version apiVersion { 0, 0, 0 };
-            std::string name { "Dynamic_Static" };
-            CursorMode cursorMode { CursorMode::Normal };
-            Resolution resolution { 1280, 720 };
-            Vector2 position { 320, 180 };
-            bool decorated { true };
-            bool resizable { true };
-            bool visible { true };
+            API api { API::Unknown };                     /*!< TODO : Documentation. */
+            Version apiVersion { 0, 0, 0 };               /*!< TODO : Documentation. */
+            std::string name { "Dynamic_Static" };        /*!< TODO : Documentation. */
+            CursorMode cursorMode { CursorMode::Normal }; /*!< TODO : Documentation. */
+            Resolution resolution { 1280, 720 };          /*!< TODO : Documentation. */
+            Vector2 position { 320, 180 };                /*!< TODO : Documentation. */
+            bool decorated { true };                      /*!< TODO : Documentation. */
+            bool resizable { true };                      /*!< TODO : Documentation. */
+            bool visible { true };                        /*!< TODO : Documentation. */
         };
 
     private:
@@ -115,63 +115,63 @@ namespace System {
          * \n NOTE : This value is platform specific
          * @return This Window's OS Display
          */
-        void* display();
+        void* get_display();
 
         /**
          * Gets this Window's OS handle.
          * \n NOTE : This value is platform specific
          * @return This Window's OS handle
          */
-        void* handle();
+        void* get_handle();
 
         #if defined(DYNAMIC_STATIC_LINUX)
         /**
          * TODO : Documentation.
          */
-        X11Window x11_window();
+        X11Window get_x11_window();
         #endif
 
         /**
          * Gets this Window's Input.
          * @return This Window's Input
          */
-        const Input& input() const;
+        const Input& get_input() const;
 
         /**
          * Gets this Window's CursorMode.
          * @return This Window's CursorMode
          */
-        CursorMode cursor_mode() const;
+        CursorMode get_cursor_mode() const;
 
         /**
          * Sets this Window's CursorMode.
          * @param [in] cursorMode This Window's CursorMode
          */
-        void cursor_mode(CursorMode cursorMode);
+        void set_cursor_mode(CursorMode cursorMode);
 
         /**
          * Gets this Window's Resolution.
          * @return This Window's Resolution
          */
-        Resolution resolution() const;
+        Resolution get_resolution() const;
 
         /**
          * Sets this Window's Resolution
          * @param [in] resolution This Window's Resolution
          */
-        void resolution(const Resolution& resolution);
+        void set_resolution(const Resolution& resolution);
 
         /**
          * Gets this Window's position.
          * @return This Window's position
          */
-        Vector2 position() const;
+        Vector2 get_position() const;
 
         /**
          * Sets this Window's position
          * @param [in] position This Window's position
          */
-        void position(const Vector2& position);
+        void set_position(const Vector2& position);
 
         /**
          * Gets a value indicating whether or not this Window is visible.
@@ -195,7 +195,7 @@ namespace System {
          * Swaps this Window's buffers.
          * \n NOTE : This method is a noop if this Window's API is anything besides OpenGL
          */
-        void swap_buffers();
+        void swap();
 
         /**
          * Updates all Window's OS queues.

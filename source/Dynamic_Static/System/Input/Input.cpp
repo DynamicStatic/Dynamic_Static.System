@@ -12,22 +12,22 @@
 namespace Dynamic_Static {
 namespace System {
 
-    Mouse& Input::mouse()
+    Mouse& Input::get_mouse()
     {
         return mMouse;
     }
 
-    const Mouse& Input::mouse() const
+    const Mouse& Input::get_mouse() const
     {
         return mMouse;
     }
 
-    Keyboard& Input::keyboard()
+    Keyboard& Input::get_keyboard()
     {
         return mKeyboard;
     }
 
-    const Keyboard& Input::keyboard() const
+    const Keyboard& Input::get_keyboard() const
     {
         return mKeyboard;
     }
@@ -85,7 +85,7 @@ namespace Tests {
                     Keyboard::State::Down :
                     Keyboard::State::Up;
 
-                inputManager.keyboard_state()[i] = keyStates[i] = keyState;
+                inputManager.get_keyboard_state()[i] = keyStates[i] = keyState;
             }
 
             inputManager.update();
@@ -95,31 +95,31 @@ namespace Tests {
         createRandomInput(currentKeyState);
 
         bool success = true;
-        const auto& input = inputManager.input();
+        const auto& get_input = inputManager.get_input();
         for (size_t i = 0; i < sKeyCount; ++i) {
             auto key = static_cast<Keyboard::Key>(i);
             if (key != Keyboard::Key::Unknown) {
                 if (currentKeyState[i] == Keyboard::State::Up) {
-                    REQUIRE(input.keyboard().up(key));
+                    REQUIRE(get_input.get_keyboard().up(key));
                 }
 
                 if (currentKeyState[i] == Keyboard::State::Down) {
-                    REQUIRE(input.keyboard().down(key));
+                    REQUIRE(get_input.get_keyboard().down(key));
                 }
 
                 if (currentKeyState[i] == Keyboard::State::Down &&
                     previousKeyState[i] == Keyboard::State::Up) {
-                    REQUIRE(input.keyboard().pressed(key));
+                    REQUIRE(get_input.get_keyboard().pressed(key));
                 }
 
                 if (currentKeyState[i] == Keyboard::State::Down &&
                     previousKeyState[i] == Keyboard::State::Down) {
-                    REQUIRE(input.keyboard().held(key));
+                    REQUIRE(get_input.get_keyboard().held(key));
                 }
 
                 if (currentKeyState[i] == Keyboard::State::Up &&
                     previousKeyState[i] == Keyboard::State::Down) {
-                    REQUIRE(input.keyboard().released(key));
+                    REQUIRE(get_input.get_keyboard().released(key));
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace Tests {
                     Mouse::State::Down :
                     Mouse::State::Up;
 
-                inputManager.mouse_state()[i] = buttonStates[i] = buttonState;
+                inputManager.get_mouse_state()[i] = buttonStates[i] = buttonState;
             }
 
             inputManager.update();
@@ -172,31 +172,31 @@ namespace Tests {
         createRandomInput(currentButtonState);
 
         bool success = true;
-        const auto& input = inputManager.input();
+        const auto& get_input = inputManager.get_input();
         for (size_t i = 0; i < sButtonCount; ++i) {
             auto button = static_cast<Mouse::Button>(i);
             if (button != Mouse::Button::Unknown) {
                 if (currentButtonState[i] == Mouse::State::Up) {
-                    REQUIRE(input.mouse().up(button));
+                    REQUIRE(get_input.get_mouse().up(button));
                 }
 
                 if (currentButtonState[i] == Mouse::State::Down) {
-                    REQUIRE(input.mouse().down(button));
+                    REQUIRE(get_input.get_mouse().down(button));
                 }
 
                 if (currentButtonState[i] == Mouse::State::Down &&
                     previousButtonState[i] == Mouse::State::Up) {
-                    REQUIRE(input.mouse().pressed(button));
+                    REQUIRE(get_input.get_mouse().pressed(button));
                 }
 
                 if (currentButtonState[i] == Mouse::State::Down &&
                     previousButtonState[i] == Mouse::State::Down) {
-                    REQUIRE(input.mouse().held(button));
+                    REQUIRE(get_input.get_mouse().held(button));
                 }
 
                 if (currentButtonState[i] == Mouse::State::Up &&
                     previousButtonState[i] == Mouse::State::Down) {
-                    REQUIRE(input.mouse().released(button));
+                    REQUIRE(get_input.get_mouse().released(button));
                 }
             }
         }

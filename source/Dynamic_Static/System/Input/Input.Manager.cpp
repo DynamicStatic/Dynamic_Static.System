@@ -12,32 +12,32 @@
 namespace Dynamic_Static {
 namespace System {
 
-    Input& Input::Manager::input()
+    Input& Input::Manager::get_input()
     {
         return mInput;
     }
 
-    const Input& Input::Manager::input() const
+    const Input& Input::Manager::get_input() const
     {
         return mInput;
     }
 
-    Mouse::State& Input::Manager::mouse_state()
+    Mouse::State& Input::Manager::get_mouse_state()
     {
         return mMouseState;
     }
 
-    const Mouse::State& Input::Manager::mouse_state() const
+    const Mouse::State& Input::Manager::get_mouse_state() const
     {
         return mMouseState;
     }
 
-    Keyboard::State& Input::Manager::keyboard_state()
+    Keyboard::State& Input::Manager::get_keyboard_state()
     {
         return mKeyboardState;
     }
 
-    const Keyboard::State& Input::Manager::keyboard_state() const
+    const Keyboard::State& Input::Manager::get_keyboard_state() const
     {
         return mKeyboardState;
     }

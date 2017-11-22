@@ -12,7 +12,7 @@
 namespace Dynamic_Static {
 namespace System {
 
-    float Resolution::aspect_ratio() const
+    float Resolution::get_aspect_ratio() const
     {
         auto w = static_cast<float>(width);
         auto h = static_cast<float>(height);

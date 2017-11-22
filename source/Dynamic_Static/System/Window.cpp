@@ -40,8 +40,8 @@ namespace System {
         , mApi { configuration.api }
     {
         glfwSetWindowUserPointer(glfw_handle(mHandle), this);
-        cursor_mode(configuration.cursorMode);
-        position(configuration.position);
+        set_cursor_mode(configuration.cursorMode);
+        set_position(configuration.position);
         visible(configuration.visible);
         set_name(configuration.name);
     }
@@ -84,7 +84,7 @@ namespace System {
         }
     }
 
-    void* Window::display()
+    void* Window::get_display()
     {
         #if defined(DYNAMIC_STATIC_LINUX)
         return glfwGetX11Display();
@@ -92,7 +92,7 @@ namespace System {
         return nullptr;
     }
 
-    void* Window::handle()
+    void* Window::get_handle()
     {
         #if defined(DYNAMIC_STATIC_WINDOWS)
         return glfwGetWin32Window(glfw_handle(mHandle));
@@ -101,18 +101,18 @@ namespace System {
     }
         
     #if defined(DYNAMIC_STATIC_LINUX)
-    X11Window Window::x11_window()
+    X11Window Window::get_x11_window()
     {
         return glfwGetX11Window(glfw_handle(mHandle));
     }
     #endif
 
-    const Input& Window::input() const
+    const Input& Window::get_input() const
     {
-        return mInputManager.input();
+        return mInputManager.get_input();
     }
 
-    Window::CursorMode Window::cursor_mode() const
+    Window::CursorMode Window::get_cursor_mode() const
     {
         auto cursorMode = CursorMode::Normal;
         switch (glfwGetInputMode(glfw_handle(mHandle), GLFW_CURSOR)) {
@@ -124,7 +124,7 @@ namespace System {
         return cursorMode;
     }
 
-    void Window::cursor_mode(CursorMode cursorMode)
+    void Window::set_cursor_mode(CursorMode cursorMode)
     {
         auto glfwCursorMode = GLFW_CURSOR_NORMAL;
         switch (cursorMode) {
@@ -136,28 +136,28 @@ namespace System {
         glfwSetInputMode(glfw_handle(mHandle), GLFW_CURSOR, glfwCursorMode);
     }
 
-    Resolution Window::resolution() const
+    Resolution Window::get_resolution() const
     {
         int width, height;
         glfwGetWindowSize(glfw_handle(mHandle), &width, &height);
         return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
     }
 
-    void Window::resolution(const Resolution& resolution)
+    void Window::set_resolution(const Resolution& resolution)
     {
         auto width = static_cast<int>(resolution.width);
         auto height = static_cast<int>(resolution.height);
         glfwSetWindowSize(glfw_handle(mHandle), width, height);
     }
 
-    Vector2 Window::position() const
+    Vector2 Window::get_position() const
     {
         int x, y;
         glfwGetWindowPos(glfw_handle(mHandle), &x, &y);
         return { static_cast<float>(x), static_cast<float>(y) };
     }
 
-    void Window::position(const Vector2& position)
+    void Window::set_position(const Vector2& position)
     {
         auto x = dst::round_cast<int>(position.x);
         auto y = dst::round_cast<int>(position.y);
@@ -180,17 +180,21 @@ namespace System {
 
     void Window::make_current()
     {
+        #if DYNAMIC_STATIC_OPEGNL_SUPPORTED
         if (mApi == API::OpenGL) {
             glfwMakeContextCurrent(glfw_handle(mHandle));
         }
+        #endif
     }
 
-    void Window::swap_buffers()
+    void Window::swap()
     {
         mInputManager.update();
+        #if DYNAMIC_STATIC_OPEGNL_SUPPORTED
         if (mApi == API::OpenGL) {
             glfwSwapBuffers(glfw_handle(mHandle));
         }
+        #endif
     }
 
     void Window::update()
@@ -235,6 +239,7 @@ namespace System {
             }
 
             switch (configuration.api) {
+                #if DYNAMIC_STATIC_OPENGL_SUPPORTED
                 case API::OpenGL:
                 {
                     // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -242,8 +247,11 @@ namespace System {
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, configuration.apiVersion.minor);
                     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
                 } break;
+                #endif
 
+                #if DYNAMIC_STATIC_VULKAN_SUPPORTED
                 case API::Vulkan:
+                #endif
                 default:
                 {
                     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -267,6 +275,7 @@ namespace System {
             throw std::runtime_error("Failed to create Window");
         }
 
+        #if DYNAMIC_STATIC_OPENGL_SUPPORTED
         if (configuration.api == API::OpenGL) {
             static bool sGLEWInitialized;
             if (!sGLEWInitialized) {
@@ -284,6 +293,7 @@ namespace System {
                 sGLEWInitialized = true;
             }
         }
+        #endif
 
         glfwSetFramebufferSizeCallback(handle, frame_buffer_size_callback);
         glfwSetMouseButtonCallback(handle, mouse_button_callback);
@@ -316,15 +326,15 @@ namespace System {
         auto dstKey = glfw_to_dst_key(glfwKey);
         switch (action) {
             case GLFW_PRESS:
-                input.keyboard_state()[dstKey] = Keyboard::State::Down;
+                input.get_keyboard_state()[dstKey] = Keyboard::State::Down;
                 break;
 
             case GLFW_RELEASE:
-                input.keyboard_state()[dstKey] = Keyboard::State::Up;
+                input.get_keyboard_state()[dstKey] = Keyboard::State::Up;
                 break;
 
             case GLFW_REPEAT:
-                input.keyboard_state()[dstKey] = Keyboard::State::Down;
+                input.get_keyboard_state()[dstKey] = Keyboard::State::Down;
                 break;
         }
     }
@@ -335,29 +345,29 @@ namespace System {
         auto dstButton = glfw_to_dst_mouse_button(glfwButton);
         switch (action) {
             case GLFW_PRESS:
-                input.mouse_state()[dstButton] = Mouse::State::Down;
+                input.get_mouse_state()[dstButton] = Mouse::State::Down;
                 break;
 
             case GLFW_RELEASE:
-                input.mouse_state()[dstButton] = Mouse::State::Up;
+                input.get_mouse_state()[dstButton] = Mouse::State::Up;
                 break;
 
             case GLFW_REPEAT:
-                input.mouse_state()[dstButton] = Mouse::State::Down;
+                input.get_mouse_state()[dstButton] = Mouse::State::Down;
                 break;
         }
     }
 
     void mouse_position_callback(GLFWwindow* handle, double xOffset, double yOffset)
     {
-        dst_window(handle).mInputManager.mouse_state().position({ xOffset, yOffset });
+        dst_window(handle).mInputManager.get_mouse_state().position({ xOffset, yOffset });
     }
 
     void mouse_scroll_callback(GLFWwindow* handle, double /* xOffset */, double yOffset)
     {
         auto& input = dst_window(handle).mInputManager;
-        auto scroll = input.mouse_state().scroll();
-        input.mouse_state().scroll(scroll + yOffset);
+        auto scroll = input.get_mouse_state().scroll();
+        input.get_mouse_state().scroll(scroll + yOffset);
     }
 
     void glfw_error_callback(int error, const char* description)

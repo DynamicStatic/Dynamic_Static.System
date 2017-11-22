@@ -36,25 +36,25 @@ namespace System {
          * Gets this Input's Mouse.
          * @return This Input's Mouse
          */
-        Mouse& mouse();
+        Mouse& get_mouse();
 
         /**
          * Gets this Input's Mouse.
          * @return This Input's Mouse
          */
-        const Mouse& mouse() const;
+        const Mouse& get_mouse() const;
 
         /**
          * Gets this Input's Keyboard.
          * @return This Input's Keyboard
          */
-        Keyboard& keyboard();
+        Keyboard& get_keyboard();
 
         /**
          * Gets this Input's Keyboard.
          * @return This Input's Keyboard
          */
-        const Keyboard& keyboard() const;
+        const Keyboard& get_keyboard() const;
 
         /**
          * Resets this Input.
@@ -86,37 +86,37 @@ namespace System {
          * Gets this Input::Manager's Input.
          * @return This Input::Manager's Input
          */
-        Input& input();
+        Input& get_input();
 
         /**
          * Gets this Input::Manager's Input.
          * @return This Input::Manager's Input
          */
-        const Input& input() const;
+        const Input& get_input() const;
 
         /**
          * Gets this Input::Manager's Mouse::State.
          * @return This Input::Manager's Mouse::State
          */
-        Mouse::State& mouse_state();
+        Mouse::State& get_mouse_state();
 
         /**
          * Gets this Input::Manager's Mouse::State.
          * @return This Input::Manager's Mouse::State
          */
-        const Mouse::State& mouse_state() const;
+        const Mouse::State& get_mouse_state() const;
 
         /**
          * Gets this Input::Manager's Keyboard::State.
          * @return This Input::Manager's Keyboard::State
          */
-        Keyboard::State& keyboard_state();
+        Keyboard::State& get_keyboard_state();
 
         /**
          * Gets this Input::Manager's Keyboard::State.
          * @return This Input::Manager's Keyboard::State
          */
-        const Keyboard::State& keyboard_state() const;
+        const Keyboard::State& get_keyboard_state() const;
 
         /**
          * Updates this Input::Manager's Input.
