@@ -197,58 +197,148 @@ public:
     {
         std::vector<Vertex> vertices;
         auto createVertex =
-        [&vertices](const dst::Vector3& position, const dst::Vector3& normal)
+        [&vertices](const dst::Vector3& position)
         {
-            vertices.push_back({ position, normal });
+            vertices.push_back({ position, dst::Vector3::Zero });
             return static_cast<GLushort>(vertices.size() - 1);
         };
 
         std::vector<GLushort> indices;
         auto createFace =
-        [&indices](const std::array<GLushort, 3>& face)
+        [&vertices, &indices](const std::array<GLushort, 3>& face)
         {
             std::copy_n(face.begin(), face.size(), std::back_inserter(indices));
         };
 
         const dst::Vector3 w(0, 0, width * 0.5f);
         const float pi = static_cast<float>(M_PI);
-        const float ta = 2.0f * pi / teeth;
-        const float da = ta / 4;
+        const float tootAngle = 2.0f * pi / teeth;
+        const float toothDivisionsAngle = tootAngle / 4;
+        const float toothInnerRadius = outerRadius - toothDepth * 0.5f;
+        const float toothOuterRadius = outerRadius + toothDepth * 0.5f;
         for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
-            float a = ta * tooth_i;
+            float angle = tootAngle * tooth_i;
+            // NOTE : Anchors provide unit vectors at the angles we'll need to layout the tooth vertices...
             std::array<dst::Vector3, 5> anchors;
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
-                anchors[anchor_i].x = cos(a + da * anchor_i);
-                anchors[anchor_i].y = sin(a + da * anchor_i);
+                anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
+                anchors[anchor_i].y = sin(angle + toothDivisionsAngle * anchor_i);
             }
 
-            // Front face
-            auto normal = dst::Vector3::UnitZ;
-            auto i0 = createVertex(anchors[0] * outerRadius + w, normal);
-            auto i1 = createVertex(anchors[3] * outerRadius + w, normal);
-            auto i2 = createVertex(anchors[4] * innerRadius + w, normal);
-            auto i3 = createVertex(anchors[0] * innerRadius + w, normal);
-            auto i4 = createVertex(anchors[4] * outerRadius + w, normal);
-            createFace({ i0, i1, i2 });
-            createFace({ i0, i2, i3 });
-            createFace({ i1, i4, i2 });
+            {
+                /*
 
-            // Tooth front face
-            normal = dst::Vector3::UnitZ;
-            i0 = createVertex(anchors[1] * (outerRadius + toothDepth) + w, normal);
-            i1 = createVertex(anchors[2] * (outerRadius + toothDepth) + w, normal);
-            i2 = createVertex(anchors[3] *  outerRadius +               w, normal);
-            i3 = createVertex(anchors[0] *  outerRadius +               w, normal);
-            createFace({ i0, i1, i2 });
-            createFace({ i0, i2, i3 });
+                    NOTE : Front face vertex indices with anchor index, clockwise winding...
+
+                                           i0      i1
+                                           a1      a2
+                          toothOuterRadius  +------+
+                                           / .      \
+                                          /    .     \
+                                      i3 /        .   \ i2
+                                      a0/             .\a3
+                     toothInnerRadius  +----------------+..      i6
+                                       \.               /  `..   a4
+                                        \  .           /       `..  toothInnerRadius
+                                         \    .       /         /
+                                          \      .   /      /
+                                           \       ./   /
+                               innerRadius  +------+
+                                           i5      i4
+                                           a0      a4
+
+                */
+
+                auto i0 = createVertex(anchors[1] * toothOuterRadius - w);
+                auto i1 = createVertex(anchors[2] * toothOuterRadius - w);
+                auto i2 = createVertex(anchors[3] * toothInnerRadius - w);
+                auto i3 = createVertex(anchors[0] * toothInnerRadius - w);
+                auto i4 = createVertex(anchors[4] * innerRadius      - w);
+                auto i5 = createVertex(anchors[0] * innerRadius      - w);
+                auto i6 = createVertex(anchors[4] * toothInnerRadius - w);
+                createFace({ i0, i1, i2 });
+                createFace({ i0, i2, i3 });
+                createFace({ i3, i2, i4 });
+                createFace({ i3, i4, i5 });
+                createFace({ i2, i6, i4 });
+            }
+
+            {
+                /*
+
+                    NOTE : Top face vertex indices with anchor index, clockwise winding...
+
+                          toothOuterRadius  +------+  toothOuterRadius
+                                          /          \
+                                         /            \  /toothInnerRadius
+                     toothInnerRadius  +                +--------+ toothInnerRadius
+
+                                      a0   a1     a2   a3       a4
+                                      i0   i1     i2   i3       i4
+                                       +----+------+----+--------+ -w
+                                       |    |      |    |        |
+                                       |    |      |    |        |
+                                       |    |      |    |        |
+                                       +----+------+----+--------+  w
+                                      a0   a1     a2   a3       a4
+                                      i5   i6     i7   i8       i9
+
+                */
+
+                auto normal = dst::Vector3::UnitZ;
+                auto i0 = createVertex(anchors[0] * toothInnerRadius + w);
+                auto i1 = createVertex(anchors[1] * toothOuterRadius + w);
+                auto i2 = createVertex(anchors[2] * toothOuterRadius + w);
+                auto i3 = createVertex(anchors[3] * toothInnerRadius + w);
+                auto i4 = createVertex(anchors[4] * toothInnerRadius + w);
+                auto i5 = createVertex(anchors[0] * toothInnerRadius - w);
+                auto i6 = createVertex(anchors[1] * toothOuterRadius - w);
+                auto i7 = createVertex(anchors[2] * toothOuterRadius - w);
+                auto i8 = createVertex(anchors[3] * toothInnerRadius - w);
+                auto i9 = createVertex(anchors[4] * toothInnerRadius - w);
+                createFace({ i0, i1, i6 });
+                createFace({ i0, i6, i5 });
+                createFace({ i1, i2, i7 });
+                createFace({ i1, i7, i6 });
+                createFace({ i2, i3, i8 });
+                createFace({ i2, i8, i7 });
+                createFace({ i3, i4, i9 });
+                createFace({ i3, i9, i8 });
+            }
+
+            {
+                auto normal = dst::Vector3::Zero;
+                auto i0 = createVertex(anchors[0] * innerRadius - w);
+                auto i1 = createVertex(anchors[4] * innerRadius - w);
+                auto i2 = createVertex(anchors[4] * innerRadius + w);
+                auto i3 = createVertex(anchors[0] * innerRadius + w);
+                createFace({ i0, i1, i2 });
+                createFace({ i0, i2, i3 });
+            }
         }
-        
-        vertices.push_back({ {  0,     0.5f, 0 }, dst::Vector3::One });
-        vertices.push_back({ { -0.5f, -0.5f, 0 }, dst::Vector3::One });
-        vertices.push_back({ { -0.5f, -0.5f, 0 }, dst::Vector3::One });
-        indices.push_back(0);
-        indices.push_back(2);
-        indices.push_back(1);
+
+        std::vector<uint32_t> hits(vertices.size());
+        for (size_t i = 0; i < indices.size(); i += 3) {
+            auto& v0 = vertices[indices[i]];
+            auto& v1 = vertices[indices[i + 1]];
+            auto& v2 = vertices[indices[i + 2]];
+            auto edge0 = v0.position - v1.position;
+            auto edge1 = v0.position - v2.position;
+            dst::Vector3 normal = glm::cross(edge0, edge1);
+            normal.normalize();
+            v0.normal += normal;
+            v1.normal += normal;
+            v2.normal += normal;
+            ++hits[indices[i]];
+            ++hits[indices[i + 1]];
+            ++hits[indices[i + 2]];
+        }
+
+        for (size_t i = 0; i < vertices.size(); ++i) {
+            vertices[i].normal /= hits[i];
+            vertices[i].normal.normalize();
+        }
+
         mesh.write(vertices, indices);
     }
 };
@@ -265,9 +355,9 @@ int main()
     dst::sys::Window window(windowConfiguration);
 
     std::array<Gear, 3> gears {
-        Gear(0.2f, 1.0f, 4.0f, 4, 0.5f, { -3.0f,  0.0f, 0.0f },  1, dst::Color::Red),
-        Gear(0.5f, 2.0f, 2.0f, 10, 0.7f, {  3.1f,  0.0f, 0.0f }, -2, dst::Color::Green),
-        Gear(1.3f, 2.0f, 0.5f, 10, 0.7f, { -3.1f, -6.2f, 0.0f }, -2, dst::Color::Blue)
+        Gear(1.0f, 4.0f, 1.0f, 20, 0.7f, { -3.0f,  0.0f, 0.0f },  1, dst::Color::White), // { 0.8f, 0.1f, 0.0f, 1.0f }),
+        Gear(0.5f, 2.0f, 2.0f, 10, 0.7f, {  3.1f,  0.0f, 0.0f }, -2, dst::Color::White), // { 0.0f, 0.8f, 0.2f, 1.0f }),
+        Gear(1.3f, 2.0f, 0.5f, 10, 0.7f, { -3.1f, -6.2f, 0.0f }, -2, dst::Color::White), // { 0.2f, 0.2f, 1.0f, 1.0f })
     };
 
     Program program(
@@ -276,6 +366,7 @@ int main()
             uniform mat4 model;
             uniform mat4 view;
             uniform mat4 projection;
+            uniform vec3 lightPosition;
             layout(location = 0) in vec3 vsPosition;
             layout(location = 1) in vec3 vsNormal;
             out vec3 fsNormal;
@@ -284,16 +375,19 @@ int main()
                 mat4 modelView = view * model;
                 vec4 position = modelView * vec4(vsPosition, 1);
                 gl_Position = projection * position;
+                fsNormal = vsNormal;
             }
         )",
         R"(
             #version 330
             uniform vec4 color;
+            uniform vec3 lightPosition;
             in vec3 fsNormal;
             out vec4 fragColor;
             void main()
             {
                 fragColor = color;
+                fragColor.rgb *= fsNormal;
             }
         )"
     );
@@ -307,16 +401,28 @@ int main()
     dst_gl(projectionLocation = glGetUniformLocation(program.handle, "projection"));
     dst_gl(colorLocation = glGetUniformLocation(program.handle, "color"));
 
-    bool lines = false;
-    float zoom = -16;
-    float zoomSpeed = 12;
+    dst_gl(glEnable(GL_CULL_FACE));
+    dst_gl(glEnable(GL_DEPTH_TEST));
+
+    bool lines = true;
+    float cameraSpeed = 7.4f;
+    float fieldOfView = 60;
+    float fieldOfViewSensitivity = 86;
+    dst::Vector2 lookSensitivity(1.6f);
+    // dst::Vector3 cameraPosition(-1, -1.5f, -16);
+    dst::Quaternion worldRotation;
+    dst::Vector3 cameraPosition(0, 0, -16);
+    dst::Vector3 lightPosition(0, 0, 0);
 
     dst::Clock clock;
     bool running = true;
     while (running) {
-        clock.update();
         dst::sys::Window::update();
         const auto& input = window.get_input();
+
+        clock.update();
+        auto dt = clock.elapsed<dst::Second<float>>();
+
         if (input.get_keyboard().down(dst::sys::Keyboard::Key::Escape)) {
             running = false;
         }
@@ -325,26 +431,47 @@ int main()
             lines = !lines;
         }
 
-        zoom += static_cast<float>(input.get_mouse().scroll() * zoomSpeed * clock.elapsed<dst::Second<>>());
+        if (input.get_keyboard().down(dst::sys::Keyboard::Key::Q)) {
+            cameraPosition.y += cameraSpeed * dt;
+        }
 
+        if (input.get_keyboard().down(dst::sys::Keyboard::Key::E)) {
+            cameraPosition.y -= cameraSpeed * dt;
+        }
 
+        fieldOfView -= static_cast<float>(input.get_mouse().scroll() * fieldOfViewSensitivity * dt);
+        if (input.get_mouse().pressed(dst::sys::Mouse::Button::Middle)) {
+            fieldOfView = 60.0f;
+        }
 
+        if (input.get_mouse().down(dst::sys::Mouse::Button::Left)) {
+            auto look = input.get_mouse().delta() * lookSensitivity * dt;
+            auto rotationX = dst::Quaternion(-look.y, dst::Vector3::UnitX);
+            auto rotationY = dst::Quaternion(-look.x, dst::Vector3::UnitY);
+            worldRotation = rotationY * worldRotation * rotationX;
+            worldRotation.normalize();
+        }
+
+        if (input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
+            cameraPosition.x -= input.get_mouse().delta().x * cameraSpeed * dt;
+            cameraPosition.y -= input.get_mouse().delta().y * cameraSpeed * dt;
+        }
 
         auto view = dst::Matrix4x4::create_view(
-            dst::Vector3(0, 0, zoom),
-            dst::Vector3(-1, -1.5f, 0),
+            cameraPosition,
+            cameraPosition + dst::Vector3::UnitZ,
             dst::Vector3::Up
         );
 
         auto projection = dst::Matrix4x4::create_perspective(
-            dst::to_radians(60.0f),
+            dst::to_radians(fieldOfView),
             window.get_resolution().get_aspect_ratio(),
             0.001f,
             100.0f
         );
 
-        dst_gl(glClearColor(0.25f, 0.25f, 0.25f, 1));
-        dst_gl(glClear(GL_COLOR_BUFFER_BIT));
+        dst_gl(glClearColor(0, 0, 0, 1));
+        dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         dst_gl(glViewport(0, 0, window.get_resolution().width, window.get_resolution().height));
         dst_gl(glUseProgram(program.handle));
         dst_gl(glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &view[0][0]));
@@ -352,6 +479,7 @@ int main()
         for (auto& gear : gears) {
             // gear.rotation += gear.speed * clock.elapsed<dst::Second<float>>();
             auto model =
+                dst::Matrix4x4::create_rotation(worldRotation) *
                 dst::Matrix4x4::create_translation(gear.position) *
                 dst::Matrix4x4::create_rotation(
                     dst::Quaternion(gear.rotation, dst::Vector3::UnitZ)
