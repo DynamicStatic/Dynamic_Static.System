@@ -180,7 +180,7 @@ namespace System {
 
     void Window::make_current()
     {
-        #if DYNAMIC_STATIC_OPEGNL_SUPPORTED
+        #if DYNAMIC_STATIC_OPENGL_SUPPORTED
         if (mApi == API::OpenGL) {
             glfwMakeContextCurrent(glfw_handle(mHandle));
         }
@@ -190,7 +190,7 @@ namespace System {
     void Window::swap()
     {
         mInputManager.update();
-        #if DYNAMIC_STATIC_OPEGNL_SUPPORTED
+        #if DYNAMIC_STATIC_OPENGL_SUPPORTED
         if (mApi == API::OpenGL) {
             glfwSwapBuffers(glfw_handle(mHandle));
         }
