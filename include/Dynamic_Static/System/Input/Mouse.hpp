@@ -59,8 +59,8 @@ namespace System {
             using ButtonSet = std::bitset<static_cast<size_t>(Button::Count)>;
 
         private:
-            double mScroll { 0 };
-            Vector2 mPosition { Vector2::Zero };
+            double mScroll { };
+            glm::vec2 mPosition { };
             ButtonSet mButtons;
 
         public:
@@ -97,25 +97,25 @@ namespace System {
              * Gets this Mouse::State's scroll value.
              * @return This Mouse::State's scroll value
              */
-            double scroll() const;
+            double get_scroll() const;
 
             /**
              * Sets this Mouse::State's scroll value.
              * @param [in] scroll This Mouse::State's scroll value
              */
-            void scroll(double scroll);
+            void set_scroll(double scroll);
 
             /**
              * Gets this Mouse::State's position.
              * @return This Mouse::State's position
              */
-            const Vector2& position() const;
+            glm::vec2 get_position() const;
 
             /**
              * Sets this Mouse::State's position.
              * @param [in] position This Mouse::State's position
              */
-            void position(const Vector2& position);
+            void set_position(const glm::vec2& position);
 
             /**
              * Resets this Mouse::State.
@@ -132,19 +132,19 @@ namespace System {
          * Gets the delta between this Mouse's current and previous scroll.
          * @return The delta between this Mouse's current and previous scroll
          */
-        double scroll() const;
+        double get_scroll() const;
 
         /**
          * Gets the delta between this Mouse's current and previous position.
          * @return The delta between this Mouse's current and previous position
          */
-        Vector2 delta() const;
+        glm::vec2 get_delta() const;
 
         /**
          * Gets this Mouse's current position.
          * @return This Mouse's current position
          */
-        Vector2 position() const;
+        glm::vec2 get_position() const;
 
         /**
          * Gets a value indicating whether or not a given Button is up.

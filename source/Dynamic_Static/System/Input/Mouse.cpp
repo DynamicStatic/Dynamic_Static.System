@@ -32,22 +32,22 @@ namespace System {
         return mButtons[button];
     }
 
-    double Mouse::State::scroll() const
+    double Mouse::State::get_scroll() const
     {
         return mScroll;
     }
 
-    void Mouse::State::scroll(double scroll)
+    void Mouse::State::set_scroll(double scroll)
     {
         mScroll = scroll;
     }
 
-    const Vector2& Mouse::State::position() const
+    glm::vec2 Mouse::State::get_position() const
     {
         return mPosition;
     }
 
-    void Mouse::State::position(const Vector2& position)
+    void Mouse::State::set_position(const glm::vec2& position)
     {
         mPosition = position;
     }
@@ -64,19 +64,19 @@ namespace System {
 namespace Dynamic_Static {
 namespace System {
 
-    double Mouse::scroll() const
+    double Mouse::get_scroll() const
     {
-        return mCurrent.scroll() - mPrevious.scroll();
+        return mCurrent.get_scroll() - mPrevious.get_scroll();
     }
 
-    Vector2 Mouse::delta() const
+    glm::vec2 Mouse::get_delta() const
     {
-        return mCurrent.position() - mPrevious.position();
+        return mCurrent.get_position() - mPrevious.get_position();
     }
 
-    Vector2 Mouse::position() const
+    glm::vec2 Mouse::get_position() const
     {
-        return mCurrent.position();
+        return mCurrent.get_position();
     }
 
     bool Mouse::up(Button button) const
@@ -113,8 +113,8 @@ namespace System {
     void Mouse::reset()
     {
         mCurrent.reset();
-        mCurrent.scroll(0);
-        mCurrent.position(Vector2::Zero);
+        mCurrent.set_scroll(0);
+        mCurrent.set_position({ });
         mPrevious = mCurrent;
     }
 

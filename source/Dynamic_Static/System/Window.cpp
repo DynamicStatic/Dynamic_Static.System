@@ -150,14 +150,14 @@ namespace System {
         glfwSetWindowSize(glfw_handle(mHandle), width, height);
     }
 
-    Vector2 Window::get_position() const
+    glm::vec2 Window::get_position() const
     {
         int x, y;
         glfwGetWindowPos(glfw_handle(mHandle), &x, &y);
         return { static_cast<float>(x), static_cast<float>(y) };
     }
 
-    void Window::set_position(const Vector2& position)
+    void Window::set_position(const glm::vec2& position)
     {
         auto x = dst::round_cast<int>(position.x);
         auto y = dst::round_cast<int>(position.y);
@@ -364,14 +364,14 @@ namespace System {
 
     void mouse_position_callback(GLFWwindow* handle, double xOffset, double yOffset)
     {
-        dst_window(handle).mInputManager.get_mouse_state().position({ xOffset, yOffset });
+        dst_window(handle).mInputManager.get_mouse_state().set_position({ xOffset, yOffset });
     }
 
     void mouse_scroll_callback(GLFWwindow* handle, double /* xOffset */, double yOffset)
     {
         auto& input = dst_window(handle).mInputManager;
-        auto scroll = input.get_mouse_state().scroll();
-        input.get_mouse_state().scroll(scroll + yOffset);
+        auto scroll = input.get_mouse_state().get_scroll();
+        input.get_mouse_state().set_scroll(scroll + yOffset);
     }
 
     void glfw_error_callback(int error, const char* description)

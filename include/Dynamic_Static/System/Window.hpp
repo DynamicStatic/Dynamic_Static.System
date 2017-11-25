@@ -55,7 +55,7 @@ namespace System {
             std::string name { "Dynamic_Static" };        /*!< TODO : Documentation. */
             CursorMode cursorMode { CursorMode::Normal }; /*!< TODO : Documentation. */
             Resolution resolution { 1280, 720 };          /*!< TODO : Documentation. */
-            Vector2 position { 320, 180 };                /*!< TODO : Documentation. */
+            glm::vec2 position { 320, 180 };              /*!< TODO : Documentation. */
             bool decorated { true };                      /*!< TODO : Documentation. */
             bool resizable { true };                      /*!< TODO : Documentation. */
             bool visible { true };                        /*!< TODO : Documentation. */
@@ -166,13 +166,13 @@ namespace System {
          * Gets this Window's position.
          * @return This Window's position
          */
-        Vector2 get_position() const;
+        glm::vec2 get_position() const;
 
         /**
          * Sets this Window's position
          * @param [in] position This Window's position
          */
-        void set_position(const Vector2& position);
+        void set_position(const glm::vec2& position);
 
         /**
          * Gets a value indicating whether or not this Window is visible.

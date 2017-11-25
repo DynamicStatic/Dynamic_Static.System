@@ -411,8 +411,8 @@ int main()
     float fieldOfView = 40;
     float cameraSpeed = 7.4f;
     float scrollSensitivity = 86;
-    dst::Vector3 cameraPosition(0, 0, 20);
-    dst::Vector2 lookSensitivity(1.6f);
+    glm::vec3 cameraPosition(0, 0, 20);
+    glm::vec2 lookSensitivity(1.6f);
     dst::Quaternion worldRotation =
         dst::Quaternion(glm::radians(20.0f), dst::Vector3::UnitX) *
         dst::Quaternion(glm::radians(30.0f), dst::Vector3::UnitY);
@@ -527,18 +527,18 @@ int main()
         }
 
         if (input.get_mouse().down(dst::sys::Mouse::Button::Left)) {
-            auto look = input.get_mouse().delta() * lookSensitivity * dt;
+            auto look = input.get_mouse().get_delta() * lookSensitivity * dt;
             auto rotationX = dst::Quaternion(-look.y, dst::Vector3::UnitX);
             auto rotationY = dst::Quaternion( look.x, dst::Vector3::UnitY);
             worldRotation = rotationY * worldRotation * rotationX;
             worldRotation.normalize();
         }
 
-        cameraPosition.z -= static_cast<float>(input.get_mouse().scroll() * scrollSensitivity * dt);
+        cameraPosition.z -= static_cast<float>(input.get_mouse().get_scroll() * scrollSensitivity * dt);
         if (input.get_mouse().down(dst::sys::Mouse::Button::Middle) ||
             input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
-            cameraPosition.x += input.get_mouse().delta().x * cameraSpeed * dt;
-            cameraPosition.y += input.get_mouse().delta().y * cameraSpeed * dt;
+            cameraPosition.x += input.get_mouse().get_delta().x * cameraSpeed * dt;
+            cameraPosition.y += input.get_mouse().get_delta().y * cameraSpeed * dt;
         }
 
         auto view = dst::Matrix4x4::create_view(
