@@ -119,10 +119,8 @@ struct Mesh final
 
 struct Shader final
 {
-public:
     GLuint handle { };
 
-public:
     Shader(GLenum stage, int lineNumber, const std::string& source)
     {
         auto versionPosition = source.find_first_of("#version");
@@ -166,10 +164,8 @@ public:
 
 struct Program final
 {
-public:
     GLuint handle { };
 
-public:
     Program(
         int vertexShaderSourceLineNumber,
         const std::string& vertexShaderSource,
@@ -205,14 +201,12 @@ public:
 
 struct Gear final
 {
-public:
     glm::vec3 position;
     glm::vec4 color;
     float rotation { };
     float speed { };
     Mesh mesh;
 
-public:
     Gear(float innerRadius, float outerRadius, float width, uint32_t teeth, float toothDepth)
     {
         std::vector<Vertex> vertices;
@@ -339,35 +333,30 @@ public:
                 createFace({ i3, i4, i9 });
                 createFace({ i3, i9, i8 });
             }
-
-            {
-                // NOTE : Inner cylinder face...matches the vertices at i4 and i5 for the front and back faces...
-                auto i0 = createVertex(anchors[0] * innerRadius - w);
-                auto i1 = createVertex(anchors[4] * innerRadius - w);
-                auto i2 = createVertex(anchors[4] * innerRadius + w);
-                auto i3 = createVertex(anchors[0] * innerRadius + w);
-                createFace({ i0, i1, i2 });
-                createFace({ i0, i2, i3 });
-            }
         }
 
-        // auto i00 = 0;
-        // auto i01 = 0;
-        // for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
-        //     float angle = toothAngle * tooth_i;
-        //     std::array<dst::Vector3, 2> anchors;
-        //     for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
-        //         anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
-        //         anchors[anchor_i].y = sin(angle + toothDivisionsAngle * anchor_i);
-        //     }
-        // 
-        //     auto i0 = createVertex(anchors[0] * innerRadius - w);
-        //     auto i1 = createVertex(anchors[4] * innerRadius - w);
-        //     auto i2 = createVertex(anchors[4] * innerRadius + w);
-        //     auto i3 = createVertex(anchors[0] * innerRadius + w);
-        //     createFace({ i0, i2, i3 });
-        //     createFace({ i0, i1, i2 });
-        // }
+        // NOTE : Inner cylinder faces...handled outside of the loop above so we can weld the verts to smooth the normals...
+        GLushort i00 { }, i01 { }, si0 { }, si1 { };
+        for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
+            float angle = toothAngle * tooth_i;
+            std::array<glm::vec3, 2> anchors { };
+            for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
+                anchors[anchor_i].x = cos(angle + toothAngle * anchor_i);
+                anchors[anchor_i].y = sin(angle + toothAngle * anchor_i);
+            }
+
+            if (!i00 && !i01) {
+                i00 = si0 = createVertex(anchors[0] * innerRadius + w);
+                i01 = si1 = createVertex(anchors[0] * innerRadius - w);
+            }
+
+            auto i0 = tooth_i < teeth - 1 ? createVertex(anchors[1] * innerRadius + w) : si0;
+            auto i1 = tooth_i < teeth - 1 ? createVertex(anchors[1] * innerRadius - w) : si1;
+            createFace({ i00, i01, i0 });
+            createFace({ i01, i1,  i0 });
+            i00 = i0;
+            i01 = i1;
+        }
 
         std::vector<uint32_t> hits(vertices.size());
         for (size_t i = 0; i < indices.size(); i += 3) {
@@ -527,9 +516,9 @@ int main()
 
         if (input.get_mouse().down(dst::sys::Mouse::Button::Left)) {
             auto look = input.get_mouse().get_delta() * lookSensitivity * dt;
-            auto rotationX = dst::Quaternion(-look.y, dst::Vector3::UnitX);
-            auto rotationY = dst::Quaternion( look.x, dst::Vector3::UnitY);
-            worldRotation = glm::normalize(rotationY * worldRotation * rotationX);
+            auto rotationX = glm::angleAxis(look.y, glm::vec3 { 1, 0, 0 });
+            auto rotationY = glm::angleAxis(look.x, glm::vec3 { 0, 1, 0 });
+            worldRotation = glm::normalize(rotationX * rotationY * worldRotation);
         }
 
         cameraPosition.z -= input.get_mouse().get_scroll() * scrollSensitivity * dt;
