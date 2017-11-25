@@ -413,9 +413,9 @@ int main()
     float scrollSensitivity = 86;
     glm::vec3 cameraPosition { 0, 0, 20 };
     glm::vec2 lookSensitivity { 1.6f };
-    dst::Quaternion worldRotation =
-        dst::Quaternion(glm::radians(20.0f), dst::Vector3::UnitX) *
-        dst::Quaternion(glm::radians(30.0f), dst::Vector3::UnitY);
+    auto worldRotationX = glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 });
+    auto worldRotationY = glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 });
+    glm::quat worldRotation = glm::normalize(worldRotationX * worldRotationY);
     glm::vec3 lightPosition(5, 5, 10);
     glm::vec3 lightDirection = lightPosition;
 
@@ -446,10 +446,10 @@ int main()
 
             void main()
             {
-                vec4 position = (modelView * vec4(vsPosition, 1));
+                vec4 position = modelView * vec4(vsPosition, 1);
                 gl_Position = projection * position;
                 fsNormal = normalize(modelView * vec4(vsNormal, 0)).xyz;
-                fsViewDirection = normalize(-position.xyz);
+                fsViewDirection = normalize(-position).xyz;
             }
         )",
         __LINE__,
@@ -529,8 +529,7 @@ int main()
             auto look = input.get_mouse().get_delta() * lookSensitivity * dt;
             auto rotationX = dst::Quaternion(-look.y, dst::Vector3::UnitX);
             auto rotationY = dst::Quaternion( look.x, dst::Vector3::UnitY);
-            worldRotation = rotationY * worldRotation * rotationX;
-            worldRotation.normalize();
+            worldRotation = glm::normalize(rotationY * worldRotation * rotationX);
         }
 
         cameraPosition.z -= input.get_mouse().get_scroll() * scrollSensitivity * dt;
@@ -564,17 +563,15 @@ int main()
             auto model =
                 glm::toMat4(worldRotation) *
                 glm::translate(gear.position) *
-                glm::toMat4(
-                    dst::Quaternion(glm::radians(gear.rotation), dst::Vector3::UnitZ)
-                );
+                glm::rotate(glm::radians(gear.rotation), glm::vec3 { 0, 0, 1 });
 
-            auto modelView = view * (glm::mat4)model;
+            auto modelView = view * model;
             dst_gl(glProgramUniformMatrix4fv(program.handle, modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
             dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.color[0]));
             dst_gl(glBindVertexArray(gear.mesh.vertexArray));
             dst_gl(glFrontFace(gear.mesh.winding));
             dst_gl(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
-            dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, 0));
+            dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, nullptr));
             dst_gl(glBindVertexArray(0));
         }
 
