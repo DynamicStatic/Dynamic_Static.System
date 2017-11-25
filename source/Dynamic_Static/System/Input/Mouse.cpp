@@ -32,12 +32,12 @@ namespace System {
         return mButtons[button];
     }
 
-    double Mouse::State::get_scroll() const
+    float Mouse::State::get_scroll() const
     {
         return mScroll;
     }
 
-    void Mouse::State::set_scroll(double scroll)
+    void Mouse::State::set_scroll(float scroll)
     {
         mScroll = scroll;
     }
@@ -64,7 +64,7 @@ namespace System {
 namespace Dynamic_Static {
 namespace System {
 
-    double Mouse::get_scroll() const
+    float Mouse::get_scroll() const
     {
         return mCurrent.get_scroll() - mPrevious.get_scroll();
     }

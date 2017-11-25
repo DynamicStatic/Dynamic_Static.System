@@ -45,8 +45,8 @@
 
 struct Vertex final
 {
-    glm::vec3 position;
-    glm::vec3 normal;
+    glm::vec3 position { };
+    glm::vec3 normal { };
 
     static void enable_attributes()
     {
@@ -230,7 +230,7 @@ public:
             std::copy_n(face.begin(), face.size(), std::back_inserter(indices));
         };
 
-        const glm::vec3 w(0, 0, width * 0.5f);
+        const glm::vec3 w { 0, 0, width * 0.5f };
         const float pi = static_cast<float>(M_PI);
         const float toothAngle = 2.0f * pi / teeth;
         const float toothDivisionsAngle = toothAngle / 4;
@@ -411,13 +411,13 @@ int main()
     float fieldOfView = 40;
     float cameraSpeed = 7.4f;
     float scrollSensitivity = 86;
-    glm::vec3 cameraPosition(0, 0, 20);
-    glm::vec2 lookSensitivity(1.6f);
+    glm::vec3 cameraPosition { 0, 0, 20 };
+    glm::vec2 lookSensitivity { 1.6f };
     dst::Quaternion worldRotation =
         dst::Quaternion(glm::radians(20.0f), dst::Vector3::UnitX) *
         dst::Quaternion(glm::radians(30.0f), dst::Vector3::UnitY);
-    dst::Vector3 lightPosition(5, 5, 10);
-    dst::Vector3 lightDirection = lightPosition;
+    glm::vec3 lightPosition(5, 5, 10);
+    glm::vec3 lightDirection = lightPosition;
 
     dst::sys::Window::Configuration windowConfiguration;
     windowConfiguration.name = "GLGears";
@@ -491,27 +491,26 @@ int main()
         Gear(1.3f, 2.0f, 0.5f, 10, 0.7f)
     };
 
-    gears[0].position = dst::Vector3(-3.0f, -2.0f, 0.0f);
-    gears[0].color = dst::Color(0.8f, 0.1f, 0.0f, 1.0f);
+    gears[0].position = { -3.0f, -2.0f, 0.0f };
+    gears[0].color = { 0.8f, 0.1f, 0.0f, 1.0f };
     gears[0].speed = 70;
 
-    gears[1].position = dst::Vector3(3.1f, -2.0f, 0.0f);
-    gears[1].color = dst::Color(0.0f, 0.8f, 0.2f, 1.0);
+    gears[1].position = { 3.1f, -2.0f, 0.0f };
+    gears[1].color = { 0.0f, 0.8f, 0.2f, 1.0 };
     gears[1].rotation = -9;
     gears[1].speed = -140;
 
-    gears[2].position = dst::Vector3(-3.1f, 4.2f, 0.0f);
-    gears[2].color = dst::Color(0.2f, 0.2f, 1.0f, 1.0f);
+    gears[2].position = { -3.1f, 4.2f, 0.0f };
+    gears[2].color = { 0.2f, 0.2f, 1.0f, 1.0f };
     gears[2].rotation = -25;
     gears[2].speed = -140;
 
     dst::Clock clock;
     bool running = true;
     while (running) {
+        clock.update();
         dst::sys::Window::update();
         const auto& input = window.get_input();
-
-        clock.update();
         auto dt = clock.elapsed<dst::Second<float>>();
 
         if (input.get_keyboard().down(dst::sys::Keyboard::Key::Escape)) {
@@ -534,7 +533,7 @@ int main()
             worldRotation.normalize();
         }
 
-        cameraPosition.z -= static_cast<float>(input.get_mouse().get_scroll() * scrollSensitivity * dt);
+        cameraPosition.z -= input.get_mouse().get_scroll() * scrollSensitivity * dt;
         if (input.get_mouse().down(dst::sys::Mouse::Button::Middle) ||
             input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
             cameraPosition.x += input.get_mouse().get_delta().x * cameraSpeed * dt;
@@ -543,8 +542,8 @@ int main()
 
         auto view = dst::Matrix4x4::create_view(
             cameraPosition,
-            cameraPosition + glm::vec3(0, 0, -1),
-            dst::Vector3(0, 1, 0)
+            cameraPosition + glm::vec3 { 0, 0, -1 },
+            { 0, 1, 0 }
         );
 
         auto projection = dst::Matrix4x4::create_perspective(
@@ -559,7 +558,7 @@ int main()
         dst_gl(glViewport(0, 0, window.get_resolution().width, window.get_resolution().height));
         dst_gl(glUseProgram(program.handle));
         dst_gl(glProgramUniformMatrix4fv(program.handle, projectionLocation, 1, GL_FALSE, &projection[0][0]));
-        dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &lightPosition.normalized()[0]));
+        dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &glm::normalize(lightPosition)[0]));
         for (auto& gear : gears) {
             gear.rotation += animation ? gear.speed * dt : 0;
             auto model =

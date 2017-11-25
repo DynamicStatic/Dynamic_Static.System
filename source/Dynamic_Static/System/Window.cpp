@@ -371,7 +371,7 @@ namespace System {
     {
         auto& input = dst_window(handle).mInputManager;
         auto scroll = input.get_mouse_state().get_scroll();
-        input.get_mouse_state().set_scroll(scroll + yOffset);
+        input.get_mouse_state().set_scroll(scroll + static_cast<float>(yOffset));
     }
 
     void glfw_error_callback(int error, const char* description)

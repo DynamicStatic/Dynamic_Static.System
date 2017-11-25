@@ -59,7 +59,7 @@ namespace System {
             using ButtonSet = std::bitset<static_cast<size_t>(Button::Count)>;
 
         private:
-            double mScroll { };
+            float mScroll { };
             glm::vec2 mPosition { };
             ButtonSet mButtons;
 
@@ -97,13 +97,13 @@ namespace System {
              * Gets this Mouse::State's scroll value.
              * @return This Mouse::State's scroll value
              */
-            double get_scroll() const;
+            float get_scroll() const;
 
             /**
              * Sets this Mouse::State's scroll value.
              * @param [in] scroll This Mouse::State's scroll value
              */
-            void set_scroll(double scroll);
+            void set_scroll(float scroll);
 
             /**
              * Gets this Mouse::State's position.
@@ -132,7 +132,7 @@ namespace System {
          * Gets the delta between this Mouse's current and previous scroll.
          * @return The delta between this Mouse's current and previous scroll
          */
-        double get_scroll() const;
+        float get_scroll() const;
 
         /**
          * Gets the delta between this Mouse's current and previous position.
