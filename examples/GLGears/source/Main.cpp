@@ -50,14 +50,19 @@ struct Vertex final
 
     static void enable_attributes()
     {
-        Vertex* offset = nullptr;
-        dst_gl(glEnableVertexAttribArray(0));
-        dst_gl(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0));
-        offset += sizeof(offset->position);
+        GLuint index = 0;
+        size_t offset = 0;
+        Vertex* vertex = nullptr;
 
-        dst_gl(glEnableVertexAttribArray(1));
-        dst_gl(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)sizeof(glm::vec3)));
-        offset += sizeof(offset->normal);
+        dst_gl(glEnableVertexAttribArray(index));
+        dst_gl(glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offset));
+        offset += sizeof(vertex->position);
+        ++index;
+
+        dst_gl(glEnableVertexAttribArray(index));
+        dst_gl(glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offset));
+        offset += sizeof(vertex->normal);
+        ++index;
     }
 };
 
