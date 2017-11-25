@@ -98,10 +98,7 @@ struct Mesh final
         dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW));
         dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
         dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW));
-        dst_gl(glEnableVertexAttribArray(0));
-        dst_gl(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (GLvoid*)0));
-        dst_gl(glEnableVertexAttribArray(1));
-        dst_gl(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (GLvoid*)(sizeof(dst::Vector3))));
+        VertexType::enable_attributes();
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, 0));
         dst_gl(glBindVertexArray(0));
 
@@ -282,21 +279,21 @@ public:
                 createFace({ i2, i6, i4 });
             }
 
-            // {
-            //     // NOTE : Back face...same as the front face with opposite winding order and positive w...
-            //     auto i0 = createVertex(anchors[1] * toothOuterRadius + w);
-            //     auto i1 = createVertex(anchors[2] * toothOuterRadius + w);
-            //     auto i2 = createVertex(anchors[3] * toothInnerRadius + w);
-            //     auto i3 = createVertex(anchors[0] * toothInnerRadius + w);
-            //     auto i4 = createVertex(anchors[4] * innerRadius      + w);
-            //     auto i5 = createVertex(anchors[0] * innerRadius      + w);
-            //     auto i6 = createVertex(anchors[4] * toothInnerRadius + w);
-            //     createFace({ i0, i2, i1 });
-            //     createFace({ i0, i3, i2 });
-            //     createFace({ i3, i4, i2 });
-            //     createFace({ i3, i5, i4 });
-            //     createFace({ i2, i4, i6 });
-            // }
+            {
+                // NOTE : Back face...same as the front face with opposite winding order and positive w...
+                auto i0 = createVertex(anchors[1] * toothOuterRadius + w);
+                auto i1 = createVertex(anchors[2] * toothOuterRadius + w);
+                auto i2 = createVertex(anchors[3] * toothInnerRadius + w);
+                auto i3 = createVertex(anchors[0] * toothInnerRadius + w);
+                auto i4 = createVertex(anchors[4] * innerRadius      + w);
+                auto i5 = createVertex(anchors[0] * innerRadius      + w);
+                auto i6 = createVertex(anchors[4] * toothInnerRadius + w);
+                createFace({ i0, i2, i1 });
+                createFace({ i0, i3, i2 });
+                createFace({ i3, i4, i2 });
+                createFace({ i3, i5, i4 });
+                createFace({ i2, i4, i6 });
+            }
 
             {
                 /*
