@@ -61,17 +61,15 @@ struct Vertex final
 
         dst_gl(glEnableVertexAttribArray(index));
         dst_gl(glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offset));
-        offset += sizeof(vertex->normal);
-        ++index;
     }
 };
 
 struct Mesh final
 {
-    GLuint vertexArray { 0 };
-    GLuint vertexBuffer { 0 };
-    GLuint indexBuffer { 0 };
-    GLsizei indexCount { 0 };
+    GLuint vertexArray { };
+    GLuint vertexBuffer { };
+    GLuint indexBuffer { };
+    GLsizei indexCount { };
     GLenum indexType { GL_UNSIGNED_SHORT };
     GLenum primitiveType { GL_TRIANGLES };
     GLenum winding { GL_CW };
@@ -122,13 +120,21 @@ struct Mesh final
 struct Shader final
 {
 public:
-    GLuint handle { 0 };
+    GLuint handle { };
 
 public:
-    Shader(GLenum stage, const std::string& source)
+    Shader(GLenum stage, int lineNumber, const std::string& source)
     {
+        auto versionPosition = source.find_first_of("#version");
+        auto sourcePosition = source.find_first_of('\n', versionPosition) + 1;
+        auto lineCount = std::count(source.begin(), source.begin() + sourcePosition, '\n');
+        auto modifiedSource =
+            source.substr(0, sourcePosition) +
+            "#line " + std::to_string(lineNumber + lineCount) + "\n" +
+            source.substr(sourcePosition);
+        auto sourceCStr = modifiedSource.c_str();
+
         handle = glCreateShader(stage);
-        auto sourceCStr = source.c_str();
         dst_gl(glShaderSource(handle, 1, &sourceCStr, nullptr));
         dst_gl(glCompileShader(handle));
         GLint compileStatus;
@@ -161,13 +167,18 @@ public:
 struct Program final
 {
 public:
-    GLuint handle { 0 };
+    GLuint handle { };
 
 public:
-    Program(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+    Program(
+        int vertexShaderSourceLineNumber,
+        const std::string& vertexShaderSource,
+        int fragmentShaderSourceLineNumber,
+        const std::string& fragmentShaderSource
+    )
     {
-        Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSource);
-        Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+        Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
+        Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
         dst_gl(handle = glCreateProgram());
         dst_gl(glAttachShader(handle, vertexShader.handle));
         dst_gl(glAttachShader(handle, fragmentShader.handle));
@@ -196,21 +207,13 @@ struct Gear final
 {
 public:
     dst::Vector3 position;
-    float rotationSpeed { 1 };
-    float rotation { 0 };
-    dst::Color diffuseColor;
-    dst::Color specularColor;
-    float specularPower;
+    dst::Color color;
+    float rotation { };
+    float speed { };
     Mesh mesh;
 
 public:
-    Gear(
-        float innerRadius,
-        float outerRadius,
-        float width,
-        uint32_t teeth,
-        float toothDepth
-    )
+    Gear(float innerRadius, float outerRadius, float width, uint32_t teeth, float toothDepth)
     {
         std::vector<Vertex> vertices;
         auto createVertex =
@@ -229,12 +232,12 @@ public:
 
         const dst::Vector3 w(0, 0, width * 0.5f);
         const float pi = static_cast<float>(M_PI);
-        const float tootAngle = 2.0f * pi / teeth;
-        const float toothDivisionsAngle = tootAngle / 4;
+        const float toothAngle = 2.0f * pi / teeth;
+        const float toothDivisionsAngle = toothAngle / 4;
         const float toothInnerRadius = outerRadius - toothDepth * 0.5f;
         const float toothOuterRadius = outerRadius + toothDepth * 0.5f;
         for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
-            float angle = tootAngle * tooth_i;
+            float angle = toothAngle * tooth_i;
             std::array<dst::Vector3, 5> anchors;
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
                 anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
@@ -348,6 +351,24 @@ public:
             }
         }
 
+        // auto i00 = 0;
+        // auto i01 = 0;
+        // for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
+        //     float angle = toothAngle * tooth_i;
+        //     std::array<dst::Vector3, 2> anchors;
+        //     for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
+        //         anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
+        //         anchors[anchor_i].y = sin(angle + toothDivisionsAngle * anchor_i);
+        //     }
+        // 
+        //     auto i0 = createVertex(anchors[0] * innerRadius - w);
+        //     auto i1 = createVertex(anchors[4] * innerRadius - w);
+        //     auto i2 = createVertex(anchors[4] * innerRadius + w);
+        //     auto i3 = createVertex(anchors[0] * innerRadius + w);
+        //     createFace({ i0, i2, i3 });
+        //     createFace({ i0, i1, i2 });
+        // }
+
         std::vector<uint32_t> hits(vertices.size());
         for (size_t i = 0; i < indices.size(); i += 3) {
             auto& v0 = vertices[indices[i]];
@@ -375,19 +396,42 @@ public:
 
 int main()
 {
+    std::cout
+        << std::endl
+        << "[Esc]          - Quit" << std::endl
+        << "[A]            - Toggle animation" << std::endl
+        << "[W]            - Toggle wireframe" << std::endl
+        << "[Left Mouse]   - Rotate gears" << std::endl
+        << "[Scroll Wheel] - Move camera forward and backward" << std::endl
+        << "[Middle Mouse] - Move camera horizontally and vertically" << std::endl
+        << "[Right Mouse]  - Move camera horizontally and vertically" << std::endl;
+
+    bool animation = true;
+    bool wireframe = false;
+    float fieldOfView = 40;
+    float cameraSpeed = 7.4f;
+    float scrollSensitivity = 86;
+    dst::Vector3 cameraPosition(0, 0, 20);
+    dst::Vector2 lookSensitivity(1.6f);
+    dst::Quaternion worldRotation =
+        dst::Quaternion(glm::radians(20.0f), dst::Vector3::UnitX) *
+        dst::Quaternion(glm::radians(30.0f), dst::Vector3::UnitY);
+    dst::Vector3 lightPosition(5, 5, 10);
+    dst::Vector3 lightDirection = lightPosition;
+
     dst::sys::Window::Configuration windowConfiguration;
     windowConfiguration.name = "GLGears";
     windowConfiguration.api = dst::sys::API::OpenGL;
-    windowConfiguration.apiVersion.major = 3;
-    windowConfiguration.apiVersion.minor = 3;
-    windowConfiguration.resolution.width = 1280;
-    windowConfiguration.resolution.height = 720;
+    windowConfiguration.apiVersion = { 3, 3, 0 };
+    windowConfiguration.resolution = { 1280, 720 };
+    windowConfiguration.vSync = true;
     dst::sys::Window window(windowConfiguration);
 
     dst_gl(glEnable(GL_CULL_FACE));
     dst_gl(glEnable(GL_DEPTH_TEST));
 
     Program program(
+        __LINE__,
         R"(
             #version 330
 
@@ -408,6 +452,7 @@ int main()
                 fsViewDirection = normalize(-position.xyz);
             }
         )",
+        __LINE__,
         R"(
             #version 330
 
@@ -421,15 +466,9 @@ int main()
 
             void main()
             {
-                // fragColor = color + vec4(lightDirection, 1) * fsNormal * fsViewSpacePosition;
-                // fragColor *= 0.0001;
-                // fragColor += color;
-                // 
-                // fragColor *= 0.0001;
-
                 vec3 reflection = normalize(reflect(-lightDirection, fsNormal));
                 vec4 ambient = vec4(0.2, 0.2, 0.2, 1);
-                vec4 diffuse = vec4(0.5) * dot(fsNormal, lightDirection);
+                vec4 diffuse = vec4(0.5) * max(dot(fsNormal, lightDirection), 0);
                 float specularPower = 0.25;
                 vec4 specular = vec4(0.5, 0.5, 0.5, 1) * pow(max(dot(reflection, fsViewDirection), 0), 0.8) * specularPower;
                 fragColor = vec4((ambient + diffuse) * color + specular);
@@ -453,33 +492,18 @@ int main()
     };
 
     gears[0].position = dst::Vector3(-3.0f, -2.0f, 0.0f);
-    gears[0].diffuseColor = dst::Color(0.8f, 0.1f, 0.0f, 1.0f);
-    gears[2].specularColor = dst::Color::White;
-    gears[2].specularPower = 0;
-    gears[0].rotationSpeed = 1;
+    gears[0].color = dst::Color(0.8f, 0.1f, 0.0f, 1.0f);
+    gears[0].speed = 70;
 
     gears[1].position = dst::Vector3(3.1f, -2.0f, 0.0f);
-    gears[1].diffuseColor = dst::Color(0.0f, 0.8f, 0.2f, 1.0);
-    gears[2].specularColor = dst::Color::White;
-    gears[2].specularPower = 0;
-    gears[1].rotationSpeed = -2;
+    gears[1].color = dst::Color(0.0f, 0.8f, 0.2f, 1.0);
+    gears[1].rotation = -9;
+    gears[1].speed = -140;
 
     gears[2].position = dst::Vector3(-3.1f, 4.2f, 0.0f);
-    gears[2].diffuseColor = dst::Color(0.2f, 0.2f, 1.0f, 1.0f);
-    gears[2].specularColor = dst::Color::White;
-    gears[2].specularPower = 0;
-    gears[2].rotationSpeed = -2;
-
-    bool spin = false;
-    bool lines = true;
-    float fieldOfView = 60;
-    float cameraSpeed = 7.4f;
-    float scrollSensitivity = 86;
-    dst::Vector2 lookSensitivity(1.6f);
-    dst::Quaternion worldRotation(0.95f, 0, 0.3f, 0);
-    dst::Vector3 cameraPosition(0, 0, 20);
-    dst::Vector3 lightPosition(5, 5, 10);
-    dst::Vector3 lightDirection = -lightPosition;
+    gears[2].color = dst::Color(0.2f, 0.2f, 1.0f, 1.0f);
+    gears[2].rotation = -25;
+    gears[2].speed = -140;
 
     dst::Clock clock;
     bool running = true;
@@ -494,12 +518,12 @@ int main()
             running = false;
         }
 
-        if (input.get_keyboard().pressed(dst::sys::Keyboard::Key::Q)) {
-            spin = !spin;
+        if (input.get_keyboard().pressed(dst::sys::Keyboard::Key::A)) {
+            animation = !animation;
         }
 
         if (input.get_keyboard().pressed(dst::sys::Keyboard::Key::W)) {
-            lines = !lines;
+            wireframe = !wireframe;
         }
 
         if (input.get_mouse().down(dst::sys::Mouse::Button::Left)) {
@@ -510,14 +534,12 @@ int main()
             worldRotation.normalize();
         }
 
-        cameraPosition.z += static_cast<float>(input.get_mouse().scroll() * scrollSensitivity * dt);
-        if (input.get_mouse().down(dst::sys::Mouse::Button::Right) ||
-            input.get_mouse().down(dst::sys::Mouse::Button::Middle)) {
+        cameraPosition.z -= static_cast<float>(input.get_mouse().scroll() * scrollSensitivity * dt);
+        if (input.get_mouse().down(dst::sys::Mouse::Button::Middle) ||
+            input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
             cameraPosition.x += input.get_mouse().delta().x * cameraSpeed * dt;
             cameraPosition.y += input.get_mouse().delta().y * cameraSpeed * dt;
         }
-
-        std::cout << worldRotation.x << ", " << worldRotation.y << ", " << worldRotation.z << ", " << worldRotation.w << std::endl;
 
         auto view = dst::Matrix4x4::create_view(
             cameraPosition,
@@ -537,25 +559,22 @@ int main()
         dst_gl(glViewport(0, 0, window.get_resolution().width, window.get_resolution().height));
         dst_gl(glUseProgram(program.handle));
         dst_gl(glProgramUniformMatrix4fv(program.handle, projectionLocation, 1, GL_FALSE, &projection[0][0]));
-        dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &lightDirection.normalized()[0]));
+        dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &lightPosition.normalized()[0]));
         for (auto& gear : gears) {
-            if (spin) {
-                gear.rotation += gear.rotationSpeed * dt;
-            }
-
+            gear.rotation += animation ? gear.speed * dt : 0;
             auto model =
                 dst::Matrix4x4::create_rotation(worldRotation) *
                 dst::Matrix4x4::create_translation(gear.position) *
                 dst::Matrix4x4::create_rotation(
-                    dst::Quaternion(gear.rotation, dst::Vector3::UnitZ)
+                    dst::Quaternion(glm::radians(gear.rotation), dst::Vector3::UnitZ)
                 );
 
             auto modelView = view * model;
             dst_gl(glProgramUniformMatrix4fv(program.handle, modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
-            dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.diffuseColor[0]));
+            dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.color[0]));
             dst_gl(glBindVertexArray(gear.mesh.vertexArray));
             dst_gl(glFrontFace(gear.mesh.winding));
-            dst_gl(glPolygonMode(GL_FRONT_AND_BACK, lines ? GL_LINE : GL_FILL));
+            dst_gl(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
             dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, 0));
             dst_gl(glBindVertexArray(0));
         }

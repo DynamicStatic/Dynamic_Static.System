@@ -295,6 +295,10 @@ namespace System {
         }
         #endif
 
+        if (configuration.vSync) {
+            glfwSwapInterval(1);
+        }
+
         glfwSetFramebufferSizeCallback(handle, frame_buffer_size_callback);
         glfwSetMouseButtonCallback(handle, mouse_button_callback);
         glfwSetCursorPosCallback(handle, mouse_position_callback);

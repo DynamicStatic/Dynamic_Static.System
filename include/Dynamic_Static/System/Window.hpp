@@ -59,6 +59,7 @@ namespace System {
             bool decorated { true };                      /*!< TODO : Documentation. */
             bool resizable { true };                      /*!< TODO : Documentation. */
             bool visible { true };                        /*!< TODO : Documentation. */
+            bool vSync { true };                          /*!< TODO : Documentation. */
         };
 
     private:

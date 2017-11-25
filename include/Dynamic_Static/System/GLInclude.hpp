@@ -69,7 +69,8 @@ namespace System {
             std::cerr
                 << "OpenGL Error [" << error << ":" << errorStr << "]" << std::endl
                 << "    " << message << std::endl
-                << "    " << glCall << std::endl;
+                << "    " << glCall << std::endl
+                << std::endl;
         }
 
         return error;
