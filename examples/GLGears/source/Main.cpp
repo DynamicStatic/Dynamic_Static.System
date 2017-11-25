@@ -207,7 +207,7 @@ struct Gear final
 {
 public:
     glm::vec3 position;
-    dst::Color color;
+    glm::vec4 color;
     float rotation { };
     float speed { };
     Mesh mesh;
