@@ -540,13 +540,13 @@ int main()
             cameraPosition.y += input.get_mouse().get_delta().y * cameraSpeed * dt;
         }
 
-        auto view = dst::Matrix4x4::create_view(
+        auto view = glm::lookAt(
             cameraPosition,
             cameraPosition + glm::vec3 { 0, 0, -1 },
             { 0, 1, 0 }
         );
 
-        auto projection = dst::Matrix4x4::create_perspective(
+        auto projection = glm::perspective(
             dst::to_radians(fieldOfView),
             window.get_resolution().get_aspect_ratio(),
             0.001f,
@@ -562,13 +562,13 @@ int main()
         for (auto& gear : gears) {
             gear.rotation += animation ? gear.speed * dt : 0;
             auto model =
-                dst::Matrix4x4::create_rotation(worldRotation) *
-                dst::Matrix4x4::create_translation(gear.position) *
-                dst::Matrix4x4::create_rotation(
+                glm::toMat4(worldRotation) *
+                glm::translate(gear.position) *
+                glm::toMat4(
                     dst::Quaternion(glm::radians(gear.rotation), dst::Vector3::UnitZ)
                 );
 
-            auto modelView = view * model;
+            auto modelView = view * (glm::mat4)model;
             dst_gl(glProgramUniformMatrix4fv(program.handle, modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
             dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.color[0]));
             dst_gl(glBindVertexArray(gear.mesh.vertexArray));
