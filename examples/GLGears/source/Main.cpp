@@ -45,8 +45,8 @@
 
 struct Vertex final
 {
-    dst::Vector3 position;
-    dst::Vector3 normal;
+    glm::vec3 position;
+    glm::vec3 normal;
 
     static void enable_attributes()
     {
@@ -239,7 +239,6 @@ public:
         const float toothOuterRadius = outerRadius + toothDepth * 0.5f;
         for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
             float angle = tootAngle * tooth_i;
-            // NOTE : Anchors provide unit vectors at the angles we'll need to layout our vertices...
             std::array<dst::Vector3, 5> anchors;
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
                 anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
@@ -360,8 +359,7 @@ public:
             auto& v2 = vertices[indices[i + 2]];
             auto edge0 = v0.position - v1.position;
             auto edge1 = v0.position - v2.position;
-            dst::Vector3 normal = -glm::cross(edge0, edge1);
-            normal.normalize();
+            glm::vec3 normal = -glm::normalize(glm::cross(edge0, edge1));
             v0.normal += normal;
             v1.normal += normal;
             v2.normal += normal;
@@ -372,7 +370,7 @@ public:
 
         for (size_t i = 0; i < vertices.size(); ++i) {
             vertices[i].normal /= hits[i];
-            vertices[i].normal.normalize();
+            vertices[i].normal = glm::normalize(vertices[i].normal);
         }
 
         mesh.write(vertices, indices);
@@ -517,7 +515,7 @@ int main()
         dst_gl(glProgramUniformMatrix4fv(program.handle, projectionLocation, 1, GL_FALSE, &projection[0][0]));
         dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &lightDirection.normalized()[0]));
         for (auto& gear : gears) {
-            gear.rotation += gear.speed * clock.elapsed<dst::Second<float>>();
+            // gear.rotation += gear.speed * clock.elapsed<dst::Second<float>>();
             auto model =
                 dst::Matrix4x4::create_rotation(worldRotation) *
                 dst::Matrix4x4::create_translation(gear.position) *
