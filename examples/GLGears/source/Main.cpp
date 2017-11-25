@@ -545,8 +545,8 @@ int main()
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         dst_gl(glViewport(0, 0, window.get_resolution().width, window.get_resolution().height));
         dst_gl(glUseProgram(program.handle));
-        dst_gl(glProgramUniformMatrix4fv(program.handle, projectionLocation, 1, GL_FALSE, &projection[0][0]));
-        dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &glm::normalize(lightPosition)[0]));
+        dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
+        dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightPosition)[0]));
         for (auto& gear : gears) {
             gear.rotation += animation ? gear.speed * dt : 0;
             auto model =
@@ -555,8 +555,8 @@ int main()
                 glm::rotate(glm::radians(gear.rotation), glm::vec3 { 0, 0, 1 });
 
             auto modelView = view * model;
-            dst_gl(glProgramUniformMatrix4fv(program.handle, modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
-            dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.color[0]));
+            dst_gl(glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
+            dst_gl(glUniform4fv(colorLocation, 1, &gear.color[0]));
             dst_gl(glBindVertexArray(gear.mesh.vertexArray));
             dst_gl(glFrontFace(gear.mesh.winding));
             dst_gl(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));

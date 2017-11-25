@@ -78,6 +78,7 @@ target_link_libraries(
     PUBLIC INTERFACE ${platformSpecificLibraryDependencies}
     PUBLIC INTERFACE ${Dynamic_Static.Core.linkLibraries}
     PUBLIC INTERFACE ${glfw.library}
+    PUBLIC INTERFACE ${platformSpecificLibraryDependencies}
 )
 
 dst_export_target(${CMAKE_PROJECT_NAME})
