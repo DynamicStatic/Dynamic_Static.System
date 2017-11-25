@@ -238,7 +238,7 @@ public:
         const float toothOuterRadius = outerRadius + toothDepth * 0.5f;
         for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
             float angle = toothAngle * tooth_i;
-            std::array<dst::Vector3, 5> anchors;
+            std::array<glm::vec3, 5> anchors { };
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
                 anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
                 anchors[anchor_i].y = sin(angle + toothDivisionsAngle * anchor_i);
