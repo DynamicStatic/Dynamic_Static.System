@@ -236,6 +236,7 @@ struct Gear final
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
                 anchors[anchor_i].x = cos(angle + toothDivisionsAngle * anchor_i);
                 anchors[anchor_i].y = sin(angle + toothDivisionsAngle * anchor_i);
+                anchors[anchor_i] = glm::normalize(anchors[anchor_i]);
             }
 
             {
@@ -393,7 +394,8 @@ int main()
         << "[Left Mouse]   - Rotate gears" << std::endl
         << "[Scroll Wheel] - Move camera forward and backward" << std::endl
         << "[Middle Mouse] - Move camera horizontally and vertically" << std::endl
-        << "[Right Mouse]  - Move camera horizontally and vertically" << std::endl;
+        << "[Right Mouse]  - Move camera horizontally and vertically" << std::endl
+        << std::endl;
 
     bool animation = true;
     bool wireframe = false;
