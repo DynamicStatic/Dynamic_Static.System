@@ -206,7 +206,7 @@ public:
 struct Gear final
 {
 public:
-    dst::Vector3 position;
+    glm::vec3 position;
     dst::Color color;
     float rotation { };
     float speed { };
