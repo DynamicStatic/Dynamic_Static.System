@@ -196,9 +196,11 @@ struct Gear final
 {
 public:
     dst::Vector3 position;
-    float speed { 1 };
+    float rotationSpeed { 1 };
     float rotation { 0 };
-    dst::Color color;
+    dst::Color diffuseColor;
+    dst::Color specularColor;
+    float specularPower;
     Mesh mesh;
 
 public:
@@ -207,14 +209,8 @@ public:
         float outerRadius,
         float width,
         uint32_t teeth,
-        float toothDepth,
-        const dst::Vector3& position,
-        float speed,
-        const dst::Color& color
+        float toothDepth
     )
-        : position { position }
-        , speed { speed }
-        , color { color }
     {
         std::vector<Vertex> vertices;
         auto createVertex =
@@ -389,56 +385,116 @@ int main()
     dst::sys::Window window(windowConfiguration);
 
     std::array<Gear, 3> gears {
-        Gear(1.0f, 4.0f, 1.0f, 20, 0.7f, { -3.0f,  0.0f, 0.0f },  1, { 0.8f, 0.1f, 0.0f, 1.0f }),
-        Gear(0.5f, 2.0f, 2.0f, 10, 0.7f, {  3.1f,  0.0f, 0.0f }, -2, { 0.0f, 0.8f, 0.2f, 1.0f }),
-        Gear(1.3f, 2.0f, 0.5f, 10, 0.7f, { -3.1f, -6.2f, 0.0f }, -2, { 0.2f, 0.2f, 1.0f, 1.0f })
+        Gear(1.0f, 4.0f, 1.0f, 20, 0.7f),
+        Gear(0.5f, 2.0f, 2.0f, 10, 0.7f),
+        Gear(1.3f, 2.0f, 0.5f, 10, 0.7f)
     };
+
+    gears[0].position = dst::Vector3(-3.0f,  0.0f, 0.0f);
+    gears[0].diffuseColor = dst::Color(0.8f, 0.1f, 0.0f, 1.0f);
+    gears[2].specularColor = dst::Color::White;
+    gears[2].specularPower = 0;
+    gears[0].rotationSpeed = 1;
+
+    gears[1].position = dst::Vector3( 3.1f,  0.0f, 0.0f);
+    gears[1].diffuseColor = dst::Color(0.0f, 0.8f, 0.2f, 1.0);
+    gears[2].specularColor = dst::Color::White;
+    gears[2].specularPower = 0;
+    gears[1].rotationSpeed = -2;
+
+    gears[2].position = dst::Vector3(-3.1f, -6.2f, 0.0f);
+    gears[2].diffuseColor = dst::Color(0.2f, 0.2f, 1.0f, 1.0f);
+    gears[2].specularColor = dst::Color::White;
+    gears[2].specularPower = 0;
+    gears[2].rotationSpeed = -2;
 
     Program program(
         R"(
             #version 330
-            uniform vec4 color;
-            uniform mat4 model;
-            uniform mat4 view;
+            // uniform vec4 color;
+
+
+            uniform mat4 modelView;
             uniform mat4 projection;
-            uniform vec3 lightDirection;
+
+
+            // uniform mat4 model;
+            // uniform mat4 view;
+            // uniform mat4 projection;
+            // uniform vec3 lightDirection;
+
+
             layout(location = 0) in vec3 vsPosition;
             layout(location = 1) in vec3 vsNormal;
-            out vec4 fsColor;
+
+
+            // out vec4 fsColor;
+
+            out vec4 fsNormal;
+            out vec4 fsViewSpacePosition;
+
             void main()
             {
-                mat4 modelView = view * model;
-                vec4 position = modelView * vec4(vsPosition, 1);
-                vec3 n = normalize((model * vec4(vsNormal, 0)).xyz);
-                vec3 l = lightDirection.xyz;
-                // vec3 l = normalize((view * vec4(-lightDirection, 1)).xyz);
-                fsColor = color * dot(n, l);
-                // fsColor += vec4(1, 1, 1, 1);
-                // fsColor *= 0.001;
-                // fsColor += vec4(n, 1);
-                gl_Position = projection * position;
+                fsNormal = normalize(modelView * vec4(vsNormal, 0));
+                fsViewSpacePosition = modelView * vec4(vsPosition, 1);
+                gl_Position = projection * fsViewSpacePosition;
+
+
+
+                // mat4 modelView = view * model;
+                // vec4 position = modelView * vec4(vsPosition, 1);
+                // vec3 n = normalize((model * vec4(vsNormal, 0)).xyz);
+                // vec3 l = lightDirection.xyz;
+                // // vec3 l = normalize((view * vec4(-lightDirection, 1)).xyz);
+                // fsColor = color * dot(n, l);
+                // // fsColor += vec4(1, 1, 1, 1);
+                // // fsColor *= 0.001;
+                // // fsColor += vec4(n, 1);
+                // gl_Position = projection * position;
             }
         )",
         R"(
             #version 330
-            in vec4 fsColor;
+            // uniform vec4 lightColor;
+            // uniform vec4 ambientColor;
+            // uniform float ambientIntensity;
+            // uniform vec4 diffuseColor;
+            // uniform vec4 specularColor;
+            // uniform vec4 specularPower;
+
+            uniform vec4 color;
+            uniform vec3 lightDirection;
+            
+
+            // in vec4 fsColor;
+
+            in vec4 fsNormal;
+            in vec4 fsViewSpacePosition;
+
             out vec4 fragColor;
+
+
             void main()
             {
-                fragColor = fsColor;
+                fragColor = color + vec4(lightDirection, 1) * fsNormal * fsViewSpacePosition;
+                fragColor *= 0.0001;
+                fragColor += color;
+
+                // float4 normal = normalize(fsNormal);
+                // float4 diffuse = diffuseColor * dot(n, l);
+                // 
+                // fragColor = fsColor;
             }
         )"
     );
 
-    GLint colorLocation;
-    GLint modelLocation;
-    GLint viewLocation;
+    GLint modelViewLocation;
     GLint projectionLocation;
+    GLint colorLocation;
     GLint lightDirectionLocation;
-    dst_gl(colorLocation = glGetUniformLocation(program.handle, "color"));
-    dst_gl(modelLocation = glGetUniformLocation(program.handle, "model"));
-    dst_gl(viewLocation = glGetUniformLocation(program.handle, "view"));
+    dst_gl(modelViewLocation = glGetUniformLocation(program.handle, "modelView"));
     dst_gl(projectionLocation = glGetUniformLocation(program.handle, "projection"));
+    dst_gl(colorLocation = glGetUniformLocation(program.handle, "color"));
     dst_gl(lightDirectionLocation = glGetUniformLocation(program.handle, "lightDirection"));
 
     dst_gl(glEnable(GL_CULL_FACE));
@@ -511,7 +567,6 @@ int main()
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         dst_gl(glViewport(0, 0, window.get_resolution().width, window.get_resolution().height));
         dst_gl(glUseProgram(program.handle));
-        dst_gl(glProgramUniformMatrix4fv(program.handle, viewLocation, 1, GL_FALSE, &view[0][0]));
         dst_gl(glProgramUniformMatrix4fv(program.handle, projectionLocation, 1, GL_FALSE, &projection[0][0]));
         dst_gl(glProgramUniform3fv(program.handle, lightDirectionLocation, 1, &lightDirection.normalized()[0]));
         for (auto& gear : gears) {
@@ -523,8 +578,9 @@ int main()
                     dst::Quaternion(gear.rotation, dst::Vector3::UnitZ)
                 );
 
-            dst_gl(glProgramUniformMatrix4fv(program.handle, modelLocation, 1, GL_FALSE, &model[0][0]));
-            dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.color[0]));
+            auto modelView = view * model;
+            dst_gl(glProgramUniformMatrix4fv(program.handle, modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
+            dst_gl(glProgramUniform4fv(program.handle, colorLocation, 1, &gear.diffuseColor[0]));
             dst_gl(glBindVertexArray(gear.mesh.vertexArray));
             dst_gl(glFrontFace(gear.mesh.winding));
             dst_gl(glPolygonMode(GL_FRONT_AND_BACK, lines ? GL_LINE : GL_FILL));
