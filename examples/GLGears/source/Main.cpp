@@ -217,7 +217,7 @@ public:
     {
         std::vector<Vertex> vertices;
         auto createVertex =
-        [&vertices](const dst::Vector3& position)
+        [&vertices](const glm::vec3& position)
         {
             vertices.push_back({ position, { }});
             return static_cast<GLushort>(vertices.size() - 1);
@@ -230,7 +230,7 @@ public:
             std::copy_n(face.begin(), face.size(), std::back_inserter(indices));
         };
 
-        const dst::Vector3 w(0, 0, width * 0.5f);
+        const glm::vec3 w(0, 0, width * 0.5f);
         const float pi = static_cast<float>(M_PI);
         const float toothAngle = 2.0f * pi / teeth;
         const float toothDivisionsAngle = toothAngle / 4;
