@@ -11,6 +11,6 @@ set(sourceFiles
 
 add_executable(${target} "${sourceFiles}")
 dst_setup_target(${target} "" "${sourceFiles}")
-target_link_libraries(${target} Dynamic_Static.System)
+target_link_libraries(${target} PUBLIC Dynamic_Static.System)
 set_target_properties(${target} PROPERTIES FOLDER Examples)
 add_dependencies(${target} Dynamic_Static.System)
