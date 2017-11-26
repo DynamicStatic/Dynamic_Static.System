@@ -240,29 +240,6 @@ struct Gear final
             }
 
             {
-                /*
-
-                    NOTE : Front face vertex indices with anchor index, clockwise winding...
-
-                                           i0      i1
-                                           a1      a2
-                          toothOuterRadius  +------+
-                                           /        \
-                                          /          \
-                                      i3 /            \ i2
-                                      a0/              \a3
-                     toothInnerRadius  +----------------+..      i6
-                                       \                /  `..   a4
-                                        \              /       `..  toothInnerRadius
-                                         \            /         /
-                                          \          /      /
-                                           \        /   /
-                               innerRadius  +------+
-                                           i5      i4
-                                           a0      a4
-
-                */
-
                 auto i0 = createVertex(anchors[1] * toothOuterRadius - w);
                 auto i1 = createVertex(anchors[2] * toothOuterRadius - w);
                 auto i2 = createVertex(anchors[3] * toothInnerRadius - w);
@@ -278,7 +255,6 @@ struct Gear final
             }
 
             {
-                // NOTE : Back face...same as the front face with opposite winding order and positive w...
                 auto i0 = createVertex(anchors[1] * toothOuterRadius + w);
                 auto i1 = createVertex(anchors[2] * toothOuterRadius + w);
                 auto i2 = createVertex(anchors[3] * toothInnerRadius + w);
@@ -294,27 +270,6 @@ struct Gear final
             }
 
             {
-                /*
-
-                    NOTE : Outer surface vertex indices with anchor index, clockwise winding...
-
-                          toothOuterRadius  +------+  toothOuterRadius
-                                          /          \
-                                         /            \  /toothInnerRadius
-                     toothInnerRadius  +                +--------+ toothInnerRadius
-
-                                      a0   a1     a2   a3       a4
-                                      i0   i1     i2   i3       i4
-                                       +----+------+----+--------+ +w
-                                       |    |      |    |        |
-                                       |    |      |    |        |
-                                       |    |      |    |        |
-                                       +----+------+----+--------+ -w
-                                      a0   a1     a2   a3       a4
-                                      i5   i6     i7   i8       i9
-
-                */
-
                 auto i0 = createVertex(anchors[0] * toothInnerRadius + w);
                 auto i1 = createVertex(anchors[1] * toothOuterRadius + w);
                 auto i2 = createVertex(anchors[2] * toothOuterRadius + w);
@@ -336,7 +291,6 @@ struct Gear final
             }
         }
 
-        // NOTE : Inner cylinder faces...handled outside of the loop above so we can weld the verts to smooth the normals...
         GLushort i00 { }, i01 { }, si0 { }, si1 { };
         for (uint32_t tooth_i = 0; tooth_i < teeth; ++tooth_i) {
             float angle = toothAngle * tooth_i;
@@ -344,6 +298,7 @@ struct Gear final
             for (size_t anchor_i = 0; anchor_i < anchors.size(); ++anchor_i) {
                 anchors[anchor_i].x = cos(angle + toothAngle * anchor_i);
                 anchors[anchor_i].y = sin(angle + toothAngle * anchor_i);
+                anchors[anchor_i] = glm::normalize(anchors[anchor_i]);
             }
 
             if (!i00 && !i01) {
@@ -367,16 +322,16 @@ struct Gear final
             auto edge0 = v0.position - v1.position;
             auto edge1 = v0.position - v2.position;
             glm::vec3 normal = -glm::normalize(glm::cross(edge0, edge1));
-            v0.normal += normal;
-            v1.normal += normal;
-            v2.normal += normal;
+            v0.normal = glm::normalize(v0.normal + normal);
+            v1.normal = glm::normalize(v1.normal + normal);
+            v2.normal = glm::normalize(v2.normal + normal);
             ++hits[indices[i]];
             ++hits[indices[i + 1]];
             ++hits[indices[i + 2]];
         }
 
         for (size_t i = 0; i < vertices.size(); ++i) {
-            vertices[i].normal /= hits[i];
+            vertices[i].normal /= static_cast<float>(hits[i]);
             vertices[i].normal = glm::normalize(vertices[i].normal);
         }
 
@@ -391,10 +346,10 @@ int main()
         << "[Esc]          - Quit" << std::endl
         << "[A]            - Toggle animation" << std::endl
         << "[W]            - Toggle wireframe" << std::endl
-        << "[Left Mouse]   - Rotate gears" << std::endl
-        << "[Scroll Wheel] - Move camera forward and backward" << std::endl
-        << "[Middle Mouse] - Move camera horizontally and vertically" << std::endl
-        << "[Right Mouse]  - Move camera horizontally and vertically" << std::endl
+        << "[Left Mouse]   - Rotate model" << std::endl
+        << "[Scroll Wheel] - Move model forward and backward" << std::endl
+        << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
+        << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
         << std::endl;
 
     bool animation = true;
@@ -404,9 +359,9 @@ int main()
     float scrollSensitivity = 86;
     glm::vec3 cameraPosition { 0, 0, 20 };
     glm::vec2 lookSensitivity { 1.6f };
-    auto worldRotationX = glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 });
-    auto worldRotationY = glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 });
-    glm::quat worldRotation = glm::normalize(worldRotationX * worldRotationY);
+    auto modelRotationX = glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 });
+    auto modelRotationY = glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 });
+    glm::quat worldRotation = glm::normalize(modelRotationX * modelRotationY);
     glm::vec3 lightPosition(5, 5, 10);
     glm::vec3 lightDirection = lightPosition;
 
@@ -526,7 +481,7 @@ int main()
         cameraPosition.z -= input.get_mouse().get_scroll() * scrollSensitivity * dt;
         if (input.get_mouse().down(dst::sys::Mouse::Button::Middle) ||
             input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
-            cameraPosition.x += input.get_mouse().get_delta().x * cameraSpeed * dt;
+            cameraPosition.x -= input.get_mouse().get_delta().x * cameraSpeed * dt;
             cameraPosition.y += input.get_mouse().get_delta().y * cameraSpeed * dt;
         }
 
