@@ -7,8 +7,15 @@ dst_add_external_package(
 include("${PROJECT_SOURCE_DIR}/external/glew.cmake")
 include("${PROJECT_SOURCE_DIR}/external/glfw.cmake")
 
+if(BUILD_AUDIO_SUPPORT)
+    include("${PROJECT_SOURCE_DIR}/external/PortAudio.cmake")
+    include("${PROJECT_SOURCE_DIR}/external/tinysound.cmake")
+endif()
+
 set(includePath ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
 set(includeFiles
+    ${includePath}/Audio/AudioTest.hpp
+
     ${includePath}/Input/Keyboard.hpp
     ${includePath}/Input/Mouse.hpp
     
@@ -24,6 +31,8 @@ set(includeFiles
 
 set(sourcePath ${PROJECT_SOURCE_DIR}/source/Dynamic_Static/System)
 set(sourceFiles
+    ${sourcePath}/Audio/AudioTest.cpp
+
     ${sourcePath}/Input/Input.cpp
     ${sourcePath}/Input/Input.Manager.cpp
     ${sourcePath}/Input/Keyboard.cpp
@@ -40,9 +49,12 @@ set(sourceFiles
 add_library(${CMAKE_PROJECT_NAME} STATIC "${includeFiles}" "${sourceFiles}")
 add_dependencies(${CMAKE_PROJECT_NAME} Dynamic_Static.Core)
 add_dependencies(${CMAKE_PROJECT_NAME} glfw)
+if(BUILD_AUDIO_SUPPORT)
+    add_dependencies(${CMAKE_PROJECT_NAME} PortAudio)
+endif()
 dst_setup_target(${CMAKE_PROJECT_NAME} "${includeFiles}" "${sourceFiles}")
 
-if (MSVC)
+if(MSVC)
     set(platformSpecificIncludeDependencies
         ${glew.include}
     )
@@ -80,5 +92,20 @@ target_link_libraries(
     PUBLIC INTERFACE ${glfw.library}
     PUBLIC INTERFACE ${platformSpecificLibraryDependencies}
 )
+
+if(BUILD_AUDIO_SUPPORT)
+    add_definitions(-DDYNAMIC_STATIC_AUDIO_SUPPORTED=1)
+
+    target_include_directories(
+        ${CMAKE_PROJECT_NAME}
+        PUBLIC ${PortAudio.include}
+        PUBLIC ${tinysound.include}
+    )
+
+    target_link_libraries(
+        ${CMAKE_PROJECT_NAME}
+        PUBLIC INTERFACE ${PortAudio.library}
+    )
+endif()
 
 dst_export_target(${CMAKE_PROJECT_NAME})
