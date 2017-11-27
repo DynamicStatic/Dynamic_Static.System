@@ -76,6 +76,12 @@ else()
         Xrandr
         Xxf86vm
     )
+
+    if(BUILD_AUDIO_SUPPORT)
+        set(platformSpecificLibraryDependencies
+            ${platformSpecificLibraryDependencies}
+        )
+    endif()
 endif()
 
 target_include_directories(
