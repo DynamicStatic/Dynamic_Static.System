@@ -14,8 +14,8 @@
     #pragma warning(disable: 4996)
 #endif
 
-#include <string>
-#include "stb_vorbis.c"
+// #include <string>
+// #include "stb_vorbis.c"
 
 #ifdef DYNAMIC_STATIC_MSVC
     #pragma warning(pop)
@@ -29,15 +29,15 @@ namespace System {
 
     void AudioTest::play()
     {
-        std::string filePath = "D:/Dynamic_Static/Dynamic_Static.System/examples/resources/PegboardNerds_x_MisterWives-Coffins-FreeRelease.ogg";
+        // std::string filePath = "D:/Dynamic_Static/Dynamic_Static.System/examples/resources/PegboardNerds_x_MisterWives-Coffins-FreeRelease.ogg";
 
-        int channels;
-        int sampleRate;
-        short* output;
-        int rc = stb_vorbis_decode_filename(filePath.c_str(), &channels, &sampleRate, &output);
-        if (rc == -1) {
-            std::cerr << "No good" << std::endl;
-        }
+        // int channels;
+        // int sampleRate;
+        // short* output;
+        // int rc = stb_vorbis_decode_filename(filePath.c_str(), &channels, &sampleRate, &output);
+        // if (rc == -1) {
+        //     std::cerr << "No good" << std::endl;
+        // }
     }
 
 } // namespace System
