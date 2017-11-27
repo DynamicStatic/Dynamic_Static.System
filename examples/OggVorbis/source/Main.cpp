@@ -77,11 +77,13 @@ int main()
     oggVorbisData.samples = stb_vorbis_stream_length_in_samples(oggVorbisData.stream) * oggVorbisData.info.channels;
     stb_vorbis_seek_start(oggVorbisData.stream);
 
+    std::cout << "@ln(" << __LINE__ << ")" << std::endl;
     auto error = Pa_Initialize();
     if (error != paNoError) {
-        std::cerr << Pa_GetErrorText(error) << std::endl;
+        std::cerr << "@ln(" << __LINE__  << ") " << Pa_GetErrorText(error) << std::endl;
     }
 
+    std::cout << "@ln(" << __LINE__ << ")" << std::endl;
     PaStream* audioStream;
     error = Pa_OpenDefaultStream(
         &audioStream,
@@ -95,24 +97,24 @@ int main()
     );
 
     if (error != paNoError) {
-        std::cerr << Pa_GetErrorText(error) << std::endl;
+        std::cerr << "@ln(" << __LINE__  << ") " << Pa_GetErrorText(error) << std::endl;
     }
 
     error = Pa_StartStream(audioStream);
     if (error != paNoError) {
-        std::cerr << Pa_GetErrorText(error) << std::endl;
+        std::cerr << "@ln(" << __LINE__  << ") " << Pa_GetErrorText(error) << std::endl;
     }
 
     std::this_thread::sleep_for(dst::Second<>(oggVorbisData.duration));
 
     error = Pa_CloseStream(audioStream);
     if (error != paNoError) {
-        std::cerr << Pa_GetErrorText(error) << std::endl;
+        std::cerr << "@ln(" << __LINE__  << ") " << Pa_GetErrorText(error) << std::endl;
     }
 
     error = Pa_Terminate();
     if (error != paNoError) {
-        std::cerr << Pa_GetErrorText(error) << std::endl;
+        std::cerr << "@ln(" << __LINE__  << ") " << Pa_GetErrorText(error) << std::endl;
     }
 
     stb_vorbis_close(oggVorbisData.stream);

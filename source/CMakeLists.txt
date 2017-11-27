@@ -76,12 +76,6 @@ else()
         Xrandr
         Xxf86vm
     )
-
-    if(BUILD_AUDIO_SUPPORT)
-        set(platformSpecificLibraryDependencies
-            ${platformSpecificLibraryDependencies}
-        )
-    endif()
 endif()
 
 target_include_directories(
@@ -114,6 +108,16 @@ if(BUILD_AUDIO_SUPPORT)
         ${CMAKE_PROJECT_NAME}
         PUBLIC INTERFACE ${PortAudio.library}
     )
+
+    # sudo apt-get install libasound-dev
+    # if(NOT MSVC)
+    #     target_link_libraries(
+    #         ${CMAKE_PROJECT_NAME}
+    #         PUBLIC rt
+    #         PUBLIC asound
+    #         PUBLIC jack
+    #     )
+    # endif()
 endif()
 
 dst_export_target(${CMAKE_PROJECT_NAME})
