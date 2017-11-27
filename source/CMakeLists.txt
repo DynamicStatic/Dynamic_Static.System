@@ -9,7 +9,7 @@ include("${PROJECT_SOURCE_DIR}/external/glfw.cmake")
 
 if(BUILD_AUDIO_SUPPORT)
     include("${PROJECT_SOURCE_DIR}/external/PortAudio.cmake")
-    include("${PROJECT_SOURCE_DIR}/external/stb_vorbis.cmake")
+    include("${PROJECT_SOURCE_DIR}/external/stb.cmake")
 endif()
 
 set(includePath ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)

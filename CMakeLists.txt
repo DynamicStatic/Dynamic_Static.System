@@ -12,7 +12,11 @@ file(
 include(${Dynamic_Static.cmake})
 dst_create_project(Dynamic_Static.System)
 set(CMAKE_CXX_STANDARD 14)
-option(BUILD_AUDIO_SUPPORT "Build audio support" OFF)
+if(MSVC)
+    option(BUILD_AUDIO_SUPPORT "Build audio support" ON)
+else()
+    option(BUILD_AUDIO_SUPPORT "Build audio support" OFF)
+endif()
 add_subdirectory("source/")
 
 option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" ON)
