@@ -9,7 +9,7 @@ include("${PROJECT_SOURCE_DIR}/external/glfw.cmake")
 
 if(BUILD_AUDIO_SUPPORT)
     include("${PROJECT_SOURCE_DIR}/external/PortAudio.cmake")
-    include("${PROJECT_SOURCE_DIR}/external/tinysound.cmake")
+    include("${PROJECT_SOURCE_DIR}/external/stb_vorbis.cmake")
 endif()
 
 set(includePath ${PROJECT_SOURCE_DIR}/include/Dynamic_Static/System/)
@@ -94,12 +94,14 @@ target_link_libraries(
 )
 
 if(BUILD_AUDIO_SUPPORT)
-    add_definitions(-DDYNAMIC_STATIC_AUDIO_SUPPORTED=1)
+    add_definitions(
+        -DDYNAMIC_STATIC_AUDIO_SUPPORTED=1
+    )
 
     target_include_directories(
         ${CMAKE_PROJECT_NAME}
         PUBLIC ${PortAudio.include}
-        PUBLIC ${tinysound.include}
+        PUBLIC ${stb.include}
     )
 
     target_link_libraries(
