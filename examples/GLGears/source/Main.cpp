@@ -492,7 +492,7 @@ int main()
         );
 
         auto projection = glm::perspective(
-            dst::to_radians(fieldOfView),
+            glm::radians(fieldOfView),
             window.get_resolution().get_aspect_ratio(),
             0.001f,
             100.0f
