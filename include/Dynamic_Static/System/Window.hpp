@@ -60,6 +60,7 @@ namespace System {
             bool resizable { true };                      /*!< TODO : Documentation. */
             bool visible { true };                        /*!< TODO : Documentation. */
             bool vSync { true };                          /*!< TODO : Documentation. */
+            Window* parent { nullptr };                   /*!< TODO : Documentation. */
         };
 
     private:

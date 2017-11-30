@@ -267,8 +267,13 @@ namespace System {
 
         // TODO : Parent window
         // TODO : Monitor
+        // TODO : GLFWwindow handle is not necessarily OS window handle...
+        GLFWwindow* parent = nullptr;
+        if (configuration.parent) {
+            parent = reinterpret_cast<GLFWwindow*>(configuration.parent->get_handle());
+        }
 
-        handle = glfwCreateWindow(width, height, configuration.name.c_str(), nullptr, nullptr);
+        handle = glfwCreateWindow(width, height, configuration.name.c_str(), nullptr, parent);
         if (!handle) {
             destroy_glfw_window(handle);
             // TODO : Get error for exception...
