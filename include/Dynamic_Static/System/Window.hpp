@@ -207,6 +207,7 @@ namespace System {
 
     private:
         void execute_on_resized() const;
+        friend GLFWwindow* create_glfw_window(const Window::Configuration&);
         friend void frame_buffer_size_callback(GLFWwindow*, int, int);
         friend void keyboard_callback(GLFWwindow*, int, int, int, int);
         friend void mouse_button_callback(GLFWwindow*, int, int, int);
