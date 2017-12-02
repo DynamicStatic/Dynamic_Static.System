@@ -20,8 +20,8 @@ namespace System {
 
     static Window& dst_window(GLFWwindow* handle);
     static GLFWwindow* glfw_handle(const void* handle);
-    static GLFWwindow* create_glfw_window(const Window::Configuration& configuration);
     static void destroy_glfw_window(GLFWwindow* handle);
+    GLFWwindow* create_glfw_window(const Window::Configuration& configuration);
     void frame_buffer_size_callback(GLFWwindow* handle, int width, int height);
     void keyboard_callback(GLFWwindow* handle, int glfwKey, int scanCode, int action, int mods);
     void mouse_button_callback(GLFWwindow* handle, int glfwButton, int action, int mods);
@@ -278,8 +278,13 @@ namespace System {
 
         // TODO : Parent window
         // TODO : Monitor
+        // TODO : GLFWwindow handle is not OS window handle...clarify names
+        GLFWwindow* parent = nullptr;
+        if (configuration.parent) {
+            parent = reinterpret_cast<GLFWwindow*>(configuration.parent->mHandle);
+        }
 
-        handle = glfwCreateWindow(width, height, configuration.name.c_str(), nullptr, nullptr);
+        handle = glfwCreateWindow(width, height, configuration.name.c_str(), nullptr, parent);
         if (!handle) {
             destroy_glfw_window(handle);
             // TODO : Get error for exception...

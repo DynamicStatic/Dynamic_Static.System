@@ -13,7 +13,7 @@
 #include "Dynamic_Static/Core/Defines.hpp"
 #include "Dynamic_Static/Core/Object.hpp"
 #include "Dynamic_Static/Core/Version.hpp"
-#include "Dynamic_Static/Core/Math/Vector2.hpp"
+#include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Resolution.hpp"
@@ -60,6 +60,7 @@ namespace System {
             bool resizable { true };                      /*!< TODO : Documentation. */
             bool visible { true };                        /*!< TODO : Documentation. */
             bool vSync { true };                          /*!< TODO : Documentation. */
+            Window* parent { nullptr };                   /*!< TODO : Documentation. */
         };
 
     private:
@@ -218,6 +219,7 @@ namespace System {
 
     private:
         void execute_on_resized() const;
+        friend GLFWwindow* create_glfw_window(const Window::Configuration&);
         friend void frame_buffer_size_callback(GLFWwindow*, int, int);
         friend void keyboard_callback(GLFWwindow*, int, int, int, int);
         friend void mouse_button_callback(GLFWwindow*, int, int, int);
