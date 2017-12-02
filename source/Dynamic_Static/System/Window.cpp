@@ -26,6 +26,7 @@ namespace System {
     static void destroy_glfw_window(GLFWwindow* handle);
     GLFWwindow* create_glfw_window(const Window::Configuration& configuration);
     void frame_buffer_size_callback(GLFWwindow* handle, int width, int height);
+    void char_callback(GLFWwindow* handle, unsigned int codepoint);
     void keyboard_callback(GLFWwindow* handle, int glfwKey, int scanCode, int action, int mods);
     void mouse_button_callback(GLFWwindow* handle, int glfwButton, int action, int mods);
     void mouse_position_callback(GLFWwindow* handle, double xOffset, double yOffset);
@@ -126,6 +127,11 @@ namespace System {
         glfwSetClipboardString(glfw_handle(mHandle), clipboard.c_str());
     }
 
+    gsl::span<const uint32_t> Window::get_text_stream() const
+    {
+        return mTextStream;
+    }
+
     Window::CursorMode Window::get_cursor_mode() const
     {
         auto cursorMode = CursorMode::Normal;
@@ -212,6 +218,10 @@ namespace System {
 
     void Window::update()
     {
+        for (auto& handle : gGLFWWindowHandles) {
+            dst_window(handle).mTextStream.clear();
+        }
+
         glfwPollEvents();
         for (auto& handle : gGLFWWindowHandles) {
             dst_window(handle).mInput.update();
@@ -325,6 +335,7 @@ namespace System {
         glfwSetCursorPosCallback(handle, mouse_position_callback);
         glfwSetScrollCallback(handle, mouse_scroll_callback);
         glfwSetKeyCallback(handle, keyboard_callback);
+        glfwSetCharCallback(handle, char_callback);
         gGLFWWindowHandles.insert(handle);
         return handle;
     }
@@ -344,6 +355,13 @@ namespace System {
     void frame_buffer_size_callback(GLFWwindow* handle, int /* width */, int /* height */)
     {
         dst_window(handle).execute_on_resized();
+    }
+
+    void char_callback(GLFWwindow* handle, unsigned int codepoint)
+    {
+        if (codepoint > 0 && codepoint < 0x10000) {
+            dst_window(handle).mTextStream.push_back(codepoint);
+        }
     }
 
     void keyboard_callback(GLFWwindow* handle, int glfwKey, int scanCode, int action, int /* mods */)

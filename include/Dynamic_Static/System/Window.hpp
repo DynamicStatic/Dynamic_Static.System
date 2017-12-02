@@ -18,6 +18,10 @@
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Resolution.hpp"
 
+#include "gsl/span"
+
+#include <vector>
+
 #if defined(DYNAMIC_STATIC_LINUX)
 typedef unsigned long X11Window;
 #endif
@@ -66,6 +70,7 @@ namespace System {
     private:
         void* mHandle { nullptr };
         API mApi { API::Unknown };
+        std::vector<uint32_t> mTextStream;
         Input mInput { };
 
     public:
@@ -152,6 +157,12 @@ namespace System {
         void set_clipboard(const std::string& clipboard) const;
 
         /**
+         * Gets this Window's text stream.
+         * @return This Window's text stream
+         */
+        gsl::span<const uint32_t> get_text_stream() const;
+
+        /**
          * Gets this Window's CursorMode.
          * @return This Window's CursorMode
          */
@@ -221,6 +232,7 @@ namespace System {
         void execute_on_resized() const;
         friend GLFWwindow* create_glfw_window(const Window::Configuration&);
         friend void frame_buffer_size_callback(GLFWwindow*, int, int);
+        friend void char_callback(GLFWwindow*, unsigned int);
         friend void keyboard_callback(GLFWwindow*, int, int, int, int);
         friend void mouse_button_callback(GLFWwindow*, int, int, int);
         friend void mouse_position_callback(GLFWwindow*, double, double);
