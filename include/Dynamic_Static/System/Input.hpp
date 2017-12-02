@@ -19,115 +19,36 @@ namespace System {
     /**
      * Provides methods for input device queries.
      */
-    class Input final
+    struct Input final
     {
-    public:
-        class Manager;
-
-    private:
-        Mouse mMouse;
-        Keyboard mKeyboard;
-
-    private:
-        Input() = default;
-
-    public:
         /**
-         * Gets this Input's Mouse.
-         * @return This Input's Mouse
+         * This Input's Keyboard.
          */
-        Mouse& get_mouse();
+        Keyboard keyboard { };
 
         /**
-         * Gets this Input's Mouse.
-         * @return This Input's Mouse
+         * This Input's Mouse.
          */
-        const Mouse& get_mouse() const;
+        Mouse mouse { };
 
         /**
-         * Gets this Input's Keyboard.
-         * @return This Input's Keyboard
+         * Updates this Input.
+         * \n NOTE : This method must be called periodically to keep this Input up to date.
          */
-        Keyboard& get_keyboard();
-
-        /**
-         * Gets this Input's Keyboard.
-         * @return This Input's Keyboard
-         */
-        const Keyboard& get_keyboard() const;
+        inline void update()
+        {
+            keyboard.update();
+            mouse.update();
+        }
 
         /**
          * Resets this Input.
          */
-        void reset();
-
-    private:
-        void update(
-            const Mouse::State& mouseState,
-            const Keyboard::State& keyboardState
-        );
-    };
-
-} // namespace System
-} // namespace Dynamic_Static
-
-namespace Dynamic_Static {
-namespace System {
-
-    class Input::Manager final
-    {
-    private:
-        Input mInput;
-        Mouse::State mMouseState;
-        Keyboard::State mKeyboardState;
-
-    public:
-        /**
-         * Gets this Input::Manager's Input.
-         * @return This Input::Manager's Input
-         */
-        Input& get_input();
-
-        /**
-         * Gets this Input::Manager's Input.
-         * @return This Input::Manager's Input
-         */
-        const Input& get_input() const;
-
-        /**
-         * Gets this Input::Manager's Mouse::State.
-         * @return This Input::Manager's Mouse::State
-         */
-        Mouse::State& get_mouse_state();
-
-        /**
-         * Gets this Input::Manager's Mouse::State.
-         * @return This Input::Manager's Mouse::State
-         */
-        const Mouse::State& get_mouse_state() const;
-
-        /**
-         * Gets this Input::Manager's Keyboard::State.
-         * @return This Input::Manager's Keyboard::State
-         */
-        Keyboard::State& get_keyboard_state();
-
-        /**
-         * Gets this Input::Manager's Keyboard::State.
-         * @return This Input::Manager's Keyboard::State
-         */
-        const Keyboard::State& get_keyboard_state() const;
-
-        /**
-         * Updates this Input::Manager's Input.
-         * \n NOTE : This method must be called periodically to keep this Input::Manager's Input up to date.
-         */
-        void update();
-
-        /**
-         * Resets this Input::Manager's Input.
-         */
-        void reset();
+        inline void reset()
+        {
+            keyboard.reset();
+            mouse.reset();
+        }
     };
 
 } // namespace System

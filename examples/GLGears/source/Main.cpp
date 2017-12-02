@@ -365,6 +365,7 @@ int main()
     glm::vec3 lightPosition(5, 5, 10);
     glm::vec3 lightDirection = lightPosition;
 
+    using namespace dst::sys;
     dst::sys::Window::Configuration windowConfiguration;
     windowConfiguration.name = "GLGears";
     windowConfiguration.api = dst::sys::API::OpenGL;
@@ -459,30 +460,30 @@ int main()
         const auto& input = window.get_input();
         auto dt = clock.elapsed<dst::Second<float>>();
 
-        if (input.get_keyboard().down(dst::sys::Keyboard::Key::Escape)) {
+        if (input.keyboard.down(dst::sys::Keyboard::Key::Escape)) {
             running = false;
         }
 
-        if (input.get_keyboard().pressed(dst::sys::Keyboard::Key::A)) {
+        if (input.keyboard.pressed(dst::sys::Keyboard::Key::A)) {
             animation = !animation;
         }
 
-        if (input.get_keyboard().pressed(dst::sys::Keyboard::Key::W)) {
+        if (input.keyboard.pressed(dst::sys::Keyboard::Key::W)) {
             wireframe = !wireframe;
         }
 
-        if (input.get_mouse().down(dst::sys::Mouse::Button::Left)) {
-            auto look = input.get_mouse().get_delta() * lookSensitivity * dt;
+        if (input.mouse.down(dst::sys::Mouse::Button::Left)) {
+            auto look = input.mouse.get_position_delta() * lookSensitivity * dt;
             auto rotationX = glm::angleAxis(look.y, glm::vec3 { 1, 0, 0 });
             auto rotationY = glm::angleAxis(look.x, glm::vec3 { 0, 1, 0 });
             worldRotation = glm::normalize(rotationX * rotationY * worldRotation);
         }
 
-        cameraPosition.z -= input.get_mouse().get_scroll() * scrollSensitivity * dt;
-        if (input.get_mouse().down(dst::sys::Mouse::Button::Middle) ||
-            input.get_mouse().down(dst::sys::Mouse::Button::Right)) {
-            cameraPosition.x -= input.get_mouse().get_delta().x * cameraSpeed * dt;
-            cameraPosition.y += input.get_mouse().get_delta().y * cameraSpeed * dt;
+        cameraPosition.z -= input.mouse.get_scroll_delta() * scrollSensitivity * dt;
+        if (input.mouse.down(dst::sys::Mouse::Button::Middle) ||
+            input.mouse.down(dst::sys::Mouse::Button::Right)) {
+            cameraPosition.x -= input.mouse.get_position_delta().x * cameraSpeed * dt;
+            cameraPosition.y += input.mouse.get_position_delta().y * cameraSpeed * dt;
         }
 
         auto view = glm::lookAt(

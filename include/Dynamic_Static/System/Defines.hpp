@@ -23,6 +23,11 @@
 #define DYNAMIC_STATIC_SYSTEM_VERSION_MINOR (0)
 #define DYNAMIC_STATIC_SYSTEM_VERSION_PATCH (1)
 
+#define DST_KEY_UP (false)
+#define DST_KEY_DOWN (true)
+#define DST_BUTTON_UP (false)
+#define DST_BUTTON_DOWN (true)
+
 namespace Dynamic_Static {
 namespace System {
 

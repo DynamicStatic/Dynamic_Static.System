@@ -66,7 +66,7 @@ namespace System {
     private:
         void* mHandle { nullptr };
         API mApi { API::Unknown };
-        Input::Manager mInputManager;
+        Input mInput { };
 
     public:
         /**

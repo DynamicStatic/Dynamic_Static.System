@@ -18,6 +18,9 @@
 namespace Dynamic_Static {
 namespace System {
 
+    static API gWindowAPI { API::Unknown };
+    static std::set<GLFWwindow*> gGLFWWindowHandles;
+
     static Window& dst_window(GLFWwindow* handle);
     static GLFWwindow* glfw_handle(const void* handle);
     static void destroy_glfw_window(GLFWwindow* handle);
@@ -94,7 +97,7 @@ namespace System {
 
     void* Window::get_handle()
     {
-        #if defined(DYNAMIC_STATIC_WINDOWS)
+        #if DYNAMIC_STATIC_WINDOWS
         return glfwGetWin32Window(glfw_handle(mHandle));
         #endif
         return nullptr;
@@ -109,7 +112,7 @@ namespace System {
 
     const Input& Window::get_input() const
     {
-        return mInputManager.get_input();
+        return mInput;
     }
 
     std::string Window::get_clipboard() const
@@ -200,7 +203,6 @@ namespace System {
 
     void Window::swap()
     {
-        mInputManager.update();
         #if DYNAMIC_STATIC_OPENGL_SUPPORTED
         if (mApi == API::OpenGL) {
             glfwSwapBuffers(glfw_handle(mHandle));
@@ -211,6 +213,9 @@ namespace System {
     void Window::update()
     {
         glfwPollEvents();
+        for (auto& handle : gGLFWWindowHandles) {
+            dst_window(handle).mInput.update();
+        }
     }
 
     void Window::execute_on_resized() const
@@ -223,9 +228,6 @@ namespace System {
 
 namespace Dynamic_Static {
 namespace System {
-
-    static std::set<GLFWwindow*> gGLFWWindowHandles;
-    static API gWindowAPI { API::Unknown };
 
     Window& dst_window(GLFWwindow* handle)
     {
@@ -279,6 +281,7 @@ namespace System {
         // TODO : Parent window
         // TODO : Monitor
         // TODO : GLFWwindow handle is not OS window handle...clarify names
+        // TODO : Should parent be a shared ptr?  Should there be some dtor() bookkeeping?
         GLFWwindow* parent = nullptr;
         if (configuration.parent) {
             parent = reinterpret_cast<GLFWwindow*>(configuration.parent->mHandle);
@@ -296,7 +299,7 @@ namespace System {
             static bool sGLEWInitialized;
             if (!sGLEWInitialized) {
                 glfwMakeContextCurrent(handle);
-                #if defined(DYNAMIC_STATIC_WINDOWS)
+                #if DYNAMIC_STATIC_WINDOWS
                 glewExperimental = true;
                 auto error = glewInit();
                 if (error) {
@@ -311,15 +314,18 @@ namespace System {
         }
         #endif
 
+        #if DYNAMIC_STATIC_OPENGL_SUPPORTED
         if (configuration.vSync) {
             glfwSwapInterval(1);
         }
+        #endif
 
         glfwSetFramebufferSizeCallback(handle, frame_buffer_size_callback);
         glfwSetMouseButtonCallback(handle, mouse_button_callback);
         glfwSetCursorPosCallback(handle, mouse_position_callback);
         glfwSetScrollCallback(handle, mouse_scroll_callback);
         glfwSetKeyCallback(handle, keyboard_callback);
+        gGLFWWindowHandles.insert(handle);
         return handle;
     }
 
@@ -342,52 +348,50 @@ namespace System {
 
     void keyboard_callback(GLFWwindow* handle, int glfwKey, int scanCode, int action, int /* mods */)
     {
-        auto& input = dst_window(handle).mInputManager;
-        auto dstKey = glfw_to_dst_key(glfwKey);
+        auto& input = dst_window(handle).mInput;
+        auto dstKey = static_cast<size_t>(glfw_to_dst_key(glfwKey));
         switch (action) {
             case GLFW_PRESS:
-                input.get_keyboard_state()[dstKey] = Keyboard::State::Down;
+                input.keyboard.staged[dstKey] = DST_KEY_DOWN;
                 break;
 
             case GLFW_RELEASE:
-                input.get_keyboard_state()[dstKey] = Keyboard::State::Up;
+                input.keyboard.staged[dstKey] = DST_KEY_UP;
                 break;
 
             case GLFW_REPEAT:
-                input.get_keyboard_state()[dstKey] = Keyboard::State::Down;
+                input.keyboard.staged[dstKey] = DST_KEY_DOWN;
                 break;
         }
     }
 
     void mouse_button_callback(GLFWwindow* handle, int glfwButton, int action, int /* mods */)
     {
-        auto& input = dst_window(handle).mInputManager;
-        auto dstButton = glfw_to_dst_mouse_button(glfwButton);
+        auto& input = dst_window(handle).mInput;
+        auto dstButton = static_cast<size_t>(glfw_to_dst_mouse_button(glfwButton));
         switch (action) {
             case GLFW_PRESS:
-                input.get_mouse_state()[dstButton] = Mouse::State::Down;
+                input.mouse.staged.buttons[dstButton] = DST_BUTTON_DOWN;
                 break;
 
             case GLFW_RELEASE:
-                input.get_mouse_state()[dstButton] = Mouse::State::Up;
+                input.mouse.staged.buttons[dstButton] = DST_BUTTON_UP;
                 break;
 
             case GLFW_REPEAT:
-                input.get_mouse_state()[dstButton] = Mouse::State::Down;
+                input.mouse.staged.buttons[dstButton] = DST_BUTTON_DOWN;
                 break;
         }
     }
 
     void mouse_position_callback(GLFWwindow* handle, double xOffset, double yOffset)
     {
-        dst_window(handle).mInputManager.get_mouse_state().set_position({ xOffset, yOffset });
+        dst_window(handle).mInput.mouse.staged.position = { xOffset, yOffset };
     }
 
     void mouse_scroll_callback(GLFWwindow* handle, double /* xOffset */, double yOffset)
     {
-        auto& input = dst_window(handle).mInputManager;
-        auto scroll = input.get_mouse_state().get_scroll();
-        input.get_mouse_state().set_scroll(scroll + static_cast<float>(yOffset));
+        dst_window(handle).mInput.mouse.staged.scroll += static_cast<float>(yOffset);
     }
 
     void glfw_error_callback(int error, const char* description)

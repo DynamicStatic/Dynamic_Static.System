@@ -33,8 +33,6 @@ set(sourcePath ${PROJECT_SOURCE_DIR}/source/Dynamic_Static/System)
 set(sourceFiles
     ${sourcePath}/Audio/AudioTest.cpp
 
-    ${sourcePath}/Input/Input.cpp
-    ${sourcePath}/Input/Input.Manager.cpp
     ${sourcePath}/Input/Keyboard.cpp
     ${sourcePath}/Input/Mouse.cpp
     

@@ -1,6 +1,8 @@
 
 set(sourcePath "${PROJECT_SOURCE_DIR}/tests/source/")
 set(sourceFiles
+    ${sourcePath}/Input/Keyboard.Tests.cpp
+
     ${sourcePath}/Main.cpp
 )
 

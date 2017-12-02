@@ -19,9 +19,8 @@ namespace System {
     /**
      * Provides methods for Keyboard queries.
      */
-    class Keyboard final
+    struct Keyboard final
     {
-    public:
         /**
          * Specifies Keyboard keys.
          */
@@ -201,23 +200,23 @@ namespace System {
             LaunchApp_1          = 0xb6,
             LaunchApp_2          = 0xb7,
 
-            OEM_SemiColon        = 0xba, // NOTE : Can vary by keyboard, ';:' is US standard
+            OEM_SemiColon        = 0xba, /* NOTE : Can vary by keyboard, ';:' is US standard */
             OEM_Plus             = 0xbb,
             OEM_Comma            = 0xbc,
             OEM_Minus            = 0xbd,
             OEM_Period           = 0xbe,
-            OEM_ForwardSlash     = 0xbf, // NOTE : Can vary by keyboard, '/?' is US standard
-            OEM_Tilde            = 0xc0, // NOTE : Can vary by keyboard, '`~' is US standard
-            OEM_OpenBracket      = 0xdb, // NOTE : Can vary by keyboard, '[{' is US standard
-            OEM_BackSlash        = 0xdc, // NOTE : Can vary by keyboard, '\|' is US standard
-            OEM_CloseBracket     = 0xdd, // NOTE : Can vary by keyboard, ']}' is US standard
-            OEM_Quote            = 0xde, // NOTE : Can vary by keyboard, ''"' is US standard
-            OEM_Misc             = 0xdf, // NOTE : Varies by keyboard
+            OEM_ForwardSlash     = 0xbf, /*!< NOTE : Can vary by keyboard, '/?' is US standard */
+            OEM_Tilde            = 0xc0, /*!< NOTE : Can vary by keyboard, '`~' is US standard */
+            OEM_OpenBracket      = 0xdb, /*!< NOTE : Can vary by keyboard, '[{' is US standard */
+            OEM_BackSlash        = 0xdc, /*!< NOTE : Can vary by keyboard, '\|' is US standard */
+            OEM_CloseBracket     = 0xdd, /*!< NOTE : Can vary by keyboard, ']}' is US standard */
+            OEM_Quote            = 0xde, /*!< NOTE : Can vary by keyboard, ''"' is US standard */
+            OEM_Misc             = 0xdf, /*!< NOTE : Varies by keyboard */
             OEM_102              = 0xe2,
 
             Process              = 0xe5,
 
-            Packet               = 0xe7, // NOTE : Used to pass Unicode characters as keystrokes
+            Packet               = 0xe7, /*!< NOTE : Used to pass Unicode characters as keystrokes */
 
             Attn                 = 0xf6,
             CrSel                = 0xf7,
@@ -237,102 +236,87 @@ namespace System {
         /**
          * Represents a Keyboard's state at a single moment.
          */
-        struct State final
-        {
-        public:
-            static constexpr bool Up = false;
-            static constexpr bool Down = true;
-            using KeySet = std::bitset<static_cast<size_t>(Key::Count)>;
+        using State = std::bitset<static_cast<size_t>(Key::Count)>;
 
-        private:
-            KeySet mKeys;
+        State previous { }; /*!< This Keyboard's previous state */
+        State current { };  /*!< This Keyboard's current state */
+        State staged { };   /*!< This Keyboard's staging state, this state will be applied when update() is called */
 
-        public:
-            /**
-             * Gets a value indicating whether or not a given Key is down.
-             * @param [in] key The Key to check
-             * @return Whether or not the given Key is down
-             */
-            bool operator[](Key key) const;
-
-            /**
-             * Sets a value indicating whether or not a given Key is down.
-             * @param [in] key The Key to set
-             * @return Whether or not the given Key is down
-             */
-            KeySet::reference operator[](Key key);
-
-            /**
-             * Gets a value indicating whether or not a given Key is down.
-             * @param [in] key The Key to check
-             * @return Whether or not the given Key is down
-             */
-            bool operator[](size_t key) const;
-
-            /**
-             * Sets a value indicating whether or not a given Key is down.
-             * @param [in] key The Key to set
-             * @return Whether or not the given Key is down
-             */
-            KeySet::reference operator[](size_t key);
-
-        public:
-            /**
-             * Resets this Keyboard::State.
-             */
-            void reset();
-        };
-
-    private:
-        State mCurrent;
-        State mPrevious;
-
-    public:
         /**
          * Gets a value indicating whether or not a given Key is up.
          * @param [in] key The Key to check
          * @return Whether or not the given Key is up
          */
-        bool up(Key key) const;
+        inline bool up(Key key) const
+        {
+            return current[static_cast<size_t>(key)] == DST_KEY_UP;
+        }
 
         /**
          * Gets a value indicating whether or not a given Key is down.
          * @param [in] key The Key to check
          * @return Whether or not the given Key is down
          */
-        bool down(Key key) const;
+        inline bool down(Key key) const
+        {
+            return current[static_cast<size_t>(key)] == DST_KEY_DOWN;
+        }
 
         /**
          * Gets a value indicating whether or not a given Key has been held.
          * @param [in] key The Key to check
          * @return Whether or not the given Key has been held
          */
-        bool held(Key key) const;
+        inline bool held(Key key) const
+        {
+            return
+                previous[static_cast<size_t>(key)] == DST_KEY_DOWN &&
+                current [static_cast<size_t>(key)] == DST_KEY_DOWN;
+        }
 
         /**
          * Gets a value indicating whether or not a given Key has been pressed.
          * @param [in] key The Key to check
          * @return Whether or not the given Key has been pressed
          */
-        bool pressed(Key key) const;
+        inline bool pressed(Key key) const
+        {
+            return
+                previous[static_cast<size_t>(key)] == DST_KEY_UP &&
+                current [static_cast<size_t>(key)] == DST_KEY_DOWN;
+        }
 
         /**
          * Gets a value indicating whether or not a given Key has been released.
          * @param [in] key The Key to check
          * @return Whether or not the given Key has been released
          */
-        bool released(Key key) const;
+        inline bool released(Key key) const
+        {
+            return
+                previous[static_cast<size_t>(key)] == DST_KEY_DOWN &&
+                current [static_cast<size_t>(key)] == DST_KEY_UP;
+        }
+
+        /**
+         * Updates this Keyboard with its staged state.
+         * \n NOTE : This method must be called periodically to keep this Keyboard up to date.
+         */
+        inline void update()
+        {
+            previous = current;
+            current = staged;
+        }
 
         /**
          * Resets this Keyboard.
          */
-        void reset();
-
-    private:
-        void update(const State& state);
-
-    private:
-        friend class Input;
+        inline void reset()
+        {
+            previous.reset();
+            current.reset();
+            staged.reset();
+        }
     };
 
 } // namespace System
