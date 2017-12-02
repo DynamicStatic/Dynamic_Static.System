@@ -112,6 +112,17 @@ namespace System {
         return mInputManager.get_input();
     }
 
+    std::string Window::get_clipboard() const
+    {
+        auto clipboard = glfwGetClipboardString(glfw_handle(mHandle));
+        return clipboard ? std::string(clipboard) : std::string();
+    }
+
+    void Window::set_clipboard(const std::string& clipboard) const
+    {
+        glfwSetClipboardString(glfw_handle(mHandle), clipboard.c_str());
+    }
+
     Window::CursorMode Window::get_cursor_mode() const
     {
         auto cursorMode = CursorMode::Normal;

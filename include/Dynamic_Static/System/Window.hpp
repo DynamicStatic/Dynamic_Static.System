@@ -139,6 +139,18 @@ namespace System {
         const Input& get_input() const;
 
         /**
+         * Gets this Window's clipboard.
+         * @return This Window's clipboard
+         */
+        std::string get_clipboard() const;
+
+        /**
+         * Sets this Window's clipboard.
+         * @param [in] clipboard This Window's clipboard
+         */
+        void set_clipboard(const std::string& clipboard) const;
+
+        /**
          * Gets this Window's CursorMode.
          * @return This Window's CursorMode
          */
