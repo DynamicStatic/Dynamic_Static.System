@@ -13,18 +13,6 @@ include("D:/Dynamic_Static/Dynamic_Static.CMake/Dynamic_Static_ex.cmake")
 include("D:/Dynamic_Static/Dynamic_Static.CMake/Dynamic_Static.external.cmake")
 dst_create_project_ex(Dynamic_Static.System)
 ################################################################################
-
-# dst_build_external_package_exx(
-#     target glfw
-#     configuration "${CMAKE_CURRENT_SOURCE_DIR}/external/glfw.cmake"
-# )
-################################################################################
-
-################################################################################
-
-################################################################################
-
-################################################################################
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/glfw.cmake")
@@ -68,57 +56,18 @@ dst_add_static_library_ex(
         ${sourcePath}/Window.cpp
 )
 
+option(BUILD_TESTS "Build Dynamic_Static.System tests" ON)
+if(BUILD_TESTS)
+    set(testsPath "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
+    dst_add_tests_ex(
+        target Dynamic_Static.System
+        sourceFiles
+            ${testsPath}/Input/Keyboard.Tests.cpp
+            ${testsPath}/Main.cpp
+    )
+endif()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 
-# # CMake configuration for Dynamic_Static.System
-# cmake_minimum_required(VERSION 3.3)
-# 
-# set(Dynamic_Static.cmake "${CMAKE_BINARY_DIR}/Dynamic_Static.cmake")
-# file(
-#     DOWNLOAD
-#     https://raw.githubusercontent.com/DynamicStatic/Dynamic_Static.CMake/master/Dynamic_Static.cmake
-#     ${Dynamic_Static.cmake}
-# )
-# 
-# include(${Dynamic_Static.cmake})
-# dst_create_project(Dynamic_Static.System)
-# set(CMAKE_CXX_STANDARD 14)
-# if(MSVC)
-#     option(BUILD_AUDIO_SUPPORT "Build audio support" ON)
-# else()
-#     option(BUILD_AUDIO_SUPPORT "Build audio support" OFF)
-# endif()
-# add_subdirectory("source/")
-# 
-# option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" ON)
-# if (BUILD_EXAMPLES)
-#     add_subdirectory("examples/")
-# endif()
-# 
-# option(BUILD_TESTS "Build Dynamic_Static.System tests" ON)
-# if (BUILD_TESTS)
-#     add_subdirectory("tests/")
-# endif()
-# 
+option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" ON)
+if(BUILD_EXAMPLES)
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/examples/")
+endif()

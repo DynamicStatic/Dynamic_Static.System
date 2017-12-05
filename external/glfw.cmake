@@ -12,13 +12,13 @@ dst_add_external_project_ex(
 set(glfw.includeDirectories "${glfw.sourceDirectory}/include/")
 if (MSVC)
     set(glfw.linkLibraries
-        "${glfw.buildDirectory}/$(Configuration)/glfw3.lib"
+        "${glfw.buildDirectory}/src/$(Configuration)/glfw3.lib"
         glu32.lib
         opengl32.lib
     )
 else()
     set(glfw.linkLibraries
-        "${glfw.buildDirectory}/libglfw3.a"
+        "${glfw.buildDirectory}/src/libglfw3.a"
         EGL
         GL
         X11
