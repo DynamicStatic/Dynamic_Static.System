@@ -8,5 +8,5 @@ latex
 html
 *.tmp
 *.dir
-
+packages
 CMakeSettings.json
