@@ -5,14 +5,6 @@ dst_add_external_project_ex(
     CMAKE_ARGS -DBUILD_TESTS=OFF
 )
 
-# set(Dynamic_Static.Core.includeDirectories "${Dynamic_Static.Core.sourceDirectory}/include/")
-# if(MSVC)
-#     set(Dynamic_Static.Core.linkLibraries "${Dynamic_Static.Core.buildDirectory}/Dynamic_Static.Core.lib")
-# else()
-#     set(Dynamic_Static.Core.linkLibraries "${Dynamic_Static.Core.buildDirectory}/Dynamic_Static.Core.a")
-# endif()
-
-message("Dynamic_Static.Core.buildDirectory=${Dynamic_Static.Core.buildDirectory}")
 include("${Dynamic_Static.Core.buildDirectory}/Dynamic_Static.Core.package.cmake")
 
 get_target_property(
