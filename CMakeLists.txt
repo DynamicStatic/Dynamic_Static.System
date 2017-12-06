@@ -63,7 +63,6 @@ if(BUILD_TESTS)
         target Dynamic_Static.System
         sourceFiles
             ${testsPath}/Input/Keyboard.Tests.cpp
-            ${testsPath}/Main.cpp
     )
 endif()
 
