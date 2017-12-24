@@ -1,5 +1,5 @@
 
-dst_add_external_project_ex(
+dst_add_external_project(
     target Dynamic_Static.Core
     URL https://github.com/DynamicStatic/Dynamic_Static.Core/archive/refactor/build-system.zip
     CMAKE_ARGS -DBUILD_TESTS=OFF
@@ -19,16 +19,16 @@ get_target_property(
     INTERFACE_LINK_LIBRARIES
 )
 
-if ("${Dynamic_Static.Core.linkLibraries}" STREQUAL "Dynamic_Static.Core.linkLibraries-NOTFOUND")
+if("${Dynamic_Static.Core.linkLibraries}" STREQUAL "Dynamic_Static.Core.linkLibraries-NOTFOUND")
     set(Dynamic_Static.Core.linkLibraries "")
 endif()
 
-if (MSVC)
+if(MSVC)
     set(Dynamic_Static.Core.importedLocation
         "${Dynamic_Static.Core.buildDirectory}/$(Configuration)/Dynamic_Static.Core.lib"
     )
 else()
-    # TODO : Make this work generically for all build configurations...
+    # TODO : Make sure this works generically for all build configurations...
     get_target_property(
         Dynamic_Static.Core.importedLocation
         Dynamic_Static.Core

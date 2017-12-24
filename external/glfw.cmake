@@ -1,5 +1,5 @@
 
-dst_add_external_project_ex(
+dst_add_external_project(
     target glfw
     URL https://github.com/glfw/glfw/archive/3.2.1.zip
     URL_HASH SHA1=3578BEFA2B96A6A2286F33C3A92E08E9F2F834F8
@@ -10,7 +10,7 @@ dst_add_external_project_ex(
 )
 
 set(glfw.includeDirectories "${glfw.sourceDirectory}/include/")
-if (MSVC)
+if(MSVC)
     set(glfw.linkLibraries
         "${glfw.buildDirectory}/src/$(Configuration)/glfw3.lib"
         glu32.lib

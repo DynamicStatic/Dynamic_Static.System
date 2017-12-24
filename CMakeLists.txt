@@ -1,24 +1,22 @@
 
 # CMake configuration for Dynamic_Static.System
 cmake_minimum_required(VERSION 3.3)
+################################################################################
 set(Dynamic_Static.cmake "${CMAKE_BINARY_DIR}/Dynamic_Static.cmake")
 file(
     DOWNLOAD
-    https://raw.githubusercontent.com/DynamicStatic/Dynamic_Static.CMake/master/Dynamic_Static.cmake
+    https://raw.githubusercontent.com/DynamicStatic/Dynamic_Static.CMake/refactor/build-system/Dynamic_Static.cmake
     ${Dynamic_Static.cmake}
 )
-
 include(${Dynamic_Static.cmake})
-include("D:/Dynamic_Static/Dynamic_Static.CMake/Dynamic_Static_ex.cmake")
-include("D:/Dynamic_Static/Dynamic_Static.CMake/Dynamic_Static.external.cmake")
-dst_create_project_ex(Dynamic_Static.System)
 ################################################################################
+dst_create_project(Dynamic_Static.System)
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/glew.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/external/glfw.cmake")
 set(includePath "${CMAKE_CURRENT_SOURCE_DIR}/include/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_SOURCE_DIR}/source/Dynamic_Static/System/")
-dst_add_static_library_ex(
+dst_add_static_library(
     target Dynamic_Static.System
     includeDirectories
         "${CMAKE_CURRENT_SOURCE_DIR}/include/"
@@ -59,7 +57,7 @@ dst_add_static_library_ex(
 option(BUILD_TESTS "Build Dynamic_Static.System tests" ON)
 if(BUILD_TESTS)
     set(testsPath "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
-    dst_add_tests_ex(
+    dst_add_tests(
         target Dynamic_Static.System
         sourceFiles
             ${testsPath}/Input/Keyboard.Tests.cpp

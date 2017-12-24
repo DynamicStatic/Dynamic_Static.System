@@ -1,6 +1,6 @@
 
 macro(add_example target)
-    dst_add_executable_ex(
+    dst_add_executable(
         target ${target}
         folder examples
         buildDependencies Dynamic_Static.System
