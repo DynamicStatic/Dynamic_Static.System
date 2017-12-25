@@ -1,7 +1,7 @@
 
 dst_add_external_project(
     target Dynamic_Static.Core
-    URL https://github.com/DynamicStatic/Dynamic_Static.Core/archive/refactor/build-system.zip
+    URL https://github.com/DynamicStatic/Dynamic_Static.Core/archive/master.zip
     CMAKE_ARGS -DBUILD_TESTS=OFF
 )
 
