@@ -30,6 +30,10 @@ set(includePath "${CMAKE_CURRENT_SOURCE_DIR}/include/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_SOURCE_DIR}/source/Dynamic_Static/System/")
 dst_add_static_library(
     target Dynamic_Static.System
+    buildDependencies
+        Dynamic_Static.Core
+        glfw
+
     includeDirectories
         "${CMAKE_CURRENT_SOURCE_DIR}/include/"
         ${Dynamic_Static.Core.includeDirectories}
