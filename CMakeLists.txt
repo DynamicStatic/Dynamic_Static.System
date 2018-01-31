@@ -9,15 +9,15 @@
 # CMake configuration for Dynamic_Static.System
 cmake_minimum_required(VERSION 3.3)
 ################################################################################
+# NOTE : Dynamic_Static.cmake is the path to the Dynamic_Static CMake module.
+#        The file will be downloaded from GitHub if it's not provided via cli.
+#           -D "Dynamic_Static.cmake=your/path/to/Dynamic_Static.cmake" 
 if(NOT Dynamic_Static.cmake)
     set(Dynamic_Static.cmake "${CMAKE_BINARY_DIR}/Dynamic_Static.cmake")
     file(
         DOWNLOAD
         https://raw.githubusercontent.com/DynamicStatic/Dynamic_Static.CMake/master/Dynamic_Static.cmake
         "${Dynamic_Static.cmake}"
-        # COPY
-        # D:/Dynamic_Static/Dynamic_Static.CMake/Dynamic_Static.cmake
-        # DESTINATION "${CMAKE_BINARY_DIR}"
     )
 endif()
 include("${Dynamic_Static.cmake}")
@@ -38,12 +38,12 @@ dst_add_static_library(
         "${CMAKE_CURRENT_SOURCE_DIR}/include/"
         ${Dynamic_Static.Core.includeDirectories}
         ${glfw.includeDirectories}
-        $<$<PLATFORM_ID:Windows>:${glew.includeDirectories}>
+        ${glew.includeDirectories}
 
     linkLibraries
         ${Dynamic_Static.Core.linkLibraries}
         ${glfw.linkLibraries}
-        $<$<PLATFORM_ID:Windows>:${glew.linkLibraries}>
+        ${glew.linkLibraries}
 
     includeFiles
         ${includePath}/Audio/AudioTest.hpp
@@ -69,6 +69,11 @@ dst_add_static_library(
         ${sourcePath}/Resolution.cpp
         ${sourcePath}/Window.cpp
 )
+
+option(CREATE_PACKAGE "Create Dynamic_Static.System package" ON)
+if(CREATE_PACKAGE)
+    dst_create_package(target Dynamic_Static.System)
+endif()
 
 option(BUILD_TESTS "Build Dynamic_Static.System tests" ON)
 if(BUILD_TESTS)

@@ -2,7 +2,9 @@
 dst_add_external_project(
     target Dynamic_Static.Core
     URL https://github.com/DynamicStatic/Dynamic_Static.Core/archive/master.zip
-    CMAKE_ARGS -DBUILD_TESTS=OFF
+    CMAKE_ARGS
+        -DCREATE_PACKAGE=OFF
+        -DBUILD_TESTS=OFF
 )
 
 include("${Dynamic_Static.Core.buildDirectory}/Dynamic_Static.Core.package.cmake")
