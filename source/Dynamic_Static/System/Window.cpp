@@ -100,10 +100,11 @@ namespace System {
     {
         #if DYNAMIC_STATIC_WINDOWS
         return glfwGetWin32Window(glfw_handle(mHandle));
-        #endif
+        #else
         return nullptr;
+        #endif
     }
-        
+
     #if defined(DYNAMIC_STATIC_LINUX)
     X11Window Window::get_x11_window()
     {
@@ -364,7 +365,7 @@ namespace System {
         }
     }
 
-    void keyboard_callback(GLFWwindow* handle, int glfwKey, int scanCode, int action, int /* mods */)
+    void keyboard_callback(GLFWwindow* handle, int glfwKey, int /* scanCode */, int action, int /* mods */)
     {
         auto& input = dst_window(handle).mInput;
         auto dstKey = static_cast<size_t>(glfw_to_dst_key(glfwKey));

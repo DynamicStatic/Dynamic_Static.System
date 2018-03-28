@@ -52,27 +52,27 @@ namespace System {
         shutdown();
     }
 
-    void Application::pre_update(const dst::Clock& clock, const Input& input)
+    void Application::pre_update(const dst::Clock& /* clock */, const Input& /* input */)
     {
     }
 
-    void Application::update(const dst::Clock& clock, const Input& input)
+    void Application::update(const dst::Clock& /* clock */, const Input& /* input */)
     {
     }
 
-    void Application::post_update(const dst::Clock& clock, const Input& input)
+    void Application::post_update(const dst::Clock& /* clock */, const Input& /* input */)
     {
     }
 
-    void Application::pre_render(const dst::Clock& clock)
+    void Application::pre_render(const dst::Clock& /* clock */)
     {
     }
 
-    void Application::render(const dst::Clock& clock)
+    void Application::render(const dst::Clock& /* clock */)
     {
     }
 
-    void Application::post_render(const dst::Clock& clock)
+    void Application::post_render(const dst::Clock& /* clock */)
     {
     }
 
