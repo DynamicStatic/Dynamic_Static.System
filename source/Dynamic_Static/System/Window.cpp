@@ -298,7 +298,8 @@ namespace System {
             parent = reinterpret_cast<GLFWwindow*>(configuration.parent->mHandle);
         }
 
-        handle = glfwCreateWindow(width, height, configuration.name.c_str(), nullptr, parent);
+		GLFWmonitor* monitor = configuration.fullScreen ? glfwGetPrimaryMonitor() : nullptr;
+        handle = glfwCreateWindow(width, height, configuration.name.c_str(), monitor, parent);
         if (!handle) {
             destroy_glfw_window(handle);
             // TODO : Get error for exception...

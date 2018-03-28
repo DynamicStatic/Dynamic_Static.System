@@ -64,6 +64,7 @@ namespace System {
             bool resizable { true };                      /*!< TODO : Documentation. */
             bool visible { true };                        /*!< TODO : Documentation. */
             bool vSync { true };                          /*!< TODO : Documentation. */
+			bool fullScreen{ false };					  /*!< TODO : Documemtation. */
             Window* parent { nullptr };                   /*!< TODO : Documentation. */
         };
 

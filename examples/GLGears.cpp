@@ -372,6 +372,7 @@ int main()
     windowConfiguration.apiVersion = { 3, 3, 0 };
     windowConfiguration.resolution = { 1280, 720 };
     windowConfiguration.vSync = true;
+	windowConfiguration.fullScreen = false;
     dst::sys::Window window(windowConfiguration);
 
     dst_gl(glEnable(GL_CULL_FACE));
