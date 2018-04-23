@@ -1,44 +1,23 @@
 
-dst_add_external_project(
-    target Dynamic_Static.Core
-    URL https://github.com/DynamicStatic/Dynamic_Static.Core/archive/74b44bca7f3c7537326f64da4728361252fa63ab.zip
-    CMAKE_ARGS
-        -DCREATE_PACKAGE=OFF
-        -DBUILD_TESTS=OFF
-)
+#==========================================
+#    Copyright 2011-2018 Dynamic_Static
+#        Patrick Purcell
+#    Licensed under the MIT license
+#    http://opensource.org/licenses/MIT
+#==========================================
 
-include("${Dynamic_Static.Core.buildDirectory}/Dynamic_Static.Core.package.cmake")
-
-get_target_property(
-    Dynamic_Static.Core.includeDirectories
-    Dynamic_Static.Core
-    INTERFACE_INCLUDE_DIRECTORIES
-)
-
-get_target_property(
-    Dynamic_Static.Core.linkLibraries
-    Dynamic_Static.Core
-    INTERFACE_LINK_LIBRARIES
-)
-
-if("${Dynamic_Static.Core.linkLibraries}" STREQUAL "Dynamic_Static.Core.linkLibraries-NOTFOUND")
-    set(Dynamic_Static.Core.linkLibraries "")
-endif()
-
-if(MSVC)
-    set(Dynamic_Static.Core.importedLocation
-        "${Dynamic_Static.Core.buildDirectory}/$(Configuration)/Dynamic_Static.Core.lib"
-    )
-else()
-    # TODO : Make sure this works generically for all build configurations...
-    get_target_property(
-        Dynamic_Static.Core.importedLocation
-        Dynamic_Static.Core
-        IMPORTED_LOCATION_NOCONFIG
+if(NOT TARGET Dynamic_Static.Core)
+    if(SDK_BUILD)
+        set(Dynamic_Static.Core.projectDirectory
+            "$ENV{DYNAMIC_STATIC_SDK}/Dynamic_Static.Core/"
+        )
+    else()
+        set(Dynamic_Static.Core.projectDirectory
+            "${CMAKE_CURRENT_LIST_DIR}/Dynamic_Static.Core/"
+        )
+    endif()
+    add_subdirectory(
+        "${Dynamic_Static.Core.projectDirectory}"
+        "${CMAKE_BINARY_DIR}/external/Dynamic_Static.Core/"
     )
 endif()
-
-set(Dynamic_Static.Core.linkLibraries
-    "${Dynamic_Static.Core.linkLibraries}"
-    "${Dynamic_Static.Core.importedLocation}"
-)

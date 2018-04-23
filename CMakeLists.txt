@@ -1,91 +1,79 @@
 
 #==========================================
+#    Copyright 2011-2018 Dynamic_Static
+#        Patrick Purcell
 #    Licensed under the MIT license
-#    Copyright (c) 2017 Dynamic_Static
-#       Patrick Purcell
 #    http://opensource.org/licenses/MIT
 #==========================================
 
 # CMake configuration for Dynamic_Static.System
 cmake_minimum_required(VERSION 3.3)
-################################################################################
-# NOTE : Dynamic_Static.cmake is the path to the Dynamic_Static CMake module.
-#        The file will be downloaded from GitHub if it's not provided via cli.
-#           -D "Dynamic_Static.cmake=your/path/to/Dynamic_Static.cmake" 
-if(NOT Dynamic_Static.cmake)
-    set(Dynamic_Static.cmake "${CMAKE_BINARY_DIR}/Dynamic_Static.cmake")
-    file(
-        DOWNLOAD
-        https://raw.githubusercontent.com/DynamicStatic/Dynamic_Static.CMake/aa6c86feda682f694785a44675392a938c19b7a2/Dynamic_Static.cmake
-        "${Dynamic_Static.cmake}"
+option(SDK_BUILD "TODO : This shouldn't be the default" ON)
+if(SDK_BUILD)
+    include("$ENV{DYNAMIC_STATIC_SDK}/Dynamic_Static.CMake/.cmake")
+else()
+    include("external/Dynamic_Static.CMake/.cmake")
+endif()
+DstCreateProject(Dynamic_Static.System)
+
+include("external/Dynamic_Static.Core.cmake")
+include("external/glew.cmake")
+include("external/glfw.cmake")
+include("external/imgui.cmake")
+
+if(MSVC)
+    set(systemLinkLibraries
+        glu32.lib
+        opengl32.lib
+    )
+else()
+    set(systemLinkLibraries
+        EGL
+        GL
+        X11
+        Xcursor
+        Xi
+        Xinerama
+        Xrandr
+        Xxf86vm
     )
 endif()
-include("${Dynamic_Static.cmake}")
-################################################################################
-dst_create_project(Dynamic_Static.System)
-include("${CMAKE_CURRENT_SOURCE_DIR}/external/Dynamic_Static.Core.cmake")
-include("${CMAKE_CURRENT_SOURCE_DIR}/external/glew.cmake")
-include("${CMAKE_CURRENT_SOURCE_DIR}/external/glfw.cmake")
-set(includePath "${CMAKE_CURRENT_SOURCE_DIR}/include/Dynamic_Static/System/")
-set(sourcePath "${CMAKE_CURRENT_SOURCE_DIR}/source/Dynamic_Static/System/")
-dst_add_static_library(
+
+set(includePath "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static/System/")
+set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/Dynamic_Static/System/")
+DstCreateStaticLibrary(
     target Dynamic_Static.System
-    buildDependencies
+    includeDirectories
+        "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
+        ${glew.includeDirectories}
+        ${imgui.includeDirectories}
+
+    staticLinkLibraries
         Dynamic_Static.Core
         glfw
-
-    includeDirectories
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/"
-        ${Dynamic_Static.Core.includeDirectories}
-        ${glfw.includeDirectories}
-        ${glew.includeDirectories}
-
-    linkLibraries
-        ${Dynamic_Static.Core.linkLibraries}
-        ${glfw.linkLibraries}
-        ${glew.linkLibraries}
+        ${glew.staticLinkLibraries}
+        ${systemLinkLibraries}
 
     includeFiles
-        ${includePath}/Audio/AudioTest.hpp
-        ${includePath}/Input/Keyboard.hpp
-        ${includePath}/Input/Mouse.hpp
-        ${includePath}/Application.hpp
         ${includePath}/Defines.hpp
-        ${includePath}/GLInclude.hpp
-        ${includePath}/Input.hpp
-        ${includePath}/Monitor.hpp
-        ${includePath}/Object.hpp
-        ${includePath}/Resolution.hpp
+        ${includePath}/OpenGL.hpp
         ${includePath}/Window.hpp
 
     sourceFiles
-        ${sourcePath}/Audio/AudioTest.cpp
-        ${sourcePath}/Input/Keyboard.cpp
-        ${sourcePath}/Input/Mouse.cpp
-        ${sourcePath}/Application.cpp
-        ${sourcePath}/GLFWInclude.hpp
-        ${sourcePath}/Monitor.cpp
-        ${sourcePath}/Object.cpp
-        ${sourcePath}/Resolution.cpp
+        ${sourcePath}/GLFWWindow.cpp
         ${sourcePath}/Window.cpp
 )
 
-option(CREATE_PACKAGE "Create Dynamic_Static.System package" ON)
-if(CREATE_PACKAGE)
-    dst_create_package(target Dynamic_Static.System)
-endif()
-
-option(BUILD_TESTS "Build Dynamic_Static.System tests" ON)
+option(BUILD_TESTS "Build Dynamic_Static.System.Tests" OFF)
 if(BUILD_TESTS)
-    set(testsPath "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
-    dst_add_tests(
+    set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests.ex/")
+    DstCreateTests(
         target Dynamic_Static.System
         sourceFiles
-            ${testsPath}/Input/Keyboard.Tests.cpp
     )
 endif()
 
-option(BUILD_EXAMPLES "Build Dynamic_Static.System examples" ON)
+option(BUILD_EXAMPLES "" ON)
 if(BUILD_EXAMPLES)
-    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/examples/")
+    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
 endif()

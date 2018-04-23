@@ -6,7 +6,12 @@
 #    http://opensource.org/licenses/MIT
 #==========================================
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/glfw/")
+macro(CreateExample target)
+    DstCreateExecutable(
+        target ${target}
+        staticLinkLibraries Dynamic_Static.System
+        sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
+    )
+endmacro()
+
+CreateExample(GLGears)
