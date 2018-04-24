@@ -43,6 +43,7 @@ set(includePath "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/Dynamic_Static/System/")
 DstCreateStaticLibrary(
     target Dynamic_Static.System
+    folder Dynamic_Static.System/
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
         ${glew.includeDirectories}
@@ -69,6 +70,7 @@ if(BUILD_TESTS)
     set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests.ex/")
     DstCreateTests(
         target Dynamic_Static.System
+        folder Dynamic_Static.System/
         sourceFiles
     )
 endif()

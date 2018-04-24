@@ -15,16 +15,23 @@
 
 int main()
 {
-    dst::sys::Window window;
-    std::cout << "hello world" << std::endl;
-
-    glewExperimental = true;
-    auto error = glewInit();
-    auto str = glewGetErrorString(error);
-    std::cout << str << std::endl;
+    using namespace dst::sys;
+    Window::Info windowInfo {};
+    windowInfo.api = GraphicsApi::OpenGL;
+    windowInfo.apiVersion = { 4, 0 };
+    Window window(windowInfo);
+    std::cout << "hello sys" << std::endl;
 
     GLuint buffer = 0;
     dst_gl(glCreateBuffers(1, &buffer));
     dst_gl(glDeleteBuffers(1, &buffer));
+
+    bool hit = true;
+    while (hit) {
+        Window::poll_events();
+        window.swap_buffers();
+    }
+
+
     return 0;
 }

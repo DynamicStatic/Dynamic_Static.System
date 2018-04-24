@@ -9,6 +9,7 @@
 macro(CreateExample target)
     DstCreateExecutable(
         target ${target}
+        folder Dynamic_Static.System/examples/
         staticLinkLibraries Dynamic_Static.System
         sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
     )
