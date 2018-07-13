@@ -14,17 +14,17 @@
 
 #include <iostream>
 
-#if DYNAMIC_STATIC_OPENGL_ENABLED
+#if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
 
-#if DYNAMIC_STATIC_WINDOWS
+#if defined(DYNAMIC_STATIC_WINDOWS)
     #ifndef GLEW_STATIC
     #define GLEW_STATIC 1
     #endif
     #include "GL/glew.h"
 #endif
 
-#define DYNAMIC_STATIC_VALIDATE_GL_CALLS 1
-#if DYNAMIC_STATIC_VALIDATE_GL_CALLS
+#define DYNAMIC_STATIC_VALIDATE_GL_CALLS
+#if defined(DYNAMIC_STATIC_VALIDATE_GL_CALLS)
 #define dst_gl(GL_CALL)                                       \
 {                                                             \
     GL_CALL;                                                  \
@@ -44,7 +44,7 @@ namespace System {
     {
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            #if DYNAMIC_STATIC_WINDOWS
+            #if defined(DYNAMIC_STATIC_WINDOWS)
             auto errorStr = reinterpret_cast<const char*>(gluErrorString(error));
             if (!errorStr) {
                 errorStr = "Unknown";
@@ -64,4 +64,4 @@ namespace System {
 } // namespace Dynamic_Static
 } // namespace System
 
-#endif
+#endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)

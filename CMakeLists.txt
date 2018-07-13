@@ -1,10 +1,10 @@
 
-#==========================================
-#    Copyright 2011-2018 Dynamic_Static
-#        Patrick Purcell
-#    Licensed under the MIT license
-#    http://opensource.org/licenses/MIT
-#==========================================
+# ==========================================
+#   Copyright (c) 2016-2018 Dynamic_Static
+#     Patrick Purcell
+#       Licensed under the MIT license
+#     http://opensource.org/licenses/MIT
+# ==========================================
 
 # CMake configuration for Dynamic_Static.System
 cmake_minimum_required(VERSION 3.3)
@@ -19,7 +19,8 @@ DstCreateProject(Dynamic_Static.System)
 include("external/Dynamic_Static.Core.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
-include("external/imgui.cmake")
+# include("external/imgui.cmake")
+include("external/SDL.cmake")
 
 if(MSVC)
     set(systemLinkLibraries
@@ -46,23 +47,30 @@ DstCreateStaticLibrary(
     folder Dynamic_Static.System/
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
-        ${glew.includeDirectories}
-        ${imgui.includeDirectories}
+        ${glew.includeDirectory}
+        # ${imgui.includeDirectories}
+        ${SDL.includeDirectory}
 
     staticLinkLibraries
         Dynamic_Static.Core
         glfw
         ${glew.staticLinkLibraries}
+        ${SDL.staticLinkLibraries}
         ${systemLinkLibraries}
 
     includeFiles
+        ${includePath}/Input/Keyboard.hpp
+        ${includePath}/Input/Mouse.hpp
         ${includePath}/Defines.hpp
+        ${includePath}/GLFW.hpp
+        ${includePath}/Input.hpp
         ${includePath}/OpenGL.hpp
+        ${includePath}/Resolution.hpp
+        ${includePath}/SDL.hpp
         ${includePath}/Window.hpp
 
     sourceFiles
-        ${sourcePath}/GLFWWindow.cpp
-        ${sourcePath}/Window.cpp
+        ${sourcePath}/Placeholder.cpp
 )
 
 option(BUILD_TESTS "Build Dynamic_Static.System.Tests" OFF)

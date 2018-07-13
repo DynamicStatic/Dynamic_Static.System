@@ -1,12 +1,12 @@
 [submodule "external/glfw"]
-	path = external/glfw
-	url = https://github.com/glfw/glfw.git
+    path = external/glfw
+    url = https://github.com/glfw/glfw.git
 [submodule "external/Dynamic_Static.CMake"]
-	path = external/Dynamic_Static.CMake
-	url = https://github.com/DynamicStatic/Dynamic_Static.CMake.git
+    path = external/Dynamic_Static.CMake
+    url = https://github.com/DynamicStatic/Dynamic_Static.CMake.git
 [submodule "external/Dynamic_Static.Core"]
-	path = external/Dynamic_Static.Core
-	url = https://github.com/DynamicStatic/Dynamic_Static.Core.git
+    path = external/Dynamic_Static.Core
+    url = https://github.com/DynamicStatic/Dynamic_Static.Core.git
 [submodule "external/imgui"]
-	path = external/imgui
-	url = https://github.com/ocornut/imgui.git
+    path = external/imgui
+    url = https://github.com/ocornut/imgui.git
