@@ -13,7 +13,7 @@
 #include "Dynamic_Static/Core/Defines.hpp"
 
 #if !defined(DYNAMIC_STATIC_DISABLE_GLFW_SUPPORT)
-    #define DYNAMIC_STATIC_GLFW_ENABLED
+    // #define DYNAMIC_STATIC_GLFW_ENABLED
 #endif
 
 #if !defined(DYNAMIC_STATIC_DISABLE_SDL_SUPPORT)

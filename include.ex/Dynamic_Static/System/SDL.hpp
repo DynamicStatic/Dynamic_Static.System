@@ -20,6 +20,19 @@
 #define HAVE_M_PI
 #include "SDL/SDL.h"
 
+#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC \
+SDL_Window* mSdlWindow { nullptr };             \
+Uint32 mSdlId { 0 };
+
+#if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS \
+DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC   \
+SDL_GLContext mSdlGlContext { nullptr };
+#else
+#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS \
+DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC
+#endif
+
 #define DYNAMIC_STATIC_VALIDATE_SDL_CALLS
 #if defined(DYNAMIC_STATIC_VALIDATE_SDL_CALLS)
 #define dst_sdl(SDL_CALL)                                                 \

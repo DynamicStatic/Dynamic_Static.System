@@ -130,7 +130,7 @@ public:
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer));
         dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexType), vertices.data(), GL_STATIC_DRAW));
         dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
-        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(VertexType), indices.data(), GL_STATIC_DRAW));
+        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), indices.data(), GL_STATIC_DRAW));
         VertexType::enable_attributes();
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, 0));
         dst_gl(glBindVertexArray(0));
@@ -517,6 +517,7 @@ int main(int argc, char* argv[])
     Clock clock;
     bool running = true;
     while (running) {
+        Window::poll_events();
         window.swap();
         clock.update();
         auto deltaTime = clock.elapsed<Second<float>>();
@@ -557,7 +558,7 @@ int main(int argc, char* argv[])
 
         auto resolution = window.get_resolution();
         dst_gl(glViewport(0, 0, resolution.width, resolution.height));
-        dst_gl(glClearColor(0, 0, 0, 1));
+        dst_gl(glClearColor(0, 0, 0, 0));
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         dst_gl(glUseProgram(program.handle));
         dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
@@ -578,19 +579,19 @@ int main(int argc, char* argv[])
             dst_gl(glBindVertexArray(0));
         }
 
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:running = false; break;
-                case SDL_KEYDOWN:
-                {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_ESCAPE: running = false; break;
-                    }
-                } break;
-                default:break;
-            }
-        }
+        // SDL_Event event;
+        // while (SDL_PollEvent(&event)) {
+        //     switch (event.type) {
+        //         case SDL_QUIT:running = false; break;
+        //         case SDL_KEYDOWN:
+        //         {
+        //             switch (event.key.keysym.sym) {
+        //                 case SDLK_ESCAPE: running = false; break;
+        //             }
+        //         } break;
+        //         default:break;
+        //     }
+        // }
     }
 
     return 0;

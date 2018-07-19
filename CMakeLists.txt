@@ -61,6 +61,8 @@ DstCreateStaticLibrary(
     includeFiles
         ${includePath}/Input/Keyboard.hpp
         ${includePath}/Input/Mouse.hpp
+        ${includePath}/Window/Window.GLFW.inl
+        ${includePath}/Window/Window.SDL.inl
         ${includePath}/Defines.hpp
         ${includePath}/GLFW.hpp
         ${includePath}/Input.hpp

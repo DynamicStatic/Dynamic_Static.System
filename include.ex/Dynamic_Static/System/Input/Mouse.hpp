@@ -195,6 +195,8 @@ namespace System {
         }
     };
 
+namespace detail {
+
 #if defined(DYNAMIC_STATIC_GLFW_ENABLED)
 
     /*
@@ -221,5 +223,6 @@ namespace System {
 
 #endif // #if defined(DYNAMIC_STATIC_GLFW_ENABLED)
 
+} // namespace detail
 } // namespace System
 } // namespace Dynamic_Static
