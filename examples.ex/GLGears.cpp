@@ -40,6 +40,7 @@
 
 #include <array>
 #include <iostream>
+#include <thread>
 #include <vector>
 
 struct Vertex final
@@ -178,9 +179,10 @@ public:
                 case GL_FRAGMENT_SHADER: stageStr = "fragment"; break;
                 default: stageStr = "unknown";
             }
-            std::cerr << "Failed to compile " << stageStr << " shader" << std::endl;
-            std::cerr << log << std::endl;
-            std::cerr << std::endl;
+            std::cerr
+                << "Failed to compile " << stageStr << " shader" << std::endl
+                << log << std::endl
+                << std::endl;
             dst_gl(glDeleteShader(handle));
             handle = 0;
         }
@@ -220,9 +222,10 @@ public:
             dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
             std::string log(logLength, ' ');
             dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
-            std::cerr << "Failed to link program" << std::endl;
-            std::cerr << log << std::endl;
-            std::cerr << std::endl;
+            std::cerr
+                << "Failed to link program" << std::endl
+                << log << std::endl
+                << std::endl;
             dst_gl(glDeleteProgram(handle));
             handle = 0;
         }
@@ -457,9 +460,9 @@ public:
     GLint colorLocation { program.get_uniform_location("color") };
     GLint lightDirectionLocation { program.get_uniform_location("lightDirection") };
     std::array<Gear, 3> gears {
-        Gear(1.0f, 4.f, 1.0f, 20, 0.7f),
-        Gear(0.5f, 2.f, 2.0f, 10, 0.7f),
-        Gear(1.3f, 2.f, 0.5f, 10, 0.7f)
+        Gear{ 1.0f, 4.f, 1.0f, 20, 0.7f },
+        Gear{ 0.5f, 2.f, 2.0f, 10, 0.7f },
+        Gear{ 1.3f, 2.f, 0.5f, 10, 0.7f },
     };
 
     bool animation { true };
@@ -565,31 +568,22 @@ public:
     }
 };
 
-int main(int argc, char* argv[])
+template <typename WindowType>
+void gl_gears_main(const std::string& name)
 {
-    std::cout
-        << std::endl
-        << "[Esc]          - Quit" << std::endl
-        << "[A]            - Toggle animation" << std::endl
-        << "[W]            - Toggle wireframe" << std::endl
-        << "[Left Mouse]   - Rotate model" << std::endl
-        << "[Scroll Wheel] - Move model forward and backward" << std::endl
-        << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
-        << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
-        << std::endl;
-
     using namespace dst;
     using namespace dst::sys;
     dst::sys::Window::Info windowInfo { };
+    windowInfo.name = name;
     windowInfo.graphicsApi = dst::sys::GraphicsApi::OpenGL;
     windowInfo.openGlContextInfo.version = { 4, 5 };
-    dst::sys::GLFWWindow window(windowInfo);
+    WindowType window(windowInfo);
 
-    GLGears glGears;
     Clock clock;
+    GLGears glGears;
     bool running = true;
     while (running) {
-        Window::poll_events();
+        WindowType::poll_events();
         window.swap();
         clock.update();
         auto deltaTime = clock.elapsed<Second<float>>();
@@ -600,6 +594,47 @@ int main(int argc, char* argv[])
         glGears.update(deltaTime, window.get_input());
         glGears.draw(deltaTime, window.get_resolution());
     }
+}
 
+int main(int argc, char* argv[])
+{
+    #define GL_GEARS_MULTI_WINDOW_ENABLED
+    #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED) || \
+        defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+        std::cout
+            << std::endl
+            << "[Esc]          - Quit" << std::endl
+            << "[A]            - Toggle animation" << std::endl
+            << "[W]            - Toggle wireframe" << std::endl
+            << "[Left Mouse]   - Rotate model" << std::endl
+            << "[Scroll Wheel] - Move model forward and backward" << std::endl
+            << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
+            << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
+            << std::endl;
+        #if defined(GL_GEARS_MULTI_WINDOW_ENABLED)
+            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+            auto glfwThread = std::thread([] { gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW"); });
+            #endif
+            #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+            auto sdlThread = std::thread([] { gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL"); });
+            #endif
+            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+            glfwThread.join();
+            #endif
+            #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+            sdlThread.join();
+            #endif
+        #else
+            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+            gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW");
+            #elif defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+            gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL");
+            #endif
+        #endif
+    #else
+    std::cerr
+        << "Dynamic_Static.System has no window API (GLFW or SDL) enabled." << std::endl
+        << std::endl;
+    #endif
     return 0;
 }
