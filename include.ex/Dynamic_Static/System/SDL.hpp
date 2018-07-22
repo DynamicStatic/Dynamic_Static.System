@@ -11,9 +11,9 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_SDL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
 
-#if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 #include "Dynamic_Static/System/OpenGL.hpp"
 #endif
 
@@ -61,4 +61,4 @@ namespace System {
 } // namespace Dynamic_Static
 } // namespace System
 
-#endif // defined(DYNAMIC_STATIC_SDL_ENABLED)
+#endif // defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)

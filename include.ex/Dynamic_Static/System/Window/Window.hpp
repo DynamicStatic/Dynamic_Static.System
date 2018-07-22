@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Dynamic_Static/Core/Callback.hpp"
+#include "Dynamic_Static/Core/Events.hpp"
 #include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/Core/NonCopyable.hpp"
 #include "Dynamic_Static/Core/Version.hpp"
@@ -18,7 +19,7 @@
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Resolution.hpp"
 
-#if defined(DYNAMIC_STATIC_SDL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
 #include "Dynamic_Static/System/SDL.hpp"
 #endif
 
@@ -147,28 +148,17 @@ namespace System {
         /*
         * TODO : Documentation.
         */
-        static inline void poll_OS_events()
+        static inline void poll_events()
         {
-
+            get_poll_events_event()();
         }
 
     protected:
-        /*
-        * TODO : Documentation.
-        */
-        static void register_static_poll_function()
+        static inline Event<Window>& get_poll_events_event()
         {
-
+            static Event<Window> sOnPollEvents;
+            return sOnPollEvents;
         }
-
-
-    private:
-        #if defined(DYNAMIC_STATIC_SDL_ENABLED)
-        SDL_Window* mSdlWindow { nullptr };
-        #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
-        SDL_GLContext mSdlGlContext { nullptr };
-        #endif
-        #endif
     };
 
     Window::~Window()

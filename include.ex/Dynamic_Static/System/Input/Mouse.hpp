@@ -221,7 +221,7 @@ namespace detail {
         return button;
     }
 
-#endif // #if defined(DYNAMIC_STATIC_GLFW_ENABLED)
+#endif // #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
 } // namespace detail
 } // namespace System

@@ -16,7 +16,7 @@
 #include "Dynamic_Static/System/GLFW.hpp"
 #endif
 
-#if defined(DYNAMIC_STATIC_SDL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
 #include "Dynamic_Static/System/SDL.hpp"
 #endif
 
@@ -480,9 +480,9 @@ namespace detail {
         return key;
     }
 
-#endif // #if defined(DYNAMIC_STATIC_GLFW_ENABLED)
+#endif // #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
-#if defined(DYNAMIC_STATIC_SDL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
 
     /*
     * Converts an SDL key to a Keyboard::Key.
@@ -742,7 +742,7 @@ namespace detail {
         return key;
     }
 
-#endif // #if defined(DYNAMIC_STATIC_SDL_ENABLED)
+#endif // #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
 
 } // namespace detail
 } // namespace System
