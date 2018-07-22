@@ -13,7 +13,7 @@
 #include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 
-#if defined(DYNAMIC_STATIC_GLFW_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 #include "Dynamic_Static/System/GLFW.hpp"
 #endif
 
@@ -197,7 +197,7 @@ namespace System {
 
 namespace detail {
 
-#if defined(DYNAMIC_STATIC_GLFW_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
     /*
     * Converts a GLFW mouse button to a Mouse::Button.

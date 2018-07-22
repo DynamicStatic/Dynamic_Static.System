@@ -11,7 +11,11 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_GLFW_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+
+#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+#include "Dynamic_Static/System/OpenGL.hpp"
+#endif
 
 #include "GLFW/glfw3.h"
 #if defined(DYNAMIC_STATIC_WINDOWS)
@@ -22,4 +26,24 @@
 #endif
 #include "GLFW/glfw3native.h"
 
-#endif // defined(DYNAMIC_STATIC_GLFW_ENABLED)
+namespace Dynamic_Static {
+namespace System {
+namespace detail {
+
+    inline void glfw_error_callback(int error, const char* description)
+    {
+
+    }
+
+    inline void glfw_framebuffer_size_callback(GLFWwindow* glfwWindow, int width, int height);
+    inline void glfw_char_callback(GLFWwindow* glfwWindow, unsigned int codepoint);
+    inline void glfw_keyboard_callback(GLFWwindow* glfwWindow, int key, int scanCode, int action, int mods);
+    inline void glfw_mouse_button_callback(GLFWwindow* glfwWindow, int button, int action, int mods);
+    inline void glfw_mouse_position_callback(GLFWwindow* glfwWindow, double xOffset, double yOffset);
+    inline void glfw_mouse_scroll_callback(GLFWwindow* glfwWindow, double xOffset, double yOffset);
+
+} // namespace Dynamic_Static
+} // namespace System
+} // namespace detail
+
+#endif // defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)

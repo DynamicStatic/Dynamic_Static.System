@@ -128,20 +128,120 @@ public:
     {
         dst_gl(glBindVertexArray(vertexArray));
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer));
-        dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexType), vertices.data(), GL_STATIC_DRAW));
+        dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW));
         dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
-        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), indices.data(), GL_STATIC_DRAW));
+        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW));
         VertexType::enable_attributes();
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, 0));
         dst_gl(glBindVertexArray(0));
-
         indexCount = static_cast<GLsizei>(indices.size());
-        switch (sizeof(IndexType)) {
+        switch (sizeof(indices[0])) {
             case sizeof(GLubyte) : indexType = GL_UNSIGNED_BYTE; break;
             case sizeof(GLushort) : indexType = GL_UNSIGNED_SHORT; break;
             case sizeof(GLuint) : indexType = GL_UNSIGNED_INT; break;
             default: indexType = GL_UNSIGNED_INT; break;
         }
+    }
+};
+
+class Shader final
+    : dst::NonCopyable
+{
+public:
+    GLuint handle { };
+
+public:
+    Shader(
+        GLenum stage,
+        int lineNumber,
+        std::string source
+    )
+    {
+        auto versionPosition = source.find("#version");
+        auto versionEnd = source.find('\n', versionPosition);
+        auto sourceStr = source.substr(versionEnd);
+        auto headerStr = source.substr(versionPosition, versionEnd);
+        auto lineCount = std::count(headerStr.begin(), headerStr.end(), '\n');
+        headerStr += "#line " + std::to_string(lineNumber + lineCount) + "\n";
+        auto modifiedSource = headerStr + sourceStr;
+        auto sourceCStr = modifiedSource.c_str();
+        dst_gl(handle = glCreateShader(stage));
+        dst_gl(glShaderSource(handle, 1, &sourceCStr, nullptr));
+        dst_gl(glCompileShader(handle));
+        GLint compileStatus = 0;
+        dst_gl(glGetShaderiv(handle, GL_COMPILE_STATUS, &compileStatus));
+        if (compileStatus != GL_TRUE) {
+            GLint logLength = 0;
+            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
+            std::string log(logLength, ' ');
+            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
+            std::string stageStr;
+            switch (stage) {
+                case GL_VERTEX_SHADER: stageStr = "vertex"; break;
+                case GL_FRAGMENT_SHADER: stageStr = "fragment"; break;
+                default: stageStr = "unknown";
+            }
+            std::cerr << "Failed to compile " << stageStr << " shader" << std::endl;
+            std::cerr << log << std::endl;
+            std::cerr << std::endl;
+            dst_gl(glDeleteShader(handle));
+            handle = 0;
+        }
+    }
+
+    ~Shader()
+    {
+        dst_gl(glDeleteShader(handle));
+
+    }
+};
+
+class Program final
+    : dst::NonCopyable
+{
+public:
+    GLuint handle { };
+
+public:
+    Program(
+        int vertexShaderSourceLineNumber,
+        const std::string& vertexShaderSource,
+        int fragmentShaderSourceLineNumber,
+        const std::string& fragmentShaderSource
+    )
+    {
+        Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
+        Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
+        dst_gl(handle = glCreateProgram());
+        dst_gl(glAttachShader(handle, vertexShader.handle));
+        dst_gl(glAttachShader(handle, fragmentShader.handle));
+        dst_gl(glLinkProgram(handle));
+        GLint linkStatus = 0;
+        dst_gl(glGetProgramiv(handle, GL_LINK_STATUS, &linkStatus));
+        if (linkStatus != GL_TRUE) {
+            GLint logLength = 0;
+            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
+            std::string log(logLength, ' ');
+            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
+            std::cerr << "Failed to link program" << std::endl;
+            std::cerr << log << std::endl;
+            std::cerr << std::endl;
+            dst_gl(glDeleteProgram(handle));
+            handle = 0;
+        }
+    }
+
+    ~Program()
+    {
+        dst_gl(glDeleteProgram(handle));
+    }
+
+public:
+    GLint get_uniform_location(const dst::string_view& uniformName) const
+    {
+        GLint uniformLocation = 0;
+        dst_gl(uniformLocation = glGetUniformLocation(handle, uniformName.data()));
+        return uniformLocation;
     }
 };
 
@@ -307,107 +407,6 @@ public:
     }
 };
 
-class Shader final
-    : dst::NonCopyable
-{
-public:
-    GLuint handle { };
-
-public:
-    Shader(
-        GLenum stage,
-        int lineNumber,
-        std::string source
-    )
-    {
-        auto versionPosition = source.find("#version");
-        auto versionEnd = source.find('\n', versionPosition);
-        auto sourceStr = source.substr(versionEnd);
-        auto headerStr = source.substr(versionPosition, versionEnd);
-        auto lineCount = std::count(headerStr.begin(), headerStr.end(), '\n');
-        headerStr += "#line " + std::to_string(lineNumber + lineCount) + "\n";
-        auto modifiedSource = headerStr + sourceStr;
-        auto sourceCStr = modifiedSource.c_str();
-        dst_gl(handle = glCreateShader(stage));
-        dst_gl(glShaderSource(handle, 1, &sourceCStr, nullptr));
-        dst_gl(glCompileShader(handle));
-        GLint compileStatus = 0;
-        dst_gl(glGetShaderiv(handle, GL_COMPILE_STATUS, &compileStatus));
-        if (compileStatus != GL_TRUE) {
-            GLint logLength = 0;
-            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
-            std::string log(logLength, ' ');
-            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
-            std::string stageStr;
-            switch (stage) {
-                case GL_VERTEX_SHADER: stageStr = "vertex"; break;
-                case GL_FRAGMENT_SHADER: stageStr = "fragment"; break;
-                default: stageStr = "unknown";
-            }
-            std::cerr << "Failed to compile " << stageStr << " shader" << std::endl;
-            std::cerr << log << std::endl;
-            std::cerr << std::endl;
-            dst_gl(glDeleteShader(handle));
-            handle = 0;
-        }
-    }
-
-    ~Shader()
-    {
-        dst_gl(glDeleteShader(handle));
-
-    }
-};
-
-class Program final
-    : dst::NonCopyable
-{
-public:
-    GLuint handle { };
-
-public:
-    Program(
-        int vertexShaderSourceLineNumber,
-        const std::string& vertexShaderSource,
-        int fragmentShaderSourceLineNumber,
-        const std::string& fragmentShaderSource
-    )
-    {
-        Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
-        Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
-        dst_gl(handle = glCreateProgram());
-        dst_gl(glAttachShader(handle, vertexShader.handle));
-        dst_gl(glAttachShader(handle, fragmentShader.handle));
-        dst_gl(glLinkProgram(handle));
-        GLint linkStatus = 0;
-        dst_gl(glGetProgramiv(handle, GL_LINK_STATUS, &linkStatus));
-        if (linkStatus != GL_TRUE) {
-            GLint logLength = 0;
-            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
-            std::string log(logLength, ' ');
-            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
-            std::cerr << "Failed to link program" << std::endl;
-            std::cerr << log << std::endl;
-            std::cerr << std::endl;
-            dst_gl(glDeleteProgram(handle));
-            handle = 0;
-        }
-    }
-
-    ~Program()
-    {
-        dst_gl(glDeleteProgram(handle));
-    }
-
-public:
-    GLint get_uniform_location(const dst::string_view& uniformName) const
-    {
-        GLint uniformLocation = 0;
-        dst_gl(uniformLocation = glGetUniformLocation(handle, uniformName.data()));
-        return uniformLocation;
-    }
-};
-
 int main(int argc, char* argv[])
 {
     std::cout
@@ -439,7 +438,7 @@ int main(int argc, char* argv[])
     dst::sys::Window::Info windowInfo { };
     windowInfo.graphicsApi = dst::sys::GraphicsApi::OpenGL;
     windowInfo.openGlContextInfo.version = { 4, 5 };
-    dst::sys::Window window(windowInfo);
+    dst::sys::GLFWWindow window(windowInfo);
 
     dst_gl(glEnable(GL_CULL_FACE));
     dst_gl(glEnable(GL_DEPTH_TEST));
@@ -489,7 +488,7 @@ int main(int argc, char* argv[])
             }
         )"
     );
-    GLint modelViewLocation = program.get_uniform_location("model_view");
+    GLint modelViewLocation = program.get_uniform_location("modelView");
     GLint projectionLocation = program.get_uniform_location("projection");
     GLint colorLocation = program.get_uniform_location("color");
     GLint lightDirectionLocation = program.get_uniform_location("lightDirection");

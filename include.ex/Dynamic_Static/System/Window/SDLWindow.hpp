@@ -14,7 +14,9 @@ namespace Dynamic_Static {
 namespace System {
 namespace detail {
 
-    inline void access_global_sdl_windows(const std::function<void(std::set<SDL_Window*>&)>& accessFunction)
+    inline void access_global_sdl_windows(
+        const std::function<void(std::set<SDL_Window*>&)>& accessFunction
+    )
     {
         static std::mutex sMutex;
         static std::set<SDL_Window*> sSdlWindows;
@@ -38,9 +40,9 @@ namespace detail {
 
                     Uint32 flags = 0;
                     flags |= info.resizable ? SDL_WINDOW_RESIZABLE : 0;
-                    #if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+                    #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
                     flags |= info.graphicsApi == GraphicsApi::OpenGL ? SDL_WINDOW_OPENGL : 0;
-                    #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+                    #endif
                     mSdlWindow = SDL_CreateWindow(
                         info.name.c_str(),
                         SDL_WINDOWPOS_CENTERED,
@@ -54,10 +56,9 @@ namespace detail {
                         throw std::runtime_error("Failed to create SDL Window : " + errorStr);
                     }
                     sdlWindows.insert(mSdlWindow);
-                    mSdlId = SDL_GetWindowID(mSdlWindow);
-                    SDL_SetWindowData(mSdlWindow, "Dynamic_Static", this);
+                    SDL_SetWindowData(mSdlWindow, DYNAMIC_STATIC, this);
 
-                    #if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+                    #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
                     if (info.graphicsApi == GraphicsApi::OpenGL) {
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
                         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -72,9 +73,11 @@ namespace detail {
                             throw std::runtime_error("Failed to create OpenGL context : " + errorStr);
                         }
                         dst_sdl(SDL_GL_SetSwapInterval(info.openGlContextInfo.vSync ? 1 : 0));
+                        #if defined(DYNAMIC_STATIC_WINDOWS)
                         initialize_glew();
+                        #endif
                     }
-                    #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+                    #endif
                 }
             }
         );
@@ -89,12 +92,12 @@ namespace detail {
                 if (mSdlGlContext) {
                     SDL_GL_DeleteContext(mSdlGlContext);
                 }
-                #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+                #endif
 
                 if (mSdlWindow) {
                     SDL_DestroyWindow(mSdlWindow);
-                    sdlWindows.erase(mSdlWindow);
                 }
+                sdlWindows.erase(mSdlWindow);
                 if (sdlWindows.empty()) {
                     SDL_Quit();
                 }
@@ -105,7 +108,7 @@ namespace detail {
     inline Window& Window::operator=(Window&& other)
     {
         if (this != &other) {
-            SDL_SetWindowData(mSdlWindow, "Dynamic_Static", this);
+            SDL_SetWindowData(mSdlWindow, DYNAMIC_STATIC, this);
             mSdlWindow = std::move(other.mSdlWindow);
             mSdlGlContext = std::move(other.mSdlGlContext);
             mTextStream = std::move(other.mTextStream);
@@ -123,12 +126,12 @@ namespace detail {
         return { width, height };
     }
 
-    #if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+    #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
     inline void Window::swap()
     {
         SDL_GL_SwapWindow(mSdlWindow);
     }
-    #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+    #endif
 
     inline void Window::poll_events()
     {
@@ -140,7 +143,7 @@ namespace detail {
                         case SDL_KEYDOWN:
                         {
                             auto sdlWindow = SDL_GetWindowFromID(event.key.windowID);
-                            auto dstWindow = reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, "Dynamic_Static"));
+                            auto dstWindow = reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC));
                             auto dstKey = static_cast<size_t>(detail::sdl_to_dst_key(event.key.keysym.scancode));
                             dstWindow->mInput.keyboard.staged[dstKey] = DST_KEY_DOWN;
                         } break;
@@ -148,7 +151,7 @@ namespace detail {
                         case SDL_KEYUP:
                         {
                             auto sdlWindow = SDL_GetWindowFromID(event.key.windowID);
-                            auto dstWindow = reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, "Dynamic_Static"));
+                            auto dstWindow = reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC));
                             auto dstKey = static_cast<size_t>(detail::sdl_to_dst_key(event.key.keysym.scancode));
                             dstWindow->mInput.keyboard.staged[dstKey] = DST_KEY_UP;
                         } break;
@@ -156,7 +159,7 @@ namespace detail {
                 }
 
                 for (auto& sdlWindow : sdlWindows) {
-                    reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, "Dynamic_Static"))->mInput.update();
+                    reinterpret_cast<Window*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC))->mInput.update();
                 }
             }
         );

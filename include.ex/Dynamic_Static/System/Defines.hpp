@@ -13,19 +13,19 @@
 #include "Dynamic_Static/Core/Defines.hpp"
 
 #if !defined(DYNAMIC_STATIC_DISABLE_GLFW_SUPPORT)
-    // #define DYNAMIC_STATIC_GLFW_ENABLED
+    #define DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED
 #endif
 
 #if !defined(DYNAMIC_STATIC_DISABLE_SDL_SUPPORT)
-    #define DYNAMIC_STATIC_SDL_ENABLED
+    #define DYNAMIC_STATIC_SYSTEM_SDL_ENABLED
 #endif
 
-#ifndef DYNAMIC_STATIC_OPENGL_DISABLED
-#define DYNAMIC_STATIC_OPENGL_ENABLED 1
+#if !defined(DYNAMIC_STATIC_OPENGL_DISABLED)
+    #define DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #endif
 
-#ifndef DYNAMIC_STATIC_VULKAN_DISABLED
-#define DYNAMIC_STATIC_VULKAN_ENABLED 1
+#if !defined(DYNAMIC_STATIC_VULKAN_DISABLED)
+    #define DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED
 #endif
 
 #define DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR 1
@@ -43,15 +43,15 @@ namespace System {
     {
         Unknown,
 
-        #if DYNAMIC_STATIC_OPENGL_ENABLED
+        #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
         OpenGL,
         #endif
 
-        #if DYNAMIC_STATIC_VULKAN_ENABLED
+        #if defined(DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED)
         Vulkan,
         #endif
     };
 
 } // namespace System
-    namespace sys = System;
+namespace sys = System;
 } // namespace Dynamic_Static

@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2017-2018 Dynamic_Static
+  Copyright (c) 2018-2018 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -19,19 +19,6 @@
 
 #define HAVE_M_PI
 #include "SDL/SDL.h"
-
-#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC \
-SDL_Window* mSdlWindow { nullptr };             \
-Uint32 mSdlId { 0 };
-
-#if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
-#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS \
-DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC   \
-SDL_GLContext mSdlGlContext { nullptr };
-#else
-#define DYNAMIC_STATIC_SDL_WINDOW_MEMBERS \
-DYNAMIC_STATIC_SDL_WINDOW_MEMBERS_BASIC
-#endif
 
 #define DYNAMIC_STATIC_VALIDATE_SDL_CALLS
 #if defined(DYNAMIC_STATIC_VALIDATE_SDL_CALLS)

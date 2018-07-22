@@ -14,8 +14,10 @@
 #include "Dynamic_Static/System/Defines.hpp"
 
 #include <iostream>
+#include <functional>
+#include <stdexcept>
 
-#if defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
 #if defined(DYNAMIC_STATIC_WINDOWS)
     #ifndef GLEW_STATIC
@@ -84,10 +86,14 @@ namespace System {
     {
         static bool sGlewInitialized;
         if (!sGlewInitialized) {
-            sGlewInitialized = true;
             glewExperimental = true;
             auto error = glewInit();
-            assert(!error);
+            if (!error) {
+                sGlewInitialized = true;
+            } else {
+                // TODO : Error meesage.
+                throw std::runtime_error("Failed to initialize GLEW : ");
+            }
         }
     }
     #endif
