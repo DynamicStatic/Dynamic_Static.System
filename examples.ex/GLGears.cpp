@@ -578,22 +578,6 @@ int main(int argc, char* argv[])
         << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
         << std::endl;
 
-#define USE_GEARS_EX
-#ifndef USE_GEARS_EX
-    bool animation = true;
-    bool wireframe = false;
-    float fieldOfView = 40;
-    float cameraSpeed = 7.4f;
-    float scrollSensitivity = 86;
-    glm::vec3 cameraPosition { 0, 0, 20 };
-    glm::vec2 lookSensitivity { 1.6f };
-    auto modelRotationX = glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 });
-    auto modelRotationY = glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 });
-    glm::quat worldRotation = glm::normalize(modelRotationX * modelRotationY);
-    glm::vec3 lightPosition { 5, 5, 10 };
-    glm::vec3 lightDirection = lightPosition;
-#endif
-
     using namespace dst;
     using namespace dst::sys;
     dst::sys::Window::Info windowInfo { };
@@ -601,83 +585,7 @@ int main(int argc, char* argv[])
     windowInfo.openGlContextInfo.version = { 4, 5 };
     dst::sys::GLFWWindow window(windowInfo);
 
-#ifdef USE_GEARS_EX
-    GLGears gearsex;
-#else
-    dst_gl(glEnable(GL_CULL_FACE));
-    dst_gl(glEnable(GL_DEPTH_TEST));
-    
-    Program program(
-        __LINE__,
-        R"(
-            #version 330
-    
-            uniform mat4 modelView;
-            uniform mat4 projection;
-    
-            layout(location = 0) in vec3 vsPosition;
-            layout(location = 1) in vec3 vsNormal;
-    
-            out vec3 fsNormal;
-            out vec3 fsViewDirection;
-    
-            void main()
-            {
-                vec4 position = modelView * vec4(vsPosition, 1);
-                gl_Position = projection * position;
-                fsNormal = normalize(modelView * vec4(vsNormal, 0)).xyz;
-                fsViewDirection = normalize(-position).xyz;
-            }
-        )",
-        __LINE__,
-        R"(
-            #version 330
-    
-            uniform vec4 color;
-            uniform vec3 lightDirection;
-    
-            in vec3 fsNormal;
-            in vec3 fsViewDirection;
-    
-            out vec4 fragColor;
-    
-            void main()
-            {
-                vec3 reflection = normalize(reflect(-lightDirection, fsNormal));
-                vec4 ambient = vec4(0.2, 0.2, 0.2, 1);
-                vec4 diffuse = vec4(0.5) * max(dot(fsNormal, lightDirection), 0);
-                float specularPower = 0.25;
-                vec4 specular = vec4(0.5, 0.5, 0.5, 1) * pow(max(dot(reflection, fsViewDirection), 0), 0.8) * specularPower;
-                fragColor = vec4((ambient + diffuse) * color + specular);
-            }
-        )"
-    );
-    GLint modelViewLocation = program.get_uniform_location("modelView");
-    GLint projectionLocation = program.get_uniform_location("projection");
-    GLint colorLocation = program.get_uniform_location("color");
-    GLint lightDirectionLocation = program.get_uniform_location("lightDirection");
-    
-    std::array<Gear, 3> gears {
-        Gear(1.0f, 4.f, 1.0f, 20, 0.7f),
-        Gear(0.5f, 2.f, 2.0f, 10, 0.7f),
-        Gear(1.3f, 2.f, 0.5f, 10, 0.7f)
-    };
-    
-    gears[0].position = { -3.f, -2.f, 0.0f };
-    gears[0].color = { 0.8f, 0.1f, 0.0f, 1.0f };
-    gears[0].speed = 70;
-    
-    gears[1].position = { 3.1f, -2.0f, 0.0f };
-    gears[1].color = { 0.0f, 0.8f, 0.2f, 1.0 };
-    gears[1].rotation = -9;
-    gears[1].speed = -140;
-    
-    gears[2].position = { -3.1f, 4.2f, 0.0f };
-    gears[2].color = { 0.2f, 0.2f, 1.0f, 1.0f };
-    gears[2].rotation = -25;
-    gears[2].speed = -140;
-#endif
-
+    GLGears glGears;
     Clock clock;
     bool running = true;
     while (running) {
@@ -689,79 +597,8 @@ int main(int argc, char* argv[])
         if (input.keyboard.down(Keyboard::Key::Escape)) {
             running = false;
         }
-
-#ifdef USE_GEARS_EX
-        gearsex.update(deltaTime, window.get_input());
-        gearsex.draw(deltaTime, window.get_resolution());
-#else
-        if (input.keyboard.pressed(Keyboard::Key::A)) {
-            animation = !animation;
-        }
-        if (input.keyboard.pressed(Keyboard::Key::W)) {
-            wireframe = !wireframe;
-        }
-        if (input.mouse.down(Mouse::Button::Left)) {
-            auto look = input.mouse.get_position_delta() * lookSensitivity * deltaTime;
-            auto rotationX = glm::angleAxis(look.y, glm::vec3 { 1, 0, 0 });
-            auto rotationY = glm::angleAxis(look.x, glm::vec3 { 0, 1, 0 });
-            worldRotation = glm::normalize(rotationX * rotationY * worldRotation);
-        }
-        cameraPosition.z -= input.mouse.get_scroll_delta() * scrollSensitivity * deltaTime;
-        if (input.mouse.down(Mouse::Button::Middle) ||
-            input.mouse.down(Mouse::Button::Right)) {
-            cameraPosition.x -= input.mouse.get_position_delta().x * cameraSpeed * deltaTime;
-            cameraPosition.y += input.mouse.get_position_delta().y * cameraSpeed * deltaTime;
-        }
-
-        auto view = glm::lookAt(
-            cameraPosition,
-            cameraPosition + glm::vec3 { 0, 0, -1 },
-            { 0, 1, 0 }
-        );
-        auto projection = glm::perspective(
-            glm::radians(fieldOfView),
-            window.get_resolution().get_aspect_ratio(),
-            0.001f,
-            100.0f
-        );
-        
-        auto resolution = window.get_resolution();
-        dst_gl(glViewport(0, 0, resolution.width, resolution.height));
-        dst_gl(glClearColor(0, 0, 0, 0));
-        dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-        dst_gl(glUseProgram(program.handle));
-        dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
-        dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightPosition)[0]));
-        for (auto& gear : gears) {
-            gear.rotation += animation ? gear.speed * deltaTime : 0;
-            auto model =
-                glm::toMat4(worldRotation) *
-                glm::translate(gear.position) *
-                glm::rotate(glm::radians(gear.rotation), glm::vec3 { 0, 0, 1 });
-            auto modelView = view * model;
-            dst_gl(glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
-            dst_gl(glUniform4fv(colorLocation, 1, &gear.color[0]));
-            dst_gl(glBindVertexArray(gear.mesh.vertexArray));
-            dst_gl(glFrontFace(gear.mesh.winding));
-            dst_gl(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
-            dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, nullptr));
-            dst_gl(glBindVertexArray(0));
-        }
-#endif
-
-        // SDL_Event event;
-        // while (SDL_PollEvent(&event)) {
-        //     switch (event.type) {
-        //         case SDL_QUIT:running = false; break;
-        //         case SDL_KEYDOWN:
-        //         {
-        //             switch (event.key.keysym.sym) {
-        //                 case SDLK_ESCAPE: running = false; break;
-        //             }
-        //         } break;
-        //         default:break;
-        //     }
-        // }
+        glGears.update(deltaTime, window.get_input());
+        glGears.draw(deltaTime, window.get_resolution());
     }
 
     return 0;
