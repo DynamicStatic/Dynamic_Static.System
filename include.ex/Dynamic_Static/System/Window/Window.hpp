@@ -82,6 +82,12 @@ namespace System {
         */
         Callback<Window, const Window&> on_resize;
 
+        /*
+        * Callback executed when this Window is closed.
+        * @param [in] The Window being closed
+        */
+        Callback<Window, const Window&> on_close;
+
     protected:
         Input mInput;
         std::vector<uint32_t> mTextStream;
@@ -140,13 +146,17 @@ namespace System {
 
         #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
         /*
-        * TODO : Documentation.
+        * Swaps this Window's front and back buffers.
+        * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+        * \n NOTE : If using OpenGL this method must be called periodically to keep this Window up to date
         */
         virtual void swap() = 0;
         #endif
 
         /*
-        * TODO : Documentation.
+        * Processes pending system events.
+        * \n NOTE : This method should be called periodically to keep all Windows up to date
+        * \n NOTE : This method triggers derived implementations of poll_events()
         */
         static inline void poll_events()
         {
@@ -154,6 +164,16 @@ namespace System {
         }
 
     protected:
+        inline void execute_on_resize_callback()
+        {
+            on_resize(*this);
+        }
+
+        inline void execute_on_close_callback()
+        {
+            on_close(*this);
+        }
+
         static inline Event<Window>& get_poll_events_event()
         {
             static Event<Window> sOnPollEvents;

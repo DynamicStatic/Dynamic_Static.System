@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <functional>
+#include <mutex>
 #include <stdexcept>
 
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
@@ -84,6 +85,8 @@ namespace System {
     */
     static void initialize_glew()
     {
+        static std::mutex sMutex;
+        std::lock_guard<std::mutex> lock(sMutex);
         static bool sGlewInitialized;
         if (!sGlewInitialized) {
             glewExperimental = true;

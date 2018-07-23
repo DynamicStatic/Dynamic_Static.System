@@ -410,6 +410,21 @@ public:
 class GLGears final
 {
 public:
+    bool animation { true };
+    bool wireframe { false };
+    float fieldOfView { 40 };
+    float cameraSpeed { 7.4f };
+    float scrollSensitivity { 86 };
+    glm::vec2 lookSensitivity { 1.6f };
+    glm::vec3 lightDirection { -5, -5, -10 };
+    glm::vec3 cameraPosition { 0, 0, 20 };
+    glm::quat worldRotation {
+        glm::normalize(
+            glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 }) *
+            glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 })
+        )
+    };
+
     Program program {
         __LINE__,
         R"(
@@ -446,9 +461,9 @@ public:
 
             void main()
             {
-                vec3 reflection = normalize(reflect(-lightDirection, fsNormal));
+                vec3 reflection = normalize(reflect(lightDirection, fsNormal));
                 vec4 ambient = vec4(0.2, 0.2, 0.2, 1);
-                vec4 diffuse = vec4(0.5) * max(dot(fsNormal, lightDirection), 0);
+                vec4 diffuse = vec4(0.5) * max(dot(fsNormal, -lightDirection), 0);
                 float specularPower = 0.25;
                 vec4 specular = vec4(0.5, 0.5, 0.5, 1) * pow(max(dot(reflection, fsViewDirection), 0), 0.8) * specularPower;
                 fragColor = vec4((ambient + diffuse) * color + specular);
@@ -463,22 +478,6 @@ public:
         Gear{ 1.0f, 4.f, 1.0f, 20, 0.7f },
         Gear{ 0.5f, 2.f, 2.0f, 10, 0.7f },
         Gear{ 1.3f, 2.f, 0.5f, 10, 0.7f },
-    };
-
-    bool animation { true };
-    bool wireframe { false };
-    float fieldOfView { 40 };
-    float cameraSpeed { 7.4f };
-    float scrollSensitivity { 86 };
-    glm::vec2 lookSensitivity { 1.6f };
-    glm::vec3 lightPosition { 5, 5, 10 };
-    glm::vec3 lightDirection { lightPosition };
-    glm::vec3 cameraPosition { 0, 0, 20 };
-    glm::quat worldRotation {
-        glm::normalize(
-            glm::angleAxis(glm::radians(20.0f), glm::vec3 { 1, 0, 0 }) *
-            glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 })
-        )
     };
 
 public:
@@ -549,7 +548,7 @@ public:
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         dst_gl(glUseProgram(program.handle));
         dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
-        dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightPosition)[0]));
+        dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightDirection)[0]));
         for (auto& gear : gears) {
             gear.rotation += animation ? gear.speed * deltaTime : 0;
             auto model =
@@ -578,14 +577,18 @@ void gl_gears_main(const std::string& name)
     windowInfo.graphicsApi = dst::sys::GraphicsApi::OpenGL;
     windowInfo.openGlContextInfo.version = { 4, 5 };
     WindowType window(windowInfo);
+    bool running = true;
+    window.on_close =
+        [&](const Window&)
+        {
+            running = false;
+        };
 
     Clock clock;
     GLGears glGears;
-    bool running = true;
     while (running) {
-        WindowType::poll_events();
-        window.swap();
         clock.update();
+        WindowType::poll_events();
         auto deltaTime = clock.elapsed<Second<float>>();
         const auto& input = window.get_input();
         if (input.keyboard.down(Keyboard::Key::Escape)) {
@@ -593,6 +596,7 @@ void gl_gears_main(const std::string& name)
         }
         glGears.update(deltaTime, window.get_input());
         glGears.draw(deltaTime, window.get_resolution());
+        window.swap();
     }
 }
 

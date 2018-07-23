@@ -223,6 +223,29 @@ namespace detail {
 
 #endif // #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
+#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+
+    /*
+    * Converts an SDL mouse button to a Mouse::Button.
+    * @param [in] sdlMouseButton The SDL mouse button to convert to a Mouse::Button
+    * @return The converted Mouse::Button
+    */
+    inline Mouse::Button sdl_to_dst_mouse_button(int sdlMouseButton)
+    {
+        auto button = Mouse::Button::Unknown;
+        switch (sdlMouseButton) {
+            case SDL_BUTTON_LEFT  : button = Mouse::Button::Left;   break;
+            case SDL_BUTTON_MIDDLE: button = Mouse::Button::Middle; break;
+            case SDL_BUTTON_RIGHT : button = Mouse::Button::Right;  break;
+            case SDL_BUTTON_X1    : button = Mouse::Button::X1;     break;
+            case SDL_BUTTON_X2    : button = Mouse::Button::X2;     break;
+            default: button = Mouse::Button::Unknown;
+        }
+        return button;
+    }
+
+#endif // #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
+
 } // namespace detail
 } // namespace System
 } // namespace Dynamic_Static

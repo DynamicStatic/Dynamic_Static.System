@@ -44,7 +44,7 @@ namespace System {
         }
 
         /*
-        * Moves an instance of GLFWWindow.
+        * Moves this instance of GLFWWindow.
         * @param [in] other The GLFWWindow to move from
         */
         inline GLFWWindow(GLFWWindow&& other)
@@ -63,7 +63,7 @@ namespace System {
         }
 
         /*
-        * Moves this instance of GLFWWindow
+        * Moves this instance of GLFWWindow.
         * @param [in] other The GLFWWindow to move from
         * @return This GLFWWindow
         */
@@ -101,7 +101,9 @@ namespace System {
 
         #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
         /*
-        * TODO : Documentation.
+        * Swaps this GLFWwindow's front and back buffers.
+        * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+        * \n NOTE : If using OpenGL this method must be called periodically to keep this GLFWwindow up to date
         */
         inline void swap() override final
         {
@@ -112,7 +114,9 @@ namespace System {
         #endif
 
         /*
-        * TODO : Documentation.
+        * Processes pending system events.
+        * \n NOTE : This method should be called periodically to keep all GLFWWindows up to date
+        * \n NOTE : This method is triggered by Window::poll_events(), one or the other should be used, not both
         */
         static inline void poll_events()
         {
