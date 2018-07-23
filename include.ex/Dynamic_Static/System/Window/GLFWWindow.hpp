@@ -108,6 +108,7 @@ namespace System {
         inline void swap() override final
         {
             if (mGraphicsApi == GraphicsApi::OpenGL) {
+                glfwMakeContextCurrent(mGlfwWindow);
                 glfwSwapBuffers(mGlfwWindow);
             }
         }
@@ -120,13 +121,19 @@ namespace System {
         */
         static inline void poll_events()
         {
-            glfwPollEvents();
             access_global_glfw_windows(
                 [](std::set<GLFWwindow*>& glfwWindows)
                 {
                     for (auto glfwWindow : glfwWindows) {
-                        auto window = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
-                        window->mInput.update();
+                        auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+                        assert(dstWindow);
+                        dstWindow->mTextStream.clear();
+                    }
+                    glfwPollEvents();
+                    for (auto glfwWindow : glfwWindows) {
+                        auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+                        assert(dstWindow);
+                        dstWindow->mInput.update();
                     }
                 }
             );
@@ -150,34 +157,73 @@ namespace System {
             accessFunction(sGlfwWindowHandles);
         }
 
+        static inline void glfw_error_callback(int error, const char* description)
+        {
+            // TODO : Setup logger.
+            std::cerr << "GLFW Error " + std::to_string(error) + " : " + std::string(description) << std::endl;
+        }
+
+        static inline void glfw_window_close_callback(GLFWwindow* glfwWindow)
+        {
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            dstWindow->execute_on_close_callback();
+        }
+
         static inline void glfw_framebuffer_size_callback(GLFWwindow* glfwWindow, int width, int height)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            dstWindow->execute_on_resize_callback();
         }
 
         static inline void glfw_char_callback(GLFWwindow* glfwWindow, unsigned int codepoint)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            if (codepoint > 0 && codepoint < 0x10000) {
+                dstWindow->mTextStream.push_back(codepoint);
+            }
         }
 
         static inline void glfw_keyboard_callback(GLFWwindow* glfwWindow, int key, int scanCode, int action, int mods)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            auto dstKey = static_cast<size_t>(detail::glfw_to_dst_key(key));
+            switch (action) {
+                case GLFW_PRESS: dstWindow->mInput.keyboard.staged[dstKey] = DST_KEY_DOWN; break;
+                case GLFW_RELEASE: dstWindow->mInput.keyboard.staged[dstKey] = DST_KEY_UP; break;
+                case GLFW_REPEAT: dstWindow->mInput.keyboard.staged[dstKey] = DST_KEY_DOWN; break;
+                default:break;
+            }
         }
 
         static inline void glfw_mouse_button_callback(GLFWwindow* glfwWindow, int button, int action, int mods)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            auto dstButton = static_cast<size_t>(detail::glfw_to_dst_mouse_button(button));
+            switch (action) {
+                case GLFW_PRESS: dstWindow->mInput.mouse.staged.buttons[dstButton] = DST_BUTTON_DOWN; break;
+                case GLFW_RELEASE: dstWindow->mInput.mouse.staged.buttons[dstButton] = DST_BUTTON_UP; break;
+                case GLFW_REPEAT: dstWindow->mInput.mouse.staged.buttons[dstButton] = DST_BUTTON_DOWN; break;
+                default:break;
+            }
         }
 
         static inline void glfw_mouse_position_callback(GLFWwindow* glfwWindow, double xOffset, double yOffset)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            dstWindow->mInput.mouse.staged.position = { xOffset, yOffset };
         }
 
         static inline void glfw_mouse_scroll_callback(GLFWwindow* glfwWindow, double xOffset, double yOffset)
         {
-
+            auto dstWindow = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(glfwWindow));
+            assert(dstWindow);
+            dstWindow->mInput.mouse.staged.scroll += static_cast<float>(yOffset);
         }
 
         static inline GLFWwindow* create_glfw_window(const Window::Info& windowInfo)
@@ -187,7 +233,7 @@ namespace System {
                 [&](std::set<GLFWwindow*>& glfwWindows)
                 {
                     if (glfwWindows.empty()) {
-                        glfwSetErrorCallback(detail::glfw_error_callback);
+                        glfwSetErrorCallback(glfw_error_callback);
                         if (glfwInit() == GLFW_FALSE) {
                             // TODO : Get error message.
                             throw std::runtime_error("Failed to initialize GLFW : ");
@@ -244,6 +290,7 @@ namespace System {
                     }
                     #endif
 
+                    glfwSetWindowCloseCallback(glfwWindow, glfw_window_close_callback);
                     glfwSetFramebufferSizeCallback(glfwWindow, glfw_framebuffer_size_callback);
                     glfwSetMouseButtonCallback(glfwWindow, glfw_mouse_button_callback);
                     glfwSetCursorPosCallback(glfwWindow, glfw_mouse_position_callback);

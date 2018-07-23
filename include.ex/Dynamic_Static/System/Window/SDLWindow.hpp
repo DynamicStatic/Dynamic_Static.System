@@ -113,8 +113,10 @@ namespace System {
         */
         inline void swap() override final
         {
-            SDL_GL_MakeCurrent(mSdlWindow, mSdlGlContext);
-            SDL_GL_SwapWindow(mSdlWindow);
+            if (mGraphicsApi == GraphicsApi::OpenGL) {
+                SDL_GL_MakeCurrent(mSdlWindow, mSdlGlContext);
+                SDL_GL_SwapWindow(mSdlWindow);
+            }
         }
         #endif
 
@@ -125,54 +127,56 @@ namespace System {
         */
         static inline void poll_events()
         {
-            auto getDstWindow =
-            [](Uint32 sdlWindowId)
-            {
-                auto sdlWindow = SDL_GetWindowFromID(sdlWindowId);
-                return reinterpret_cast<SDLWindow*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC));
-            };
-
             access_global_sdl_windows(
                 [&](std::set<SDL_Window*>& sdlWindows) {
+                    for (auto& sdlWindow : sdlWindows) {
+                        auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC));
+                        assert(dstWindow);
+                        dstWindow->mTextStream.clear();
+                    }
+
                     SDL_Event event;
                     while (SDL_PollEvent(&event)) {
                         switch (event.type) {
-                            case SDL_KEYUP:
-                            case SDL_KEYDOWN:
-                            {
-                                auto dstWindow = getDstWindow(event.key.windowID);
-                                auto dstKey = static_cast<size_t>(detail::sdl_to_dst_key(event.key.keysym.scancode));
-                                dstWindow->mInput.keyboard.staged[dstKey] = event.key.state == SDL_PRESSED ? DST_KEY_DOWN : DST_KEY_UP;
-                            } break;
-
-                            case SDL_MOUSEBUTTONUP:
-                            case SDL_MOUSEBUTTONDOWN:
-                            {
-                                auto dstWindow = getDstWindow(event.button.windowID);
-                                auto dstMouseButton = static_cast<size_t>(detail::sdl_to_dst_mouse_button(event.button.button));
-                                dstWindow->mInput.mouse.staged.buttons[dstMouseButton] = event.button.state == SDL_PRESSED ? DST_BUTTON_DOWN : DST_BUTTON_UP;
-                            } break;
-
-                            case SDL_MOUSEWHEEL:
-                            {
-                                auto dstWindow = getDstWindow(event.wheel.windowID);
-                                dstWindow->mInput.mouse.staged.scroll += static_cast<float>(event.wheel.y);
-                            } break;
-
                             case SDL_WINDOWEVENT:
                             {
                                 switch (event.window.event) {
                                     case SDL_WINDOWEVENT_CLOSE:
                                     {
-                                        getDstWindow(event.window.windowID)->execute_on_close_callback();
+                                        auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(SDL_GetWindowFromID(event.button.windowID), DYNAMIC_STATIC));
+                                        assert(dstWindow);
+                                        dstWindow->execute_on_close_callback();
                                     } break;
-
                                     case SDL_WINDOWEVENT_RESIZED:
                                     case SDL_WINDOWEVENT_SIZE_CHANGED:
                                     {
-                                        getDstWindow(event.window.windowID)->execute_on_resize_callback();
+                                        auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(SDL_GetWindowFromID(event.button.windowID), DYNAMIC_STATIC));
+                                        assert(dstWindow);
+                                        dstWindow->execute_on_resize_callback();
                                     } break;
                                 }
+                            } break;
+                            case SDL_KEYUP:
+                            case SDL_KEYDOWN:
+                            {
+                                auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(SDL_GetWindowFromID(event.key.windowID), DYNAMIC_STATIC));
+                                assert(dstWindow);
+                                auto dstKey = static_cast<size_t>(detail::sdl_to_dst_key(event.key.keysym.scancode));
+                                dstWindow->mInput.keyboard.staged[dstKey] = event.key.state == SDL_PRESSED ? DST_KEY_DOWN : DST_KEY_UP;
+                            } break;
+                            case SDL_MOUSEBUTTONUP:
+                            case SDL_MOUSEBUTTONDOWN:
+                            {
+                                auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(SDL_GetWindowFromID(event.button.windowID), DYNAMIC_STATIC));
+                                assert(dstWindow);
+                                auto dstMouseButton = static_cast<size_t>(detail::sdl_to_dst_mouse_button(event.button.button));
+                                dstWindow->mInput.mouse.staged.buttons[dstMouseButton] = event.button.state == SDL_PRESSED ? DST_BUTTON_DOWN : DST_BUTTON_UP;
+                            } break;
+                            case SDL_MOUSEWHEEL:
+                            {
+                                auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(SDL_GetWindowFromID(event.wheel.windowID), DYNAMIC_STATIC));
+                                assert(dstWindow);
+                                dstWindow->mInput.mouse.staged.scroll += static_cast<float>(event.wheel.y);
                             } break;
                         }
                     }
@@ -183,6 +187,7 @@ namespace System {
                         int wx, wy;
                         SDL_GetWindowPosition(sdlWindow, &wx, &wy);
                         auto dstWindow = reinterpret_cast<SDLWindow*>(SDL_GetWindowData(sdlWindow, DYNAMIC_STATIC));
+                        assert(dstWindow);
                         dstWindow->mInput.mouse.staged.position = { mx - wx, my - wy };
                         dstWindow->mInput.update();
                     }
