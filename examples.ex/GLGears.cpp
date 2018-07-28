@@ -127,14 +127,14 @@ public:
     {
         dst_gl(glBindVertexArray(vertexArray));
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer));
-        dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW));
+        dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexType), vertices.data(), GL_STATIC_DRAW));
         dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
-        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW));
+        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), indices.data(), GL_STATIC_DRAW));
         VertexType::enable_attributes();
         dst_gl(glBindBuffer(GL_ARRAY_BUFFER, 0));
         dst_gl(glBindVertexArray(0));
         indexCount = static_cast<GLsizei>(indices.size());
-        switch (sizeof(indices[0])) {
+        switch (sizeof(IndexType)) {
             case sizeof(GLubyte) : indexType = GL_UNSIGNED_BYTE; break;
             case sizeof(GLushort) : indexType = GL_UNSIGNED_SHORT; break;
             case sizeof(GLuint) : indexType = GL_UNSIGNED_INT; break;
@@ -170,10 +170,6 @@ public:
         GLint compileStatus = 0;
         dst_gl(glGetShaderiv(handle, GL_COMPILE_STATUS, &compileStatus));
         if (compileStatus != GL_TRUE) {
-            GLint logLength = 0;
-            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
-            std::string log(logLength, ' ');
-            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
             std::string stageStr;
             switch (stage) {
                 case GL_VERTEX_SHADER: stageStr = "vertex"; break;
@@ -182,7 +178,7 @@ public:
             }
             std::cerr
                 << "Failed to compile " << stageStr << " shader" << std::endl
-                << log << std::endl
+                << dst::sys::get_shader_info_log(handle) << std::endl
                 << std::endl;
             dst_gl(glDeleteShader(handle));
             handle = 0;
@@ -219,13 +215,9 @@ public:
         GLint linkStatus = 0;
         dst_gl(glGetProgramiv(handle, GL_LINK_STATUS, &linkStatus));
         if (linkStatus != GL_TRUE) {
-            GLint logLength = 0;
-            dst_gl(glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &logLength));
-            std::string log(logLength, ' ');
-            dst_gl(glGetShaderInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
             std::cerr
                 << "Failed to link program" << std::endl
-                << log << std::endl
+                << dst::sys::get_program_info_log(handle) << std::endl
                 << std::endl;
             dst_gl(glDeleteProgram(handle));
             handle = 0;
@@ -585,8 +577,9 @@ void gl_gears_main(const std::string& name, bool audio = false)
             running = false;
         };
 
+    FMOD::System* fmod = nullptr;
     if (audio) {
-        fmod_audio_test();
+        fmod = fmod_init();
     }
 
     Clock clock;
@@ -602,12 +595,19 @@ void gl_gears_main(const std::string& name, bool audio = false)
         glGears.update(deltaTime, window.get_input());
         glGears.draw(deltaTime, window.get_resolution());
         window.swap();
+        if (fmod) {
+            fmod_update(fmod);
+        }
+    }
+
+    if (fmod) {
+        fmod_shutdown(fmod);
     }
 }
 
 int main(int argc, char* argv[])
 {
-    #define GL_GEARS_MULTI_WINDOW_ENABLED
+    // #define GL_GEARS_MULTI_WINDOW_ENABLED
     #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED) || \
         defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
         std::cout
@@ -635,7 +635,7 @@ int main(int argc, char* argv[])
             #endif
         #else
             #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-            gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW");
+            gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW", true);
             #elif defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
             gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL");
             #endif

@@ -17,17 +17,35 @@
 namespace Dynamic_Static {
 namespace System {
 
-    void fmod_audio_test()
+    FMOD::System* fmod_init()
     {
         FMOD::System* system = nullptr;
         auto fmResult = FMOD::System_Create(&system);
-        if (fmResult != FMOD_OK) {
-            assert(false);
-        }
+        assert(fmResult == FMOD_OK);
+
         fmResult = system->init(512, FMOD_INIT_NORMAL, 0);
-        if (fmResult != FMOD_OK) {
-            assert(false);
-        }
+        assert(fmResult == FMOD_OK);
+
+        // auto filePath = "C:/Development/Dynamic_Static/Dynamic_Static.System/examples/resources/Mega Hyper Ultrastorm.mp3";
+        auto filePath = "C:/Development/Dynamic_Static/Dynamic_Static.System/examples/resources/Track_00.ogg";
+        FMOD::Sound* sound = nullptr;
+        fmResult = system->createSound(filePath, FMOD_CREATESTREAM, nullptr, &sound);
+        assert(fmResult == FMOD_OK);
+
+        fmResult = system->playSound(sound, nullptr, false, nullptr);
+        assert(fmResult == FMOD_OK);
+
+        return system;
+    }
+
+    void fmod_update(FMOD::System* system)
+    {
+        system->update();
+    }
+
+    void fmod_shutdown(FMOD::System* system)
+    {
+        system->release();
     }
 
 } // namespace System

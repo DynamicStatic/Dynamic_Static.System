@@ -56,6 +56,28 @@ namespace System {
         bool vSync { true };         /*!< Whether or not the configured OpenGL context has VSync enabled (hint) */
     };
 
+    #if defined(DYNAMIC_STATIC_WINDOWS)
+    /*
+    * TODO : Documentation.
+    */
+    static void initialize_glew()
+    {
+        static std::mutex sMutex;
+        std::lock_guard<std::mutex> lock(sMutex);
+        static bool sGlewInitialized;
+        if (!sGlewInitialized) {
+            glewExperimental = true;
+            auto error = glewInit();
+            if (!error) {
+                sGlewInitialized = true;
+            } else {
+                // TODO : Error meesage.
+                throw std::runtime_error("Failed to initialize GLEW : ");
+            }
+        }
+    }
+    #endif
+
     /*
     * TODO : Documentation.
     */
@@ -79,29 +101,43 @@ namespace System {
         return glError;
     }
 
-    #if defined(DYNAMIC_STATIC_WINDOWS)
     /*
     * TODO : Documentation.
     */
-    static void initialize_glew()
+    template <
+        typename GetIvFunctionType,
+        typename GetInfoLogFunctionType
+    >
+    std::string get_info_log(
+        GLuint handle,
+        GetIvFunctionType getIv,
+        GetInfoLogFunctionType getInfoLog
+    )
     {
-        static std::mutex sMutex;
-        std::lock_guard<std::mutex> lock(sMutex);
-        static bool sGlewInitialized;
-        if (!sGlewInitialized) {
-            glewExperimental = true;
-            auto error = glewInit();
-            if (!error) {
-                sGlewInitialized = true;
-            } else {
-                // TODO : Error meesage.
-                throw std::runtime_error("Failed to initialize GLEW : ");
-            }
-        }
+        GLint logLength = 0;
+        dst_gl(getIv(handle, GL_INFO_LOG_LENGTH, &logLength));
+        std::string log(logLength, ' ');
+        dst_gl(getInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
+        return log.data();
     }
-    #endif
 
-} // namespace Dynamic_Static
+    /*
+    * TODO : Documentation.
+    */
+    std::string get_shader_info_log(GLuint shaderHandle)
+    {
+        return get_info_log(shaderHandle, glGetShaderiv, glGetShaderInfoLog);
+    }
+
+    /*
+    * TODO : Documentation.
+    */
+    std::string get_program_info_log(GLuint programHandle)
+    {
+        return get_info_log(programHandle, glGetProgramiv, glGetProgramInfoLog);
+    }
+
 } // namespace System
+} // namespace Dynamic_Static
 
 #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
