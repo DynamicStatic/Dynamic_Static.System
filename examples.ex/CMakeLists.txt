@@ -12,7 +12,7 @@ macro(CreateExample target)
         folder Dynamic_Static.System/examples/
         staticLinkLibraries Dynamic_Static.System
         sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
-        dynamicLinkLibraries ${FMOD.sharedLibraries}
+        sharedLibraries ${FMOD.sharedLibraries}
     )
 endmacro()
 
