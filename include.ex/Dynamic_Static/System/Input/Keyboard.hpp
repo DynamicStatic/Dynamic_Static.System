@@ -13,11 +13,11 @@
 #include "Dynamic_Static/System/Defines.hpp"
 
 #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-#include "Dynamic_Static/System/GLFW.hpp"
+#include "Dynamic_Static/System/Video/GLFW.hpp"
 #endif
 
 #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-#include "Dynamic_Static/System/SDL.hpp"
+#include "Dynamic_Static/System/Video/SDL.hpp"
 #endif
 
 #include <bitset>

@@ -35,8 +35,9 @@
 #include "Dynamic_Static/Core/NonCopyable.hpp"
 #include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/Core/Time.hpp"
-#include "Dynamic_Static/System/OpenGL.hpp"
-#include "Dynamic_Static/System/Window.hpp"
+
+#include "Dynamic_Static/System/Audio/Defines.hpp"
+#include "Dynamic_Static/System/Video.hpp"
 
 #include <array>
 #include <iostream>
@@ -568,7 +569,7 @@ public:
 };
 
 template <typename WindowType>
-void gl_gears_main(const std::string& name)
+void gl_gears_main(const std::string& name, bool audio = false)
 {
     using namespace dst;
     using namespace dst::sys;
@@ -583,6 +584,10 @@ void gl_gears_main(const std::string& name)
         {
             running = false;
         };
+
+    if (audio) {
+        fmod_audio_test();
+    }
 
     Clock clock;
     GLGears glGears;
@@ -620,7 +625,7 @@ int main(int argc, char* argv[])
             auto glfwThread = std::thread([] { gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW"); });
             #endif
             #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-            auto sdlThread = std::thread([] { gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL"); });
+            auto sdlThread = std::thread([] { gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL", true); });
             #endif
             #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
             glfwThread.join();

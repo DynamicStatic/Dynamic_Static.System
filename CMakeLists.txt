@@ -17,6 +17,7 @@ endif()
 DstCreateProject(Dynamic_Static.System)
 
 include("external/Dynamic_Static.Core.cmake")
+include("external/FMOD.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
 # include("external/imgui.cmake")
@@ -40,6 +41,8 @@ else()
     )
 endif()
 
+message("fmod=${FMOD.includeDirectories}")
+
 set(includePath "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/Dynamic_Static/System/")
 DstCreateStaticLibrary(
@@ -47,30 +50,36 @@ DstCreateStaticLibrary(
     folder Dynamic_Static.System/
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
+        ${FMOD.includeDirectories}
         ${glew.includeDirectory}
         # ${imgui.includeDirectories}
         ${SDL.includeDirectory}
 
     staticLinkLibraries
         Dynamic_Static.Core
+        ${FMOD.staticLibraries}
         glfw
         ${glew.staticLinkLibraries}
         ${SDL.staticLinkLibraries}
         ${systemLinkLibraries}
 
     includeFiles
+        ${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp
+        ${includePath}/Audio/Defines.hpp
         ${includePath}/Input/Keyboard.hpp
         ${includePath}/Input/Mouse.hpp
-        ${includePath}/Window/Window.hpp
-        ${includePath}/Window/GLFWWindow.hpp
-        ${includePath}/Window/SDLWindow.hpp
+        ${includePath}/Video/GLFW.hpp
+        ${includePath}/Video/GLFWWindow.hpp
+        ${includePath}/Video/OpenGL.hpp
+        ${includePath}/Video/Resolution.hpp
+        ${includePath}/Video/Window.hpp
+        ${includePath}/Video/SDL.hpp
+        ${includePath}/Video/SDLWindow.hpp
+        ${includePath}/Video/Window.hpp
+        ${includePath}/Audio.hpp
         ${includePath}/Defines.hpp
-        ${includePath}/GLFW.hpp
         ${includePath}/Input.hpp
-        ${includePath}/OpenGL.hpp
-        ${includePath}/Resolution.hpp
-        ${includePath}/SDL.hpp
-        ${includePath}/Window.hpp
+        ${includePath}/Video.hpp
 
     sourceFiles
         ${sourcePath}/Placeholder.cpp
