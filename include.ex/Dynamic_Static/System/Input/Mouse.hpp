@@ -13,14 +13,6 @@
 #include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 
-#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-#include "Dynamic_Static/System/Video/GLFW.hpp"
-#endif
-
-#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-#include "Dynamic_Static/System/Video/SDL.hpp"
-#endif
-
 #include <bitset>
 
 #define DST_BUTTON_UP false
@@ -199,57 +191,5 @@ namespace System {
         }
     };
 
-namespace detail {
-
-#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-
-    /*
-    * Converts a GLFW mouse button to a Mouse::Button.
-    * @param [in] glfwMouseButton The GLFW mouse button to convert to a Mouse::Button
-    * @return The converted Mouse::Button
-    */
-    inline Mouse::Button glfw_to_dst_mouse_button(int glfwMouseButton)
-    {
-        auto button = Mouse::Button::Unknown;
-        switch (glfwMouseButton) {
-            case GLFW_MOUSE_BUTTON_LEFT  : button = Mouse::Button::Left;    break;
-            case GLFW_MOUSE_BUTTON_RIGHT : button = Mouse::Button::Right;   break;
-            case GLFW_MOUSE_BUTTON_MIDDLE: button = Mouse::Button::Middle;  break;
-            case GLFW_MOUSE_BUTTON_4     : button = Mouse::Button::Unknown; break;
-            case GLFW_MOUSE_BUTTON_5     : button = Mouse::Button::Unknown; break;
-            case GLFW_MOUSE_BUTTON_6     : button = Mouse::Button::Unknown; break;
-            case GLFW_MOUSE_BUTTON_7     : button = Mouse::Button::Unknown; break;
-            case GLFW_MOUSE_BUTTON_LAST  : button = Mouse::Button::Unknown; break;
-            default: button = Mouse::Button::Unknown;
-        }
-        return button;
-    }
-
-#endif // #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-
-#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-
-    /*
-    * Converts an SDL mouse button to a Mouse::Button.
-    * @param [in] sdlMouseButton The SDL mouse button to convert to a Mouse::Button
-    * @return The converted Mouse::Button
-    */
-    inline Mouse::Button sdl_to_dst_mouse_button(int sdlMouseButton)
-    {
-        auto button = Mouse::Button::Unknown;
-        switch (sdlMouseButton) {
-            case SDL_BUTTON_LEFT  : button = Mouse::Button::Left;   break;
-            case SDL_BUTTON_MIDDLE: button = Mouse::Button::Middle; break;
-            case SDL_BUTTON_RIGHT : button = Mouse::Button::Right;  break;
-            case SDL_BUTTON_X1    : button = Mouse::Button::X1;     break;
-            case SDL_BUTTON_X2    : button = Mouse::Button::X2;     break;
-            default: button = Mouse::Button::Unknown;
-        }
-        return button;
-    }
-
-#endif // #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-
-} // namespace detail
 } // namespace System
 } // namespace Dynamic_Static

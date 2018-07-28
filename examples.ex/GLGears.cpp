@@ -565,14 +565,14 @@ void gl_gears_main(const std::string& name, bool audio = false)
 {
     using namespace dst;
     using namespace dst::sys;
-    dst::sys::Window::Info windowInfo { };
+    dst::sys::IWindow::Info windowInfo { };
     windowInfo.name = name;
     windowInfo.graphicsApi = dst::sys::GraphicsApi::OpenGL;
     windowInfo.openGlContextInfo.version = { 4, 5 };
     WindowType window(windowInfo);
     bool running = true;
     window.on_close =
-        [&](const Window&)
+        [&](const IWindow&)
         {
             running = false;
         };

@@ -21,7 +21,6 @@ include("external/FMOD.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
 # include("external/imgui.cmake")
-include("external/SDL.cmake")
 
 if(MSVC)
     set(systemLinkLibraries
@@ -41,8 +40,6 @@ else()
     )
 endif()
 
-message("fmod=${FMOD.includeDirectories}")
-
 set(includePath "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/Dynamic_Static/System/")
 DstCreateStaticLibrary(
@@ -53,14 +50,12 @@ DstCreateStaticLibrary(
         ${FMOD.includeDirectories}
         ${glew.includeDirectory}
         # ${imgui.includeDirectories}
-        ${SDL.includeDirectory}
 
     staticLinkLibraries
         Dynamic_Static.Core
         ${FMOD.staticLibraries}
         glfw
         ${glew.staticLinkLibraries}
-        ${SDL.staticLinkLibraries}
         ${systemLinkLibraries}
 
     includeFiles
@@ -70,15 +65,13 @@ DstCreateStaticLibrary(
         ${includePath}/Input/Mouse.hpp
         ${includePath}/Video/GLFW.hpp
         ${includePath}/Video/GLFWWindow.hpp
-        ${includePath}/Video/OpenGL.hpp
         ${includePath}/Video/Resolution.hpp
         ${includePath}/Video/Window.hpp
-        ${includePath}/Video/SDL.hpp
-        ${includePath}/Video/SDLWindow.hpp
         ${includePath}/Video/Window.hpp
         ${includePath}/Audio.hpp
         ${includePath}/Defines.hpp
         ${includePath}/Input.hpp
+        ${includePath}/OpenGL.hpp
         ${includePath}/Video.hpp
 
     sourceFiles

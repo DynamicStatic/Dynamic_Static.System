@@ -19,10 +19,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 
-#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-#include "Dynamic_Static/System/Video/SDL.hpp"
-#endif
-
 #include <memory>
 #include <mutex>
 #include <set>
@@ -36,7 +32,7 @@ namespace System {
     /*
     * Provides high level control over a system window.
     */
-    class Window
+    class IWindow
         : NonCopyable
     {
     public:
@@ -80,13 +76,13 @@ namespace System {
         * Callback executed when this Window is resized.
         * @param [in] The Window being resized
         */
-        Callback<Window, const Window&> on_resize;
+        Callback<IWindow, const IWindow&> on_resize;
 
         /*
         * Callback executed when this Window is closed.
         * @param [in] The Window being closed
         */
-        Callback<Window, const Window&> on_close;
+        Callback<IWindow, const IWindow&> on_close;
 
     protected:
         Input mInput;
@@ -97,13 +93,13 @@ namespace System {
         /*
         * Constructs an instance of Window.
         */
-        inline Window() = default;
+        inline IWindow() = default;
 
         /*
         * Moves this instance of Window.
         * @param [in] other The Window to move from
         */
-        inline Window(Window&& other)
+        inline IWindow(IWindow&& other)
         {
             *this = std::move(other);
         }
@@ -111,14 +107,14 @@ namespace System {
         /*
         * Destroys this instance of Winodw.
         */
-        virtual inline ~Window() = 0;
+        virtual inline ~IWindow() = 0;
 
         /*
         * Moves this instance of Window.
         * @param [in] other The Window to move from
         * @return This Window
         */
-        virtual inline Window& operator=(Window&& other)
+        virtual inline IWindow& operator=(IWindow&& other)
         {
             if (this != &other) {
                 mInput = std::move(other.mInput);
@@ -174,14 +170,14 @@ namespace System {
             on_close(*this);
         }
 
-        static inline Event<Window>& get_poll_events_event()
+        static inline Event<IWindow>& get_poll_events_event()
         {
-            static Event<Window> sOnPollEvents;
+            static Event<IWindow> sOnPollEvents;
             return sOnPollEvents;
         }
     };
 
-    Window::~Window()
+    IWindow::~IWindow()
     {
     }
 

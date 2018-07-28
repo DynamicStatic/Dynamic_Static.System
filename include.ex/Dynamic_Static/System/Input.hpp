@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input/Keyboard.hpp"
 #include "Dynamic_Static/System/Input/Mouse.hpp"
+#include "Dynamic_Static/System/Defines.hpp"
 
 namespace Dynamic_Static {
 namespace System {

@@ -11,12 +11,10 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-
 #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-#include "Dynamic_Static/System/Video/GLFWWindow.hpp"
+    #include "Dynamic_Static/System/Video/GLFWWindow.hpp"
 #endif
-#if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-#include "Dynamic_Static/System/Video/SDLWindow.hpp"
-#endif
-
 #include "Dynamic_Static/System/Video/Window.hpp"
+#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+    #include "Dynamic_Static/System/OpenGL.hpp"
+#endif
