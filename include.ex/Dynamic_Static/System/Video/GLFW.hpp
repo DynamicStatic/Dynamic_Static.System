@@ -24,3 +24,34 @@
     #endif
     #include "GLFW/glfw3native.h"
 #endif
+
+namespace Dynamic_Static {
+namespace System {
+namespace detail {
+
+    /*
+    * Gets the last GLFW error message for the calling thread.
+    * @return The last GLFW error message for the calling thread
+    */
+    static inline std::string& get_last_glfw_error_message()
+    {
+        thread_local std::string tlErrorMessage;
+        return tlErrorMessage;
+    }
+
+    /*
+    * Function used for handling errors reported from GLFW.
+    * @param [in] error The GLFW error code for the current error
+    * @param [in] desctiption The GLFW error description
+    */
+    static inline void glfw_error_callback(int error, const char* description)
+    {
+        auto& lastErrorMessage = get_last_glfw_error_message();
+        lastErrorMessage = "GLFW Error " + std::to_string(error) + " : " + std::string(description);
+        // TODO : Setup logger in dst::core.
+        std::cerr << lastErrorMessage << std::endl;
+    }
+
+} // namespace detail
+} // namespace System
+} // namespace Dynamic_Static

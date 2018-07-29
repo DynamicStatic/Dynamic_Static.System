@@ -75,7 +75,7 @@ DstCreateStaticLibrary(
         ${includePath}/Video.hpp
 
     sourceFiles
-        ${sourcePath}/Placeholder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp
 )
 
 option(BUILD_TESTS "Build Dynamic_Static.System.Tests" OFF)

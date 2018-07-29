@@ -14,7 +14,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 
 #include <iostream>
-#include <functional>
 #include <mutex>
 #include <stdexcept>
 
@@ -26,10 +25,10 @@
 
 #define DYNAMIC_STATIC_VALIDATE_GL_CALLS
 #if defined(DYNAMIC_STATIC_VALIDATE_GL_CALLS)
-#define dst_gl(GL_CALL)                                       \
-{                                                             \
-    GL_CALL;                                                  \
-    dst::sys::validate_last_gl_call(dst_file_line, #GL_CALL); \
+#define dst_gl(GL_CALL)                                           \
+{                                                                 \
+    GL_CALL;                                                      \
+    dst::sys::gl::validate_last_gl_call(dst_file_line, #GL_CALL); \
 }
 #else
 #define dst_gl(GL_CALL) \
@@ -40,11 +39,12 @@
 
 namespace Dynamic_Static {
 namespace System {
+namespace OpenGL {
 
     /*
     * Specifies configuration paramaters for an OpenGL context.
     */
-    struct OpenGLContextInfo final
+    struct ContextInfo final
     {
         Version version { 4, 5, 0 }; /*!< The configured OpenGL context's Version */
         bool doubleBuffer { true };  /*!< Whether or not the configured OpenGL context has double buffering enabled (hint) */
@@ -53,30 +53,10 @@ namespace System {
         bool vSync { true };         /*!< Whether or not the configured OpenGL context has VSync enabled (hint) */
     };
 
-    #if defined(DYNAMIC_STATIC_WINDOWS)
     /*
-    * TODO : Documentation.
-    */
-    static void initialize_glew()
-    {
-        static std::mutex sMutex;
-        std::lock_guard<std::mutex> lock(sMutex);
-        static bool sGlewInitialized;
-        if (!sGlewInitialized) {
-            glewExperimental = true;
-            auto error = glewInit();
-            if (!error) {
-                sGlewInitialized = true;
-            } else {
-                // TODO : Error meesage.
-                throw std::runtime_error("Failed to initialize GLEW : ");
-            }
-        }
-    }
-    #endif
-
-    /*
-    * TODO : Documentation.
+    * Logs any errors that occured during the last OpenGL call.
+    * @param [in] message The message to print with the OpenGL error message
+    * @param [in] glCall The string representation of last OpenGL call
     */
     inline GLenum validate_last_gl_call(const char* message, const char* glCall)
     {
@@ -99,41 +79,80 @@ namespace System {
     }
 
     /*
-    * TODO : Documentation.
+    * Gets the info log for a given OpenGL shader or program.
+    * @param <GetIvFunctionType> The type of function to use to get the info log length
+    * @param <GetInfoLogFunctionType> The type of function to use to get the info log
+    * @param [in] handle The handle to the OpenGL shader or program to get the info log for
+    * @param [in] getInfoLogLength The function to use to get the info log length
+    * @param [in] getInfoLog The function to use to get the info log
+    * @return The info log for the given OpenGL shader or program
     */
     template <
-        typename GetIvFunctionType,
+        typename GetInfoLogLengthFunctionType,
         typename GetInfoLogFunctionType
     >
     std::string get_info_log(
         GLuint handle,
-        GetIvFunctionType getIv,
+        GetInfoLogLengthFunctionType getInfoLogLength,
         GetInfoLogFunctionType getInfoLog
     )
     {
         GLint logLength = 0;
-        dst_gl(getIv(handle, GL_INFO_LOG_LENGTH, &logLength));
+        dst_gl(getInfoLogLength(handle, GL_INFO_LOG_LENGTH, &logLength));
         std::string log(logLength, ' ');
         dst_gl(getInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
         return log.data();
     }
 
     /*
-    * TODO : Documentation.
+    * Gets the info log for a given OpenGL shader.
+    * @param [in] handle The handle to the OpenGL shader to get the info log for
+    * @return The info log for the given OpenGL shader
     */
-    std::string get_shader_info_log(GLuint shaderHandle)
+    std::string get_shader_info_log(GLuint handle)
     {
-        return get_info_log(shaderHandle, glGetShaderiv, glGetShaderInfoLog);
+        return get_info_log(handle, glGetShaderiv, glGetShaderInfoLog);
     }
 
     /*
-    * TODO : Documentation.
+    * Gets the info log for a given OpenGL program.
+    * @param [in] handle The handle to the OpenGL program to get the info log for
+    * @return The info log for the given OpenGL program
     */
-    std::string get_program_info_log(GLuint programHandle)
+    std::string get_program_info_log(GLuint handle)
     {
-        return get_info_log(programHandle, glGetProgramiv, glGetProgramInfoLog);
+        return get_info_log(handle, glGetProgramiv, glGetProgramInfoLog);
     }
 
+namespace detail {
+
+    #if defined(DYNAMIC_STATIC_WINDOWS)
+    /*
+    * Initializes OpenGL entry points.
+    * \n NOTE : An OpenGL context must exist before calling this function
+    * \n NOTE : This function is only available on Windows
+    */
+    static void initialize_glew()
+    {
+        static std::mutex sMutex;
+        std::lock_guard<std::mutex> lock(sMutex);
+        static bool sGlewInitialized;
+        if (!sGlewInitialized) {
+            glewExperimental = true;
+            auto error = glewInit();
+            if (!error) {
+                sGlewInitialized = true;
+            } else {
+                // TODO : Error message.
+                throw std::runtime_error("Failed to initialize GLEW : ");
+            }
+        }
+    }
+    #endif
+
+} // namespace detail
+} // namespace OpenGL
+namespace gl = OpenGL;
 } // namespace System
 } // namespace Dynamic_Static
 

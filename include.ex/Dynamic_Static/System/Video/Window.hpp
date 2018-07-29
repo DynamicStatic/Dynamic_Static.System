@@ -19,11 +19,8 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 
-#include <memory>
-#include <mutex>
-#include <set>
-#include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace Dynamic_Static {
@@ -64,10 +61,11 @@ namespace System {
 
             #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
             /*
-            * The configured Window's OpenGL context
+            * The configured Window's OpenGL context info
             * \n NOTE : This member is ignored if this Info's graphicsApi member isn't set to OpenGL
+            * \n NOTE : This member is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
             */
-            OpenGLContextInfo openGlContextInfo { };
+            gl::ContextInfo glContextInfo { };
             #endif
         };
 
@@ -87,6 +85,7 @@ namespace System {
     protected:
         Input mInput;
         std::vector<uint32_t> mTextStream;
+        std::string mName { "Dynamic_Static" };
         GraphicsApi mGraphicsApi { GraphicsApi::Unknown };
 
     public:
@@ -135,16 +134,92 @@ namespace System {
         }
 
         /*
+        * Gets this Window's text stream.
+        * @return This Window's text stream
+        */
+        inline const std::vector<uint32_t>& get_text_stream() const
+        {
+            return mTextStream;
+        }
+
+        /*
+        * Gets this Window's name.
+        * @return This Window's name
+        */
+        virtual const std::string& get_name() const
+        {
+            return mName;
+        }
+
+        /*
+        * Sets this Window's name.
+        * @param [in] name This Window's name
+        */
+        virtual void set_name(const std::string_view& name) = 0;
+
+        /*
+        * Gets this Window's CursorMode.
+        * @return This Window's CursorMode
+        */
+        virtual CursorMode get_cursor_mode() const = 0;
+
+        /*
+        * Sets this Window's CursorMode.
+        * @param [in] cursorMode This Window's CursorMode
+        */
+        virtual void set_cursor_mode(CursorMode cursorMode) = 0;
+
+        /*
+        * Gets this Window's clipboard.
+        * @return This Window's clipboard
+        */
+        virtual std::string get_clipboard() const = 0;
+
+        /*
+        * Sets this Window's clipboard.
+        * @param [in] This Window's clipboard
+        */
+        virtual void set_clipboard(const std::string_view& clipboard) = 0;
+
+        /*
+        * Gets a value indicating whether or not this Window is visible.
+        * @return Whether or not this Window is visible
+        */
+        virtual bool is_visible() const = 0;
+
+        /*
+        * Sets a value indicating whether or not this Window is visible.
+        * @param [in] isVisible Whether or not this Window is visible
+        */
+        virtual void is_visible(bool isVisible) = 0;
+
+        /*
         * Gets this Window's Resolution.
         * @return This Window's Resolution
         */
         virtual Resolution get_resolution() const = 0;
 
+        #if defined(DYNAMIC_STATIC_WINDOWS)
+        /*
+        * Gets this Window's HWND.
+        * @return This Window's HWND
+        * \n NOTE : This method is only available on Windows
+        */
+        virtual HWND get_hwnd() const = 0;
+        #endif
+
         #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
         /*
-        * Swaps this Window's front and back buffers.
+        * Makes this Window's OpenGL context current.
+        * \n NOTE : This method is a noop if this Window's GraphicsApi isn't OpenGL
         * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+        */
+        virtual void make_context_current() = 0;
+
+        /*
+        * Swaps this Window's front and back buffers.
         * \n NOTE : If using OpenGL this method must be called periodically to keep this Window up to date
+        * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         */
         virtual void swap() = 0;
         #endif

@@ -17,7 +17,10 @@
 #include "Dynamic_Static/System/Video/GLFW.hpp"
 #include "Dynamic_Static/System/Video/Window.hpp"
 
-#include <iostream>
+#include <mutex>
+#include <set>
+#include <string>
+#include <string_view>
 #include <utility>
 
 namespace Dynamic_Static {
@@ -90,6 +93,93 @@ namespace System {
         }
 
         /*
+        * Sets this GLFWwindow's name.
+        * @param [in] name This GLFWwindow's name
+        */
+        void set_name(const std::string_view& name) override final
+        {
+            if (mName != name) {
+                mName = name;
+                glfwSetWindowTitle(mGlfwWindow, mName.c_str());
+            }
+        }
+
+        /*
+        * Gets this GLFWwindow's CursorMode.
+        * @return This GLFWwindow's CursorMode
+        */
+        CursorMode get_cursor_mode() const override final
+        {
+            auto cursorMode = CursorMode::Visible;
+            switch (glfwGetInputMode(mGlfwWindow, GLFW_CURSOR)) {
+                case GLFW_CURSOR_NORMAL: cursorMode = CursorMode::Visible; break;
+                case GLFW_CURSOR_HIDDEN: cursorMode = CursorMode::Hidden; break;
+                case GLFW_CURSOR_DISABLED: cursorMode = CursorMode::Disabled; break;
+                default: break;
+            }
+            return cursorMode;
+        }
+
+        /*
+        * Sets this GLFWwindow's CursorMode.
+        * @param [in] cursorMode This GLFWwindow's CursorMode
+        */
+        void set_cursor_mode(CursorMode cursorMode) override final
+        {
+            auto glfwCursorMode = GLFW_CURSOR_NORMAL;
+            switch (cursorMode) {
+                case CursorMode::Visible: glfwCursorMode = GLFW_CURSOR_NORMAL; break;
+                case CursorMode::Hidden: glfwCursorMode = GLFW_CURSOR_HIDDEN; break;
+                case CursorMode::Disabled: glfwCursorMode = GLFW_CURSOR_DISABLED; break;
+                default: break;
+            }
+            glfwSetInputMode(mGlfwWindow, GLFW_CURSOR, glfwCursorMode);
+        }
+
+        /*
+        * Gets this GLFWwindow's clipboard.
+        * @return This GLFWwindow's clipboard
+        */
+        std::string get_clipboard() const override final
+        {
+            auto clipboard = glfwGetClipboardString(mGlfwWindow);
+            return clipboard ? std::string(clipboard) : std::string();
+        }
+
+        /*
+        * Sets this GLFWwindow's clipboard.
+        * @param [in] This GLFWwindow's clipboard
+        */
+        void set_clipboard(const std::string_view& clipboard) override final
+        {
+            // TODO : Setup dst::string_view to ensure null termination.
+            //        See https://stackoverflow.com/a/41288372/3453616
+            glfwSetClipboardString(mGlfwWindow, std::string(clipboard).c_str());
+        }
+
+        /*
+        * Gets a value indicating whether or not this GLFWwindow is visible.
+        * @return Whether or not this GLFWwindow is visible
+        */
+        bool is_visible() const override final
+        {
+            return glfwGetWindowAttrib(mGlfwWindow, GLFW_VISIBLE) == 1;
+        }
+
+        /*
+        * Sets a value indicating whether or not this GLFWwindow is visible.
+        * @param [in] isVisible Whether or not this GLFWwindow is visible
+        */
+        void is_visible(bool isVisible) override final
+        {
+            if (isVisible) {
+                glfwShowWindow(mGlfwWindow);
+            } else {
+                glfwHideWindow(mGlfwWindow);
+            }
+        }
+
+        /*
         * Gets this GLFWWindow's Resolution.
         * @return This GLFWWindow's Resolution
         */
@@ -100,16 +190,39 @@ namespace System {
             return { width, height };
         }
 
+        #if defined(DYNAMIC_STATIC_WINDOWS)
+        /*
+        * Gets this GLFWWindow's HWND.
+        * @return This GLFWWindow's HWND
+        * \n NOTE : This method is only available on Windows
+        */
+        HWND get_hwnd() const override final
+        {
+            return glfwGetWin32Window(mGlfwWindow);
+        }
+        #endif
+
         #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
         /*
-        * Swaps this GLFWwindow's front and back buffers.
+        * Makes this GLFWWindow's OpenGL context current.
+        * \n NOTE : This method is a noop if this GLFWWindow's GraphicsApi isn't OpenGL
         * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+        */
+        virtual void make_context_current() override final
+        {
+            if (mGraphicsApi == GraphicsApi::OpenGL) {
+                glfwMakeContextCurrent(mGlfwWindow);
+            }
+        }
+
+        /*
+        * Swaps this GLFWwindow's front and back buffers.
         * \n NOTE : If using OpenGL this method must be called periodically to keep this GLFWwindow up to date
+        * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         */
         inline void swap() override final
         {
             if (mGraphicsApi == GraphicsApi::OpenGL) {
-                glfwMakeContextCurrent(mGlfwWindow);
                 glfwSwapBuffers(mGlfwWindow);
             }
         }
@@ -156,12 +269,6 @@ namespace System {
             static std::set<GLFWwindow*> sGlfwWindowHandles;
             std::lock_guard<std::mutex> lock(sMutex);
             accessFunction(sGlfwWindowHandles);
-        }
-
-        static inline void glfw_error_callback(int error, const char* description)
-        {
-            // TODO : Setup logger.
-            std::cerr << "GLFW Error " + std::to_string(error) + " : " + std::string(description) << std::endl;
         }
 
         static inline void glfw_window_close_callback(GLFWwindow* glfwWindow)
@@ -234,18 +341,17 @@ namespace System {
                 [&](std::set<GLFWwindow*>& glfwWindows)
                 {
                     if (glfwWindows.empty()) {
-                        glfwSetErrorCallback(glfw_error_callback);
+                        glfwSetErrorCallback(detail::glfw_error_callback);
                         if (glfwInit() == GLFW_FALSE) {
-                            // TODO : Get error message.
-                            throw std::runtime_error("Failed to initialize GLFW : ");
+                            throw std::runtime_error("Failed to initialize GLFW : " + detail::get_last_glfw_error_message());
                         }
 
                         switch (windowInfo.graphicsApi) {
                             #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
                             case GraphicsApi::OpenGL:
                             {
-                                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, windowInfo.openGlContextInfo.version.major);
-                                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, windowInfo.openGlContextInfo.version.minor);
+                                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, windowInfo.glContextInfo.version.major);
+                                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, windowInfo.glContextInfo.version.minor);
                                 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
                             } break;
                             #endif
@@ -268,21 +374,22 @@ namespace System {
                         windowInfo.resolution.height,
                         windowInfo.name.c_str(),
                         windowInfo.fullScreen ? glfwGetPrimaryMonitor() : nullptr,
+                        // TODO : Handle multiple windows / gl contexts...
                         /* windowInfo.parent ? windowInfo.parent->get_glfw_window() : */ nullptr
                     );
                     if (!glfwWindow) {
+                        auto errorMessage = detail::get_last_glfw_error_message();
                         destroy_glfw_window(glfwWindow);
-                        // TODO : Get error message.
-                        throw std::runtime_error("Failed to create GLFW Window : ");
+                        throw std::runtime_error("Failed to create GLFW Window : " + errorMessage);
                     }
 
                     #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
                     if (windowInfo.graphicsApi == GraphicsApi::OpenGL) {
                         glfwMakeContextCurrent(glfwWindow);
-                        glfwSwapInterval(windowInfo.openGlContextInfo.vSync ? 1 : 0);
+                        glfwSwapInterval(windowInfo.glContextInfo.vSync ? 1 : 0);
                         #if defined(DYNAMIC_STATIC_WINDOWS)
                         try {
-                            initialize_glew();
+                            gl::detail::initialize_glew();
                         } catch (const std::runtime_error& e) {
                             destroy_glfw_window(glfwWindow);
                             throw e;
@@ -458,8 +565,8 @@ namespace System {
                 case GLFW_MOUSE_BUTTON_LEFT  : button = Mouse::Button::Left;    break;
                 case GLFW_MOUSE_BUTTON_RIGHT : button = Mouse::Button::Right;   break;
                 case GLFW_MOUSE_BUTTON_MIDDLE: button = Mouse::Button::Middle;  break;
-                case GLFW_MOUSE_BUTTON_4     : button = Mouse::Button::Unknown; break;
-                case GLFW_MOUSE_BUTTON_5     : button = Mouse::Button::Unknown; break;
+                case GLFW_MOUSE_BUTTON_4     : button = Mouse::Button::X1;      break;
+                case GLFW_MOUSE_BUTTON_5     : button = Mouse::Button::X2;      break;
                 case GLFW_MOUSE_BUTTON_6     : button = Mouse::Button::Unknown; break;
                 case GLFW_MOUSE_BUTTON_7     : button = Mouse::Button::Unknown; break;
                 case GLFW_MOUSE_BUTTON_LAST  : button = Mouse::Button::Unknown; break;

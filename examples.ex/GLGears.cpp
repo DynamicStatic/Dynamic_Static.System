@@ -35,8 +35,7 @@
 #include "Dynamic_Static/Core/NonCopyable.hpp"
 #include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/Core/Time.hpp"
-
-#include "Dynamic_Static/System/Audio/Defines.hpp"
+#include "Dynamic_Static/System/Audio.hpp"
 #include "Dynamic_Static/System/Video.hpp"
 
 #include <array>
@@ -178,7 +177,7 @@ public:
             }
             std::cerr
                 << "Failed to compile " << stageStr << " shader" << std::endl
-                << dst::sys::get_shader_info_log(handle) << std::endl
+                << dst::sys::gl::get_shader_info_log(handle) << std::endl
                 << std::endl;
             dst_gl(glDeleteShader(handle));
             handle = 0;
@@ -217,7 +216,7 @@ public:
         if (linkStatus != GL_TRUE) {
             std::cerr
                 << "Failed to link program" << std::endl
-                << dst::sys::get_program_info_log(handle) << std::endl
+                << dst::sys::gl::get_program_info_log(handle) << std::endl
                 << std::endl;
             dst_gl(glDeleteProgram(handle));
             handle = 0;
@@ -560,16 +559,26 @@ public:
     }
 };
 
-template <typename WindowType>
-void gl_gears_main(const std::string& name, bool audio = false)
+int main(int argc, char* argv[])
 {
+    std::cout
+        << std::endl
+        << "[Esc]          - Quit" << std::endl
+        << "[A]            - Toggle animation" << std::endl
+        << "[W]            - Toggle wireframe" << std::endl
+        << "[Left Mouse]   - Rotate model" << std::endl
+        << "[Scroll Wheel] - Move model forward and backward" << std::endl
+        << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
+        << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
+        << std::endl;
+
     using namespace dst;
     using namespace dst::sys;
-    dst::sys::IWindow::Info windowInfo { };
-    windowInfo.name = name;
-    windowInfo.graphicsApi = dst::sys::GraphicsApi::OpenGL;
-    windowInfo.openGlContextInfo.version = { 4, 5 };
-    WindowType window(windowInfo);
+    dst::sys::Window::Info windowInfo { };
+    windowInfo.name = "Dynamic_Static GLGears";
+    windowInfo.graphicsApi = GraphicsApi::OpenGL;
+    windowInfo.glContextInfo.version = { 4, 5 };
+    Window window(windowInfo);
     bool running = true;
     window.on_close =
         [&](const IWindow&)
@@ -577,22 +586,20 @@ void gl_gears_main(const std::string& name, bool audio = false)
             running = false;
         };
 
-    FMOD::System* fmod = nullptr;
-    if (audio) {
-        fmod = fmod_init();
-    }
+    FMOD::System* fmod = fmod_init();
 
     Clock clock;
     GLGears glGears;
     while (running) {
         clock.update();
-        WindowType::poll_events();
+        Window::poll_events();
         auto deltaTime = clock.elapsed<Second<float>>();
         const auto& input = window.get_input();
         if (input.keyboard.down(Keyboard::Key::Escape)) {
             running = false;
         }
         glGears.update(deltaTime, window.get_input());
+        window.make_context_current();
         glGears.draw(deltaTime, window.get_resolution());
         window.swap();
         if (fmod) {
@@ -603,47 +610,6 @@ void gl_gears_main(const std::string& name, bool audio = false)
     if (fmod) {
         fmod_shutdown(fmod);
     }
-}
 
-int main(int argc, char* argv[])
-{
-    // #define GL_GEARS_MULTI_WINDOW_ENABLED
-    #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED) || \
-        defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-        std::cout
-            << std::endl
-            << "[Esc]          - Quit" << std::endl
-            << "[A]            - Toggle animation" << std::endl
-            << "[W]            - Toggle wireframe" << std::endl
-            << "[Left Mouse]   - Rotate model" << std::endl
-            << "[Scroll Wheel] - Move model forward and backward" << std::endl
-            << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
-            << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
-            << std::endl;
-        #if defined(GL_GEARS_MULTI_WINDOW_ENABLED)
-            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-            auto glfwThread = std::thread([] { gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW"); });
-            #endif
-            #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-            auto sdlThread = std::thread([] { gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL", true); });
-            #endif
-            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-            glfwThread.join();
-            #endif
-            #if defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-            sdlThread.join();
-            #endif
-        #else
-            #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-            gl_gears_main<dst::sys::GLFWWindow>("Dynamic_Static GLFW", true);
-            #elif defined(DYNAMIC_STATIC_SYSTEM_SDL_ENABLED)
-            gl_gears_main<dst::sys::SDLWindow>("Dynamic_Static SDL");
-            #endif
-        #endif
-    #else
-    std::cerr
-        << "Dynamic_Static.System has no window API (GLFW or SDL) enabled." << std::endl
-        << std::endl;
-    #endif
     return 0;
 }
