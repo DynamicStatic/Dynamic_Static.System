@@ -1,10 +1,10 @@
 
-#==========================================
-#    Copyright 2011-2018 Dynamic_Static
-#        Patrick Purcell
-#    Licensed under the MIT license
-#    http://opensource.org/licenses/MIT
-#==========================================
+# ==========================================
+#   Copyright (c) 2016-2018 Dynamic_Static
+#     Patrick Purcell
+#       Licensed under the MIT license
+#     http://opensource.org/licenses/MIT
+# ==========================================
 
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -15,6 +15,3 @@ set_target_properties(
     glfw PROPERTIES
     FOLDER external/GLFW3/
 )
-if(MSVC)
-    set_target_properties(glfw PROPERTIES LINK_FLAGS "/NODEFAULTLIB")
-endif()

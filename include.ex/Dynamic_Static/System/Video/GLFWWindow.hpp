@@ -17,6 +17,7 @@
 #include "Dynamic_Static/System/Video/GLFW.hpp"
 #include "Dynamic_Static/System/Video/Window.hpp"
 
+#include <iostream>
 #include <utility>
 
 namespace Dynamic_Static {

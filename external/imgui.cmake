@@ -1,10 +1,10 @@
 
-#==========================================
-#    Copyright 2017-2018 Dynamic_Static
-#        Patrick Purcell
-#    Licensed under the MIT license
-#    http://opensource.org/licenses/MIT
-#==========================================
+# ==========================================
+#   Copyright (c) 2017-2018 Dynamic_Static
+#     Patrick Purcell
+#       Licensed under the MIT license
+#     http://opensource.org/licenses/MIT
+# ==========================================
 
 set(imgui.includeDirectories "${CMAKE_CURRENT_LIST_DIR}/imgui/")
 file(GLOB imgui.clutter "${imgui.includeDirectories}/*")

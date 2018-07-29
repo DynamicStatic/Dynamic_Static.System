@@ -19,12 +19,9 @@
 #include <stdexcept>
 
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
-
 #if defined(DYNAMIC_STATIC_WINDOWS)
-    #ifndef GLEW_STATIC
-    #define GLEW_STATIC 1
-    #endif
-    #include "GL/glew.h"
+#include "GL/glew.h"
+#include "GL/wglew.h"
 #endif
 
 #define DYNAMIC_STATIC_VALIDATE_GL_CALLS
