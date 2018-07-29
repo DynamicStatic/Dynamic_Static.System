@@ -23,12 +23,12 @@ include("external/glfw.cmake")
 # include("external/imgui.cmake")
 
 if(MSVC)
-    set(systemLinkLibraries
+    set(systemLibraries
         glu32.lib
         opengl32.lib
     )
 else()
-    set(systemLinkLibraries
+    set(systemLibraries
         EGL
         GL
         X11
@@ -48,15 +48,15 @@ DstCreateStaticLibrary(
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
         ${FMOD.includeDirectories}
-        ${glew.includeDirectory}
+        ${glew.includeDirectories}
         # ${imgui.includeDirectories}
 
-    staticLinkLibraries
+    staticLibraries
         Dynamic_Static.Core
         ${FMOD.staticLibraries}
         glfw
-        ${glew.staticLinkLibraries}
-        ${systemLinkLibraries}
+        ${glew.staticLibraries}
+        ${systemLibraries}
 
     includeFiles
         ${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp

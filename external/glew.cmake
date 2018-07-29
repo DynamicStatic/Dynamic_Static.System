@@ -7,9 +7,11 @@
 # ==========================================
 
 if(MSVC)
-    set(glew.includeDirectory "${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include/")
-    set(glew.staticLinkLibraries "${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/glew32s.lib")
+    set(glew.includeDirectories "${PROJECT_SOURCE_DIR}/external/glew-2.1.0/include/")
+    set(glew.staticLibraries "${PROJECT_SOURCE_DIR}/external/glew-2.1.0/lib/Release/x64/glew32s.lib")
+    set(glew.sharedLibraries "${PROJECT_SOURCE_DIR}/external/glew-2.1.0/bin/Release/x64/glew32.dll")
 else()
-    set(glew.includeDirectory "")
-    set(glew.linkLibraries "")
+    set(glew.includeDirectories "")
+    set(glew.staticLibraries "")
+    set(glew.sharedLibraries "")
 endif()

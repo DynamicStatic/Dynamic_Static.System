@@ -1,4 +1,11 @@
 
+# ==========================================
+#   Copyright (c) 2018-2018 Dynamic_Static
+#     Patrick Purcell
+#       Licensed under the MIT license
+#     http://opensource.org/licenses/MIT
+# ==========================================
+
 set(programFiles "$ENV{PROGRAMFILES} (x86)")
 set(FMOD.installDirectory "${programFiles}/FMOD SoundSystem/FMOD Studio API Windows/")
 set(FMOD.apiDirectory "${FMOD.installDirectory}/api/")

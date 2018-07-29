@@ -15,3 +15,6 @@ set_target_properties(
     glfw PROPERTIES
     FOLDER external/GLFW3/
 )
+if(MSVC)
+    set_target_properties(glfw PROPERTIES LINK_FLAGS "/NODEFAULTLIB")
+endif()

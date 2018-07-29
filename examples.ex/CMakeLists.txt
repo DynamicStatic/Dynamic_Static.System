@@ -10,9 +10,11 @@ macro(CreateExample target)
     DstCreateExecutable(
         target ${target}
         folder Dynamic_Static.System/examples/
-        staticLinkLibraries Dynamic_Static.System
+        staticLibraries Dynamic_Static.System
         sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
-        sharedLibraries ${FMOD.sharedLibraries}
+        sharedLibraries
+            ${FMOD.sharedLibraries}
+            ${glew.sharedLibraries}
     )
 endmacro()
 
