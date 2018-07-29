@@ -65,6 +65,7 @@ DstCreateStaticLibrary(
         ${includePath}/Input/Mouse.hpp
         ${includePath}/Video/GLFW.hpp
         ${includePath}/Video/GLFWWindow.hpp
+        ${includePath}/Video/Gui.hpp
         ${includePath}/Video/Resolution.hpp
         ${includePath}/Video/Window.hpp
         ${includePath}/Video/Window.hpp

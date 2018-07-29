@@ -31,12 +31,8 @@
 ==========================================
 */
 
-#include "Dynamic_Static/Core/Math/Colors.hpp"
-#include "Dynamic_Static/Core/NonCopyable.hpp"
-#include "Dynamic_Static/Core/StringUtilities.hpp"
-#include "Dynamic_Static/Core/Time.hpp"
-#include "Dynamic_Static/System/Audio.hpp"
-#include "Dynamic_Static/System/Video.hpp"
+#include "Dynamic_Static.Core.hpp"
+#include "Dynamic_Static.System.hpp"
 
 #include <array>
 #include <iostream>

@@ -19,3 +19,4 @@ macro(CreateExample target)
 endmacro()
 
 CreateExample(GLGears)
+CreateExample(ImGui)
