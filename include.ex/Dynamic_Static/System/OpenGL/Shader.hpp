@@ -64,6 +64,7 @@ namespace OpenGL {
         )
         {
             mName = "Shader";
+            // TODO : Line offset is _sometimes_ incorrect...wtf?
             auto versionPosition = source.find("#version");
             auto versionEnd = source.find('\n', versionPosition);
             std::string sourceStr(source.substr(versionEnd));
