@@ -15,5 +15,5 @@
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Video.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
-    #include "Dynamic_Static/System/OpenGL.hpp"
+#include "Dynamic_Static/System/OpenGL.hpp"
 #endif

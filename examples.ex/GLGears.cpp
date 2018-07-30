@@ -138,55 +138,6 @@ public:
     }
 };
 
-class Shader final
-    : dst::NonCopyable
-{
-public:
-    GLuint handle { };
-
-public:
-    Shader(
-        GLenum stage,
-        int lineNumber,
-        std::string source
-    )
-    {
-        auto versionPosition = source.find("#version");
-        auto versionEnd = source.find('\n', versionPosition);
-        auto sourceStr = source.substr(versionEnd);
-        auto headerStr = source.substr(versionPosition, versionEnd);
-        auto lineCount = std::count(headerStr.begin(), headerStr.end(), '\n');
-        headerStr += "#line " + std::to_string(lineNumber + lineCount) + "\n";
-        auto modifiedSource = headerStr + sourceStr;
-        auto sourceCStr = modifiedSource.c_str();
-        dst_gl(handle = glCreateShader(stage));
-        dst_gl(glShaderSource(handle, 1, &sourceCStr, nullptr));
-        dst_gl(glCompileShader(handle));
-        GLint compileStatus = 0;
-        dst_gl(glGetShaderiv(handle, GL_COMPILE_STATUS, &compileStatus));
-        if (compileStatus != GL_TRUE) {
-            std::string stageStr;
-            switch (stage) {
-                case GL_VERTEX_SHADER: stageStr = "vertex"; break;
-                case GL_FRAGMENT_SHADER: stageStr = "fragment"; break;
-                default: stageStr = "unknown";
-            }
-            std::cerr
-                << "Failed to compile " << stageStr << " shader" << std::endl
-                << dst::sys::gl::get_shader_info_log(handle) << std::endl
-                << std::endl;
-            dst_gl(glDeleteShader(handle));
-            handle = 0;
-        }
-    }
-
-    ~Shader()
-    {
-        dst_gl(glDeleteShader(handle));
-
-    }
-};
-
 class Program final
     : dst::NonCopyable
 {
@@ -201,11 +152,11 @@ public:
         const std::string& fragmentShaderSource
     )
     {
-        Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
-        Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
+        dst::sys::gl::Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
+        dst::sys::gl::Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
         dst_gl(handle = glCreateProgram());
-        dst_gl(glAttachShader(handle, vertexShader.handle));
-        dst_gl(glAttachShader(handle, fragmentShader.handle));
+        dst_gl(glAttachShader(handle, vertexShader.get_handle()));
+        dst_gl(glAttachShader(handle, fragmentShader.get_handle()));
         dst_gl(glLinkProgram(handle));
         GLint linkStatus = 0;
         dst_gl(glGetProgramiv(handle, GL_LINK_STATUS, &linkStatus));

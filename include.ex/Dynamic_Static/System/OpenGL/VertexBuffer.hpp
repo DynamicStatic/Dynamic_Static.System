@@ -12,13 +12,16 @@
 
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
-#include "Dynamic_Static/System/OpenGL/Buffer.hpp"
+
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
-#include "Dynamic_Static/System/OpenGL/IndexBuffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
-#include "Dynamic_Static/System/OpenGL/Program.hpp"
-#include "Dynamic_Static/System/OpenGL/Shader.hpp"
-#include "Dynamic_Static/System/OpenGL/Texture.hpp"
-#include "Dynamic_Static/System/OpenGL/VertexArray.hpp"
-#include "Dynamic_Static/System/OpenGL/VertexBuffer.hpp"
-#endif
+
+namespace Dynamic_Static {
+namespace System {
+namespace OpenGL {
+
+} // namespace OpenGL
+} // namespace System
+} // namespace Dynamic_Static
+
+#endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)

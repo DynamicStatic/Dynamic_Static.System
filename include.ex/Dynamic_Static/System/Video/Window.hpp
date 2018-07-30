@@ -44,20 +44,20 @@ namespace System {
         };
 
         /*
-        * Specifies configuration parameters for Window construction.
+        * Configuration parameters for Window construction.
         */
         class Info final
         {
         public:
-            GraphicsApi graphicsApi { GraphicsApi::Unknown };   /*!< The configured Window's GraphicsApi */
-            std::string name { "Dynamic_Static" };              /*!< The configured Window's name */
-            CursorMode cursorMode { CursorMode::Visible };      /*!< The configured Window's CursorMode */
-            Resolution resolution { 1280, 720 };                /*!< The configured Window's Resolution */
-            glm::vec2 position { 320, 180 };                    /*!< The configured Window's position */
-            bool decorated { true };                            /*!< Whether or not the configured Window has decorations (hint) */
-            bool resizable { true };                            /*!< Whether or not the configured Window is resizable */
-            bool visible { true };                              /*!< Whether or not the configured Window is visiable */
-            bool fullScreen { false };                          /*!< Whether or not the configured Window is full screen */
+            GraphicsApi graphicsApi { GraphicsApi::Unknown }; /*!< The configured Window's GraphicsApi */
+            std::string name { "Dynamic_Static" };            /*!< The configured Window's name */
+            CursorMode cursorMode { CursorMode::Visible };    /*!< The configured Window's CursorMode */
+            Resolution resolution { 1280, 720 };              /*!< The configured Window's Resolution */
+            glm::vec2 position { 320, 180 };                  /*!< The configured Window's position */
+            bool decorated { true };                          /*!< Whether or not the configured Window has decorations (hint) */
+            bool resizable { true };                          /*!< Whether or not the configured Window is resizable */
+            bool visible { true };                            /*!< Whether or not the configured Window is visiable */
+            bool fullScreen { false };                        /*!< Whether or not the configured Window is full screen */
 
             #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
             /*

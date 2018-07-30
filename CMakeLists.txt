@@ -20,7 +20,7 @@ include("external/Dynamic_Static.Core.cmake")
 include("external/FMOD.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
-# include("external/imgui.cmake")
+include("external/imgui.cmake")
 
 if(MSVC)
     set(systemLibraries
@@ -49,7 +49,7 @@ DstCreateStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
         ${FMOD.includeDirectories}
         ${glew.includeDirectories}
-        # ${imgui.includeDirectories}
+        ${imgui.includeDirectories}
 
     staticLibraries
         Dynamic_Static.Core
@@ -59,10 +59,18 @@ DstCreateStaticLibrary(
         ${systemLibraries}
 
     includeFiles
-        ${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp
         ${includePath}/Audio/Defines.hpp
         ${includePath}/Input/Keyboard.hpp
         ${includePath}/Input/Mouse.hpp
+        ${includePath}/OpenGL/Buffer.hpp
+        ${includePath}/OpenGL/Defines.hpp
+        ${includePath}/OpenGL/IndexBuffer.hpp
+        ${includePath}/OpenGL/Object.hpp
+        ${includePath}/OpenGL/Program.hpp
+        ${includePath}/OpenGL/Shader.hpp
+        ${includePath}/OpenGL/Texture.hpp
+        ${includePath}/OpenGL/VertexArray.hpp
+        ${includePath}/OpenGL/VertexBuffer.hpp
         ${includePath}/Video/GLFW.hpp
         ${includePath}/Video/GLFWWindow.hpp
         ${includePath}/Video/Gui.hpp
@@ -74,6 +82,7 @@ DstCreateStaticLibrary(
         ${includePath}/Input.hpp
         ${includePath}/OpenGL.hpp
         ${includePath}/Video.hpp
+        "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp"
 
     sourceFiles
         ${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp
