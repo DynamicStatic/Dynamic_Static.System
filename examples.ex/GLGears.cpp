@@ -138,52 +138,6 @@ public:
     }
 };
 
-class Program final
-    : dst::NonCopyable
-{
-public:
-    GLuint handle { };
-
-public:
-    Program(
-        int vertexShaderSourceLineNumber,
-        const std::string& vertexShaderSource,
-        int fragmentShaderSourceLineNumber,
-        const std::string& fragmentShaderSource
-    )
-    {
-        dst::sys::gl::Shader vertexShader(GL_VERTEX_SHADER, vertexShaderSourceLineNumber, vertexShaderSource);
-        dst::sys::gl::Shader fragmentShader(GL_FRAGMENT_SHADER, fragmentShaderSourceLineNumber, fragmentShaderSource);
-        dst_gl(handle = glCreateProgram());
-        dst_gl(glAttachShader(handle, vertexShader.get_handle()));
-        dst_gl(glAttachShader(handle, fragmentShader.get_handle()));
-        dst_gl(glLinkProgram(handle));
-        GLint linkStatus = 0;
-        dst_gl(glGetProgramiv(handle, GL_LINK_STATUS, &linkStatus));
-        if (linkStatus != GL_TRUE) {
-            std::cerr
-                << "Failed to link program" << std::endl
-                << dst::sys::gl::get_program_info_log(handle) << std::endl
-                << std::endl;
-            dst_gl(glDeleteProgram(handle));
-            handle = 0;
-        }
-    }
-
-    ~Program()
-    {
-        dst_gl(glDeleteProgram(handle));
-    }
-
-public:
-    GLint get_uniform_location(const dst::string_view& uniformName) const
-    {
-        GLint uniformLocation = 0;
-        dst_gl(uniformLocation = glGetUniformLocation(handle, uniformName.data()));
-        return uniformLocation;
-    }
-};
-
 class Gear final
     : dst::NonCopyable
 {
@@ -363,52 +317,58 @@ public:
             glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 })
         )
     };
+    std::array<dst::sys::gl::Shader, 2> shaders {{
+        {
+            GL_VERTEX_SHADER,
+            __LINE__,
+            R"(
+                #version 330
 
-    Program program {
-        __LINE__,
-        R"(
-            #version 330
+                uniform mat4 modelView;
+                uniform mat4 projection;
 
-            uniform mat4 modelView;
-            uniform mat4 projection;
+                layout(location = 0) in vec3 vsPosition;
+                layout(location = 1) in vec3 vsNormal;
 
-            layout(location = 0) in vec3 vsPosition;
-            layout(location = 1) in vec3 vsNormal;
+                out vec3 fsNormal;
+                out vec3 fsViewDirection;
 
-            out vec3 fsNormal;
-            out vec3 fsViewDirection;
-
-            void main()
-            {
-                vec4 position = modelView * vec4(vsPosition, 1);
-                gl_Position = projection * position;
-                fsNormal = normalize(modelView * vec4(vsNormal, 0)).xyz;
-                fsViewDirection = normalize(-position).xyz;
-            }
-        )",
-        __LINE__,
-        R"(
-            #version 330
-
-            uniform vec4 color;
-            uniform vec3 lightDirection;
-
-            in vec3 fsNormal;
-            in vec3 fsViewDirection;
-
-            out vec4 fragColor;
-
-            void main()
-            {
-                vec3 reflection = normalize(reflect(lightDirection, fsNormal));
-                vec4 ambient = vec4(0.2, 0.2, 0.2, 1);
-                vec4 diffuse = vec4(0.5) * max(dot(fsNormal, -lightDirection), 0);
-                float specularPower = 0.25;
-                vec4 specular = vec4(0.5, 0.5, 0.5, 1) * pow(max(dot(reflection, fsViewDirection), 0), 0.8) * specularPower;
-                fragColor = vec4((ambient + diffuse) * color + specular);
-            }
-        )"
-    };
+                void main()
+                {
+                    vec4 position = modelView * vec4(vsPosition, 1);
+                    gl_Position = projection * position;
+                    fsNormal = normalize(modelView * vec4(vsNormal, 0)).xyz;
+                    fsViewDirection = normalize(-position).xyz;
+                }
+            )"
+        },
+        {
+            GL_FRAGMENT_SHADER,
+            __LINE__,
+            R"(
+                #version 330
+    
+                uniform vec4 color;
+                uniform vec3 lightDirection;
+    
+                in vec3 fsNormal;
+                in vec3 fsViewDirection;
+    
+                out vec4 fragColor;
+    
+                void main()
+                {
+                    vec3 reflection = normalize(reflect(lightDirection, fsNormal));
+                    vec4 ambient = vec4(0.2, 0.2, 0.2, 1);
+                    vec4 diffuse = vec4(0.5) * max(dot(fsNormal, -lightDirection), 0);
+                    float specularPower = 0.25;
+                    vec4 specular = vec4(0.5, 0.5, 0.5, 1) * pow(max(dot(reflection, fsViewDirection), 0), 0.8) * specularPower;
+                    fragColor = vec4((ambient + diffuse) * color + specular);
+                }
+            )"
+        }
+    }};
+    dst::sys::gl::Program program { shaders };
     GLint modelViewLocation { program.get_uniform_location("modelView") };
     GLint projectionLocation { program.get_uniform_location("projection") };
     GLint colorLocation { program.get_uniform_location("color") };
@@ -485,7 +445,7 @@ public:
         dst_gl(glViewport(0, 0, viewportResolution.width, viewportResolution.height));
         dst_gl(glClearColor(0, 0, 0, 0));
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-        dst_gl(glUseProgram(program.handle));
+        program.bind();
         dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
         dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightDirection)[0]));
         for (auto& gear : gears) {
@@ -503,6 +463,7 @@ public:
             dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, nullptr));
             dst_gl(glBindVertexArray(0));
         }
+        program.unbind();
     }
 };
 

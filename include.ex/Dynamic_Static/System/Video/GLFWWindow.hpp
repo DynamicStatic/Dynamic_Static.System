@@ -14,13 +14,13 @@
 #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
 #include "Dynamic_Static/Core/Events.hpp"
+#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/Video/GLFW.hpp"
 #include "Dynamic_Static/System/Video/Window.hpp"
 
 #include <mutex>
 #include <set>
 #include <string>
-#include <string_view>
 #include <utility>
 
 namespace Dynamic_Static {
@@ -96,7 +96,7 @@ namespace System {
         * Sets this GLFWwindow's name.
         * @param [in] name This GLFWwindow's name
         */
-        void set_name(const std::string_view& name) override final
+        void set_name(dst::string_view name) override final
         {
             if (mName != name) {
                 mName = name;
@@ -150,9 +150,9 @@ namespace System {
         * Sets this GLFWwindow's clipboard.
         * @param [in] This GLFWwindow's clipboard
         */
-        void set_clipboard(const std::string_view& clipboard) override final
+        void set_clipboard(dst::string_view clipboard) override final
         {
-            // TODO : Setup dst::string_view to ensure null termination.
+            // TODO : Setup dst::StringView to ensure null termination.
             //        See https://stackoverflow.com/a/41288372/3453616
             glfwSetClipboardString(mGlfwWindow, std::string(clipboard).c_str());
         }

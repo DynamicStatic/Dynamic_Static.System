@@ -14,13 +14,13 @@
 #include "Dynamic_Static/Core/Events.hpp"
 #include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/Core/NonCopyable.hpp"
+#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/Core/Version.hpp"
 #include "Dynamic_Static/System/Video/Resolution.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 
 #include <string>
-#include <string_view>
 #include <vector>
 
 namespace Dynamic_Static {
@@ -155,7 +155,7 @@ namespace System {
         * Sets this Window's name.
         * @param [in] name This Window's name
         */
-        virtual void set_name(const std::string_view& name) = 0;
+        virtual void set_name(dst::string_view name) = 0;
 
         /*
         * Gets this Window's CursorMode.
@@ -179,7 +179,7 @@ namespace System {
         * Sets this Window's clipboard.
         * @param [in] This Window's clipboard
         */
-        virtual void set_clipboard(const std::string_view& clipboard) = 0;
+        virtual void set_clipboard(dst::string_view clipboard) = 0;
 
         /*
         * Gets a value indicating whether or not this Window is visible.

@@ -107,15 +107,15 @@ namespace OpenGL {
         return log.data();
     }
 
-    /*
-    * Gets the info log for a given OpenGL program.
-    * @param [in] handle The handle to the OpenGL program to get the info log for
-    * @return The info log for the given OpenGL program
-    */
-    std::string get_program_info_log(GLuint handle)
-    {
-        return get_info_log(handle, glGetProgramiv, glGetProgramInfoLog);
-    }
+    // /*
+    // * Gets the info log for a given OpenGL program.
+    // * @param [in] handle The handle to the OpenGL program to get the info log for
+    // * @return The info log for the given OpenGL program
+    // */
+    // std::string get_program_info_log(GLuint handle)
+    // {
+    //     return get_info_log(handle, glGetProgramiv, glGetProgramInfoLog);
+    // }
 
 namespace detail {
 
