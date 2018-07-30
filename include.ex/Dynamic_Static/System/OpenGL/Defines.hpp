@@ -82,13 +82,13 @@ namespace OpenGL {
     }
 
     /*
-    * Gets the info log for a given OpenGL shader or program.
+    * Gets the info log for a given OpenGL object.
     * @param <GetInfoLogLengthFunctionType> The type of function to use to get the info log length
     * @param <GetInfoLogFunctionType> The type of function to use to get the info log
-    * @param [in] handle The handle to the OpenGL shader or program to get the info log for
+    * @param [in] handle The handle to the OpenGL object to get the info log for
     * @param [in] getInfoLogLength The function to use to get the info log length
     * @param [in] getInfoLog The function to use to get the info log
-    * @return The info log for the given OpenGL shader or program
+    * @return The info log for the given OpenGL object
     */
     template <
         typename GetInfoLogLengthFunctionType,
@@ -105,16 +105,6 @@ namespace OpenGL {
         std::string log(logLength, ' ');
         dst_gl(getInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
         return log.data();
-    }
-
-    /*
-    * Gets the info log for a given OpenGL shader.
-    * @param [in] handle The handle to the OpenGL shader to get the info log for
-    * @return The info log for the given OpenGL shader
-    */
-    std::string get_shader_info_log(GLuint handle)
-    {
-        return get_info_log(handle, glGetShaderiv, glGetShaderInfoLog);
     }
 
     /*
