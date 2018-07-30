@@ -14,8 +14,10 @@
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
 #include "Dynamic_Static/Core/NonCopyable.hpp"
+#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 
+#include <string>
 #include <utility>
 
 namespace Dynamic_Static {
@@ -30,7 +32,9 @@ namespace OpenGL {
     {
     protected:
         GLuint mHandle { 0 };
-        std::string mName { "GLObject (null)" };
+
+    private:
+        std::string mName { "GLObject(0)" };
 
     public:
         /*
@@ -94,9 +98,10 @@ namespace OpenGL {
         * Sets this Object's name.
         * @param [in] name This Object's name
         */
-        inline void set_name(const std::string& name)
+        inline void set_name(dst::string_view name)
         {
             mName = name;
+            mName += "(" + std::to_string(mHandle) + ")";
         }
 
         /*

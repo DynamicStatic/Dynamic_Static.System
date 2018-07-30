@@ -65,6 +65,7 @@ DstCreateStaticLibrary(
         ${includePath}/OpenGL/Buffer.hpp
         ${includePath}/OpenGL/Defines.hpp
         ${includePath}/OpenGL/IndexBuffer.hpp
+        ${includePath}/OpenGL/Mesh.hpp
         ${includePath}/OpenGL/Object.hpp
         ${includePath}/OpenGL/Program.hpp
         ${includePath}/OpenGL/Shader.hpp

@@ -16,9 +16,199 @@
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 
+#include "gsl/span"
+
+#include <string>
+#include <utility>
+
 namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
+
+    /*
+    * Provides high level control over an OpenGL buffer.
+    */
+    class Buffer
+        : public Object
+    {
+    private:
+        GLenum mTarget { 0 };
+        GLsizei mElementSize { 0 };
+        GLsizei mElementCount { 0 };
+        void* mMappedPtr { nullptr };
+
+    public:
+        /*
+        * Constructs an instance of Buffer.
+        */
+        inline Buffer()
+        {
+            set_name("Buffer");
+        }
+
+        /*
+        * Constructs an instance of Buffer.
+        * @param [in] type This Buffer's type
+        */
+        inline Buffer(GLenum type)
+            : mTarget { type }
+        {
+            dst_gl(glGenBuffers(1, &mHandle));
+            set_name("Buffer");
+        }
+
+        /*
+        * Destroys this instance of Buffer.
+        */
+        inline ~Buffer()
+        {
+            if (mHandle) {
+                dst_gl(glDeleteBuffers(1, &mHandle));
+            }
+        }
+
+        /*
+        * Moves an instance of Buffer.
+        * @param [in] other The Buffer to move from
+        */
+        inline Buffer(Buffer&& other)
+        {
+            *this = std::move(other);
+        }
+
+        /*
+        * Moves an instance of Buffer.
+        * @param [in] other The Buffer to move from
+        * @return This Buffer
+        */
+        inline Buffer& operator=(Buffer&& other)
+        {
+            if (this != &other) {
+                Object::operator=(std::move(other));
+                mTarget = std::move(other.mTarget);
+                mElementSize = std::move(other.mElementSize);
+                mElementCount = std::move(other.mElementCount);
+                mMappedPtr = std::move(other.mMappedPtr);
+                other.mMappedPtr = nullptr;
+            }
+            return *this;
+        }
+
+    public:
+        /*
+        * Gets the size in bytes of a single element in this Buffer.
+        * @return The size in bytes of a single element in this Buffer
+        */
+        inline GLsizei get_element_size() const
+        {
+            return mElementSize;
+        }
+
+        /*
+        * Gets the number of elements in this Buffer.
+        * @return The number of elements in this Buffer
+        */
+        inline GLsizei get_element_count() const
+        {
+            return mElementCount;
+        }
+
+        /*
+        * Gets this Buffer's size in bytes.
+        * @return This Buffer's size in bytes
+        */
+        inline GLsizei get_size() const
+        {
+            return mElementSize * mElementCount;
+        }
+
+        /*
+        * Gets this Buffer's mapped ptr.
+        * @return This Buffer's mapped ptr or nullptr if this Buffer isn't mapped
+        */
+        inline void* get_mapped_ptr()
+        {
+            return mMappedPtr;
+        }
+
+        /*
+        * Gets this Buffer's mapped ptr.
+        * @return This Buffer's mapped ptr or nullptr if this Buffer isn't mapped
+        */
+        inline const void* get_mapped_ptr() const
+        {
+            return mMappedPtr;
+        }
+
+        /*
+        * Binds this Buffer using its OpenGL target.
+        */
+        inline void bind() const
+        {
+            dst_gl(glBindBuffer(mTarget, mHandle));
+        }
+
+        /*
+        * Unbinds the Buffer at this Buffer's OpenGL target.
+        */
+        inline void unbind() const
+        {
+            dst_gl(glBindBuffer(mTarget, 0));
+        }
+
+        /*
+        * Maps this Buffer.
+        * @param [in](optional = GL_WRITE_ONLY) access This Buffer's access policy given as GL_READ_ONLY, GL_WRITE_ONLY, or GL_READ_WRITE
+        * @param [in](optional = GL_STREAM_DRAW) usage This Buffer's usage pattern given as GL_ STREAM/STATIC/DYNAMIC_ DRAW/READ/COPY
+        */
+        inline void* map(
+            GLenum access = GL_WRITE_ONLY,
+            GLenum usage = GL_STREAM_DRAW
+        )
+        {
+            if (!mMappedPtr) {
+                bind();
+                if (usage == GL_STREAM_DRAW) {
+                    dst_gl(glBufferData(mTarget, get_size(), nullptr, usage));
+                }
+                dst_gl(mMappedPtr = glMapBuffer(mTarget, access));
+                unbind();
+            }
+            return mMappedPtr;
+        }
+
+        /*
+        * Unmaps this Buffer.
+        */
+        inline void unmap()
+        {
+            if (mMappedPtr) {
+                bind();
+                dst_gl(glUnmapBuffer(mTarget));
+                mMappedPtr = nullptr;
+                unbind();
+            }
+        }
+
+        /*
+        * Writes data to this Buffer.
+        * @param <T> The type of data to write to this Buffer
+        * @param [in] data The data to write to this Buffer
+        * @param [in](optional = GL_STATIC_DRAW) usage This Buffer's usage pattern given as GL_ STREAM/STATIC/DYNAMIC_ DRAW/READ/COPY
+        */
+        template <typename T>
+        inline void write(
+            gsl::span<T> data,
+            GLenum usage = GL_STATIC_DRAW
+        )
+        {
+            mElementSize = static_cast<GLsizei>(sizeof(T));
+            mElementCount = static_cast<GLsizei>(data.size());
+            bind();
+            dst_gl(glBufferData(mTarget, get_size(), data.data(), usage));
+            unbind();
+        }
+    };
 
 } // namespace OpenGL
 } // namespace System

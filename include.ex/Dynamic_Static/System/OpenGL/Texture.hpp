@@ -33,7 +33,7 @@ namespace OpenGL {
         */
         struct Info final
         {
-            GLint type { GL_TEXTURE_2D };           /*!< The configured Texture's type */
+            GLint target { GL_TEXTURE_2D };         /*!< The configured Texture's target */
             GLsizei width { 1 };                    /*!< The configured Texture's width */
             GLsizei height { 1 };                   /*!< The configured Texture's height */
             GLsizei depth { 1 };                    /*!< The configured Texture's depth */
@@ -53,7 +53,7 @@ namespace OpenGL {
         */
         inline Texture()
         {
-            mName = "Texture (null)";
+            set_name("Texture");
         }
 
         /*
@@ -61,21 +61,24 @@ namespace OpenGL {
         * @param [in] info This Texture's Texture::Info
         * @param [in] data This Texture's initial data
         */
-        inline Texture(const Info& info, const uint8_t* data)
+        inline Texture(
+            const Info& info,
+            const uint8_t* data
+        )
             : mInfo { info }
         {
             // TODO : More detailed support for every method in here, ie. 1D and 3D textures, mip maps, etc...
-            mName = "Texture";
             mInfo.width = std::max(1, mInfo.width);
             mInfo.height = std::max(1, mInfo.height);
             mInfo.depth = std::max(1, mInfo.depth);
-            if (mInfo.type == GL_TEXTURE_1D || mInfo.type == GL_TEXTURE_2D) {
-                if (mInfo.type == GL_TEXTURE_1D) {
+            if (mInfo.target == GL_TEXTURE_1D || mInfo.target == GL_TEXTURE_2D) {
+                if (mInfo.target == GL_TEXTURE_1D) {
                     mInfo.height = 1;
                 }
                 mInfo.depth = 1;
             }
             create_gl_resources(data);
+            set_name("Texture");
         }
 
         /*
@@ -137,26 +140,26 @@ namespace OpenGL {
                 mInfo.filter == GL_NEAREST_MIPMAP_LINEAR ||
                 mInfo.filter == GL_LINEAR_MIPMAP_LINEAR) {
                 bind();
-                dst_gl(glTexParameteri(mInfo.type, GL_TEXTURE_MAX_LEVEL, get_mip_map_level_count()));
-                dst_gl(glGenerateMipmap(mInfo.type));
+                dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MAX_LEVEL, get_mip_map_level_count()));
+                dst_gl(glGenerateMipmap(mInfo.target));
                 unbind();
             }
         }
 
         /*
-        * Binds this Texture.
+        * Binds this Texture using its OpenGL target.
         */
         inline void bind() const
         {
-            dst_gl(glBindTexture(mInfo.type, mHandle));
+            dst_gl(glBindTexture(mInfo.target, mHandle));
         }
 
         /*
-        * Unbinds the Texture at this texture's OpenGL type target.
+        * Unbinds the Texture at this texture's OpenGL target.
         */
         inline void unbind() const
         {
-            dst_gl(glBindTexture(mInfo.type, 0));
+            dst_gl(glBindTexture(mInfo.target, 0));
         }
 
         /*
@@ -201,7 +204,7 @@ namespace OpenGL {
             }
             bind();
             dst_gl(glTexImage2D(
-                mInfo.type,
+                mInfo.target,
                 0,
                 mInfo.internalFormat,
                 mInfo.width,
@@ -212,10 +215,10 @@ namespace OpenGL {
                 data
             ));
             auto magFilter = mInfo.filter == GL_LINEAR_MIPMAP_LINEAR ? GL_LINEAR : mInfo.filter;
-            dst_gl(glTexParameteri(mInfo.type, GL_TEXTURE_MIN_FILTER, mInfo.filter));
-            dst_gl(glTexParameteri(mInfo.type, GL_TEXTURE_MAG_FILTER, magFilter));
-            dst_gl(glTexParameteri(mInfo.type, GL_TEXTURE_WRAP_S, mInfo.wrap));
-            dst_gl(glTexParameteri(mInfo.type, GL_TEXTURE_WRAP_T, mInfo.wrap));
+            dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MIN_FILTER, mInfo.filter));
+            dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MAG_FILTER, magFilter));
+            dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_S, mInfo.wrap));
+            dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_T, mInfo.wrap));
             generate_mip_maps();
             unbind();
         }

@@ -36,7 +36,7 @@ namespace OpenGL {
         */
         inline Shader()
         {
-            mName = "Shader (null)";
+            set_name("Shader");
         }
 
         /*
@@ -64,7 +64,6 @@ namespace OpenGL {
             dst::string_view source
         )
         {
-            mName = "Shader";
             // TODO : Line offset is _sometimes_ incorrect...wtf?
             auto versionPosition = source.find("#version");
             auto versionEnd = source.find('\n', versionPosition);
@@ -100,6 +99,7 @@ namespace OpenGL {
                 dst_gl(glDeleteShader(mHandle));
                 mHandle = 0;
             }
+            set_name("Shader");
         }
 
         /*

@@ -38,7 +38,7 @@ namespace OpenGL {
         */
         inline Program()
         {
-            mName = "Program (null)";
+            set_name("Program");
         }
 
         /*
@@ -46,7 +46,6 @@ namespace OpenGL {
         */
         inline Program(const gsl::span<Shader>& shaders)
         {
-            mName = "Program";
             dst_gl(mHandle = glCreateProgram());
             for (const auto& shader : shaders) {
                 dst_gl(glAttachShader(mHandle, shader.get_handle()));
@@ -63,6 +62,7 @@ namespace OpenGL {
                 dst_gl(glDeleteProgram(mHandle));
                 mHandle = 0;
             }
+            set_name("Program");
         }
 
         /*
@@ -160,22 +160,3 @@ namespace OpenGL {
 } // namespace Dynamic_Static
 
 #endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
-
-
-#if 0
-OpenGL Error[1282:invalid operation]
-c:\development\dynamic_static\dynamic_static.system\examples.ex\glgears.cpp @ line 541
-    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0])
-
-    OpenGL Error[1282:invalid operation]
-    c:\development\dynamic_static\dynamic_static.system\examples.ex\glgears.cpp @ line 542
-    glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightDirection)[0])
-
-    OpenGL Error[1282:invalid operation]
-    c:\development\dynamic_static\dynamic_static.system\examples.ex\glgears.cpp @ line 550
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelView[0][0])
-
-    OpenGL Error[1282:invalid operation]
-    c:\development\dynamic_static\dynamic_static.system\examples.ex\glgears.cpp @ line 551
-    glUniform4fv(colorLocation, 1, &gear.color[0])
-#endif
