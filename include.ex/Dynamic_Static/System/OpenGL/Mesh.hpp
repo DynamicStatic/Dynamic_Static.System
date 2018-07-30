@@ -34,13 +34,13 @@ namespace OpenGL {
     class Mesh final
     {
     public:
-        std::string name { "Mesh" };           /*!< This Mesh's name */
-        VertexBuffer vertexBuffer;             /*!< This Mesh's VertexBuffer */
-        IndexBuffer indexBuffer;               /*!< This Mesh's IndexBuffer */
-        VertexArray vertexArray;               /*!< This Mesh's VertexArray */
-        GLenum windingMode { GL_CW };          /*!< This Mesh's winding mode */
-        GLenum fillMode { GL_FILL };           /*!< This Mesh's fill mode */
-        GLenum prmitiveType { GL_TRIANGLES };  /*!< This Mesh's primitive type */
+        std::string name { "Mesh" };          /*!< This Mesh's name */
+        VertexBuffer vertexBuffer;            /*!< This Mesh's VertexBuffer */
+        IndexBuffer indexBuffer;              /*!< This Mesh's IndexBuffer */
+        VertexArray vertexArray;              /*!< This Mesh's VertexArray */
+        GLenum windingMode { GL_CW };         /*!< This Mesh's winding mode */
+        GLenum fillMode { GL_FILL };          /*!< This Mesh's fill mode */
+        GLenum prmitiveType { GL_TRIANGLES }; /*!< This Mesh's primitive type */
 
     public:
         /*
