@@ -13,12 +13,81 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
+#include "Dynamic_Static/System/OpenGL/Buffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
+
+#include <utility>
 
 namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
+
+    /*
+    * Provides high level control over an OpenGL vertex array.
+    */
+    class VertexArray final
+        : public Object
+    {
+    public:
+        /*
+        * Constructs an instance of VertexArray.
+        */
+        inline VertexArray()
+        {
+            dst_gl(glGenVertexArrays(1, &mHandle));
+            set_name("VertexArray");
+        }
+
+        /*
+        * Moves an instance of VertexArray.
+        * @param [in] other The VertexArray to move from
+        */
+        inline VertexArray(VertexArray&& other)
+        {
+            *this = std::move(other);
+        }
+
+        /*
+        * Destroys this instance of VertexArray.
+        */
+        inline ~VertexArray()
+        {
+            if (mHandle) {
+                dst_gl(glDeleteVertexArrays(1, &mHandle));
+            }
+        }
+
+        /*
+        * Moves an instance of VertexArray.
+        * @param [in] other The VertexArray to move from
+        * @return This VertexArray
+        */
+        inline VertexArray& operator=(VertexArray&& other)
+        {
+            if (this != &other) {
+                Object::operator=(std::move(other));
+            }
+            return *this;
+        }
+
+    public:
+        /*
+        * Binds this VertexArray.
+        */
+        inline void bind() const
+        {
+            dst_gl(glBindVertexArray(mHandle));
+        }
+
+        /*
+        * Unbinds the current VertexArray.
+        */
+        inline void unbind() const
+        {
+            dst_gl(glBindVertexArray(0));
+        }
+    };
 
 } // namespace OpenGL
 } // namespace System

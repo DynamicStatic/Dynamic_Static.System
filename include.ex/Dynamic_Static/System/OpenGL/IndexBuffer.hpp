@@ -32,7 +32,7 @@ namespace OpenGL {
         /*
         * Constructs an instance of IndexBuffer.
         */
-        IndexBuffer()
+        inline IndexBuffer()
             : Buffer(GL_ELEMENT_ARRAY_BUFFER)
         {
             set_name("IndexBuffer");
@@ -42,7 +42,7 @@ namespace OpenGL {
         * Moves an instance of IndexBuffer.
         * @param [in] other The IndexBuffer to move from
         */
-        IndexBuffer(IndexBuffer&& other)
+        inline IndexBuffer(IndexBuffer&& other)
         {
             *this = std::move(other);
         }
@@ -52,7 +52,7 @@ namespace OpenGL {
         * @param [in] other The IndexBuffer to move from
         * @return This IndexBuffer
         */
-        IndexBuffer& operator=(IndexBuffer&& other)
+        inline IndexBuffer& operator=(IndexBuffer&& other)
         {
             if (this != &other) {
                 Buffer::operator=(std::move(other));
@@ -62,10 +62,10 @@ namespace OpenGL {
 
     public:
         /*
-        * Gets this IndexBuffer's index type.
-        * @return This IndexBuffer's index type
+        * Gets the type of elements in this IndexBuffer.
+        * @return The type of elements in this IndexBuffer
         */
-        GLenum get_type() const
+        inline GLenum get_element_type() const
         {
             switch (get_element_size()) {
                 case sizeof(uint8_t): return GL_UNSIGNED_BYTE;

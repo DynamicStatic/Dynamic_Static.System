@@ -32,7 +32,7 @@ namespace OpenGL {
         /*
         * Constructs an instance of VertexBuffer.
         */
-        VertexBuffer()
+        inline VertexBuffer()
             : Buffer(GL_ARRAY_BUFFER)
         {
             set_name("VertexBuffer");
@@ -42,7 +42,7 @@ namespace OpenGL {
         * Moves an instance of VertexBuffer.
         * @param [in] other The VertexBuffer to move from
         */
-        VertexBuffer(VertexBuffer&& other)
+        inline VertexBuffer(VertexBuffer&& other)
         {
             *this = std::move(other);
         }
@@ -52,7 +52,7 @@ namespace OpenGL {
         * @param [in] other The VertexBuffer to move from
         * @return This VertexBuffer
         */
-        VertexBuffer& operator=(VertexBuffer&& other)
+        inline VertexBuffer& operator=(VertexBuffer&& other)
         {
             if (this != &other) {
                 Buffer::operator=(std::move(other));

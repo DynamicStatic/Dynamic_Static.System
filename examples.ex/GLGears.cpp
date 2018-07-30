@@ -36,107 +36,26 @@
 
 #include <array>
 #include <iostream>
-#include <thread>
 #include <vector>
 
 struct Vertex final
 {
     glm::vec3 position { };
     glm::vec3 normal { };
-
-    static void enable_attributes()
-    {
-        GLuint index = 0;
-        size_t offset = 0;
-        Vertex* vertex = nullptr;
-        dst_gl(glEnableVertexAttribArray(index));
-        dst_gl(glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offset));
-        offset += sizeof(vertex->position);
-        ++index;
-        dst_gl(glEnableVertexAttribArray(index));
-        dst_gl(glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offset));
-    }
 };
 
-class Mesh final
-    : dst::NonCopyable
-{
-public:
-    GLuint vertexArray { };
-    GLuint vertexBuffer { };
-    GLuint indexBuffer { };
-    GLsizei indexCount { };
-    GLenum indexType { GL_UNSIGNED_SHORT };
-    GLenum primitiveType { GL_TRIANGLES };
-    GLenum winding { GL_CW };
+namespace dstgl {
 
-public:
-    Mesh()
+    template <>
+    void enable_vertex_attributes<Vertex>()
     {
-        dst_gl(glGenVertexArrays(1, &vertexArray));
-        dst_gl(glGenBuffers(1, &vertexBuffer));
-        dst_gl(glGenBuffers(1, &indexBuffer));
+        dst::gl::enable_vertex_attributes<Vertex, 2>({{
+            { GL_FLOAT, 3 },
+            { GL_FLOAT, 3 }
+        }});
     }
 
-    Mesh(Mesh&& other)
-    {
-        *this = std::move(other);
-    }
-
-    ~Mesh()
-    {
-        if (vertexArray) {
-            dst_gl(glDeleteVertexArrays(1, &vertexArray));
-        }
-        if (vertexBuffer) {
-            dst_gl(glDeleteBuffers(1, &vertexBuffer));
-        }
-        if (indexBuffer) {
-            dst_gl(glDeleteBuffers(1, &indexBuffer));
-        }
-    }
-
-    Mesh& operator=(Mesh&& other)
-    {
-        if (this != &other) {
-            vertexArray = std::move(other.vertexArray);
-            vertexBuffer = std::move(other.vertexBuffer);
-            indexBuffer = std::move(other.indexBuffer);
-            indexCount = std::move(other.indexCount);
-            indexType = std::move(other.indexType);
-            primitiveType = std::move(other.primitiveType);
-            winding = std::move(other.winding);
-            other.vertexArray = 0;
-            other.vertexBuffer = 0;
-            other.indexBuffer = 0;
-        }
-        return *this;
-    }
-
-public:
-    template <typename VertexType, typename IndexType>
-    void write(
-        const std::vector<VertexType>& vertices,
-        const std::vector<IndexType>& indices
-    )
-    {
-        dst_gl(glBindVertexArray(vertexArray));
-        dst_gl(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer));
-        dst_gl(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexType), vertices.data(), GL_STATIC_DRAW));
-        dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
-        dst_gl(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), indices.data(), GL_STATIC_DRAW));
-        VertexType::enable_attributes();
-        dst_gl(glBindBuffer(GL_ARRAY_BUFFER, 0));
-        dst_gl(glBindVertexArray(0));
-        indexCount = static_cast<GLsizei>(indices.size());
-        switch (sizeof(IndexType)) {
-            case sizeof(GLubyte) : indexType = GL_UNSIGNED_BYTE; break;
-            case sizeof(GLushort) : indexType = GL_UNSIGNED_SHORT; break;
-            case sizeof(GLuint) : indexType = GL_UNSIGNED_INT; break;
-            default: indexType = GL_UNSIGNED_INT; break;
-        }
-    }
-};
+}
 
 class Gear final
     : dst::NonCopyable
@@ -146,7 +65,7 @@ public:
     glm::vec4 color;
     float rotation { };
     float speed { };
-    Mesh mesh;
+    dst::gl::Mesh mesh;
 
 public:
     Gear(
@@ -279,7 +198,7 @@ public:
             vertices[i].normal = glm::normalize(vertices[i].normal);
         }
 
-        mesh.write(vertices, indices);
+        mesh.write<Vertex, GLushort>(vertices, indices);
     }
 
     Gear(Gear&& other)
@@ -304,7 +223,7 @@ class GLGears final
 {
 public:
     bool animation { true };
-    bool wireframe { false };
+    bool wireFrame { false };
     float fieldOfView { 40 };
     float cameraSpeed { 7.4f };
     float scrollSensitivity { 86 };
@@ -317,7 +236,7 @@ public:
             glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 })
         )
     };
-    std::array<dst::sys::gl::Shader, 2> shaders {{
+    std::array<dst::gl::Shader, 2> shaders {{
         {
             GL_VERTEX_SHADER,
             __LINE__,
@@ -368,15 +287,15 @@ public:
             )"
         }
     }};
-    dst::sys::gl::Program program { shaders };
+    dst::gl::Program program { shaders };
     GLint modelViewLocation { program.get_uniform_location("modelView") };
     GLint projectionLocation { program.get_uniform_location("projection") };
     GLint colorLocation { program.get_uniform_location("color") };
     GLint lightDirectionLocation { program.get_uniform_location("lightDirection") };
     std::array<Gear, 3> gears {
-        Gear{ 1.0f, 4.f, 1.0f, 20, 0.7f },
-        Gear{ 0.5f, 2.f, 2.0f, 10, 0.7f },
-        Gear{ 1.3f, 2.f, 0.5f, 10, 0.7f },
+        Gear { 1.0f, 4.f, 1.0f, 20, 0.7f },
+        Gear { 0.5f, 2.f, 2.0f, 10, 0.7f },
+        Gear { 1.3f, 2.f, 0.5f, 10, 0.7f },
     };
 
 public:
@@ -408,7 +327,7 @@ public:
             animation = !animation;
         }
         if (input.keyboard.pressed(Keyboard::Key::W)) {
-            wireframe = !wireframe;
+            wireFrame = !wireFrame;
         }
         if (input.mouse.down(Mouse::Button::Left)) {
             auto look = input.mouse.get_position_delta() * lookSensitivity * deltaTime;
@@ -429,39 +348,37 @@ public:
         const dst::sys::Resolution& viewportResolution
     )
     {
-        auto view = glm::lookAt(
+        auto viewMatrix = glm::lookAt(
             cameraPosition,
             cameraPosition + glm::vec3 { 0, 0, -1 },
             { 0, 1, 0 }
         );
-        auto projection = glm::perspective(
+        auto projectionMatrix = glm::perspective(
             glm::radians(fieldOfView),
             viewportResolution.get_aspect_ratio(),
             0.001f,
             100.0f
         );
         dst_gl(glEnable(GL_CULL_FACE));
+        dst_gl(glCullFace(GL_BACK));
         dst_gl(glEnable(GL_DEPTH_TEST));
         dst_gl(glViewport(0, 0, viewportResolution.width, viewportResolution.height));
         dst_gl(glClearColor(0, 0, 0, 0));
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         program.bind();
-        dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]));
+        dst_gl(glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projectionMatrix[0][0]));
         dst_gl(glUniform3fv(lightDirectionLocation, 1, &glm::normalize(lightDirection)[0]));
         for (auto& gear : gears) {
             gear.rotation += animation ? gear.speed * deltaTime : 0;
-            auto model =
+            auto modelMatrix =
                 glm::toMat4(worldRotation) *
                 glm::translate(gear.position) *
                 glm::rotate(glm::radians(gear.rotation), glm::vec3 { 0, 0, 1 });
-            auto modelView = view * model;
-            dst_gl(glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelView[0][0]));
+            auto modelViewMatrix = viewMatrix * modelMatrix;
+            dst_gl(glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelViewMatrix[0][0]));
             dst_gl(glUniform4fv(colorLocation, 1, &gear.color[0]));
-            dst_gl(glBindVertexArray(gear.mesh.vertexArray));
-            dst_gl(glFrontFace(gear.mesh.winding));
-            dst_gl(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
-            dst_gl(glDrawElements(gear.mesh.primitiveType, gear.mesh.indexCount, gear.mesh.indexType, nullptr));
-            dst_gl(glBindVertexArray(0));
+            gear.mesh.fillMode = wireFrame ? GL_LINE : GL_FILL;
+            gear.mesh.draw();
         }
         program.unbind();
     }
@@ -473,16 +390,15 @@ int main(int argc, char* argv[])
         << std::endl
         << "[Esc]          - Quit" << std::endl
         << "[A]            - Toggle animation" << std::endl
-        << "[W]            - Toggle wireframe" << std::endl
+        << "[W]            - Toggle wire frame" << std::endl
         << "[Left Mouse]   - Rotate model" << std::endl
         << "[Scroll Wheel] - Move model forward and backward" << std::endl
         << "[Middle Mouse] - Move model horizontally and vertically" << std::endl
         << "[Right Mouse]  - Move model horizontally and vertically" << std::endl
         << std::endl;
 
-    using namespace dst;
     using namespace dst::sys;
-    dst::sys::Window::Info windowInfo { };
+    Window::Info windowInfo { };
     windowInfo.name = "Dynamic_Static GLGears";
     windowInfo.graphicsApi = GraphicsApi::OpenGL;
     windowInfo.glContextInfo.version = { 4, 5 };
@@ -494,14 +410,12 @@ int main(int argc, char* argv[])
             running = false;
         };
 
-    FMOD::System* fmod = fmod_init();
-
-    Clock clock;
     GLGears glGears;
+    dst::Clock clock;
     while (running) {
         clock.update();
         Window::poll_events();
-        auto deltaTime = clock.elapsed<Second<float>>();
+        auto deltaTime = clock.elapsed<dst::Second<float>>();
         const auto& input = window.get_input();
         if (input.keyboard.down(Keyboard::Key::Escape)) {
             running = false;
@@ -510,14 +424,6 @@ int main(int argc, char* argv[])
         window.make_context_current();
         glGears.draw(deltaTime, window.get_resolution());
         window.swap();
-        if (fmod) {
-            fmod_update(fmod);
-        }
     }
-
-    if (fmod) {
-        fmod_shutdown(fmod);
-    }
-
     return 0;
 }

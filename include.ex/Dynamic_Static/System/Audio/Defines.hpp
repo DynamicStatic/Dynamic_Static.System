@@ -26,9 +26,8 @@ namespace System {
         fmResult = system->init(512, FMOD_INIT_NORMAL, 0);
         assert(fmResult == FMOD_OK);
 
-        // auto filePath = "C:/Development/Dynamic_Static/Dynamic_Static.System/examples/resources/Mega Hyper Ultrastorm.mp3";
-        auto filePath = "C:/Development/Dynamic_Static/Dynamic_Static.System/examples/resources/Track_00.ogg";
         FMOD::Sound* sound = nullptr;
+        auto filePath = "../../examples/resources/Track_00.ogg";
         fmResult = system->createSound(filePath, FMOD_CREATESTREAM, nullptr, &sound);
         assert(fmResult == FMOD_OK);
 

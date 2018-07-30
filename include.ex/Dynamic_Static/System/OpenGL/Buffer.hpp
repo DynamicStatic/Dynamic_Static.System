@@ -96,6 +96,15 @@ namespace OpenGL {
 
     public:
         /*
+        * Gets a value indicating whether or not this Buffer is empty.
+        * @return Whether or not this Buffer is empty
+        */
+        inline bool is_empty() const
+        {
+            return mElementCount == 0;
+        }
+
+        /*
         * Gets the size in bytes of a single element in this Buffer.
         * @return The size in bytes of a single element in this Buffer
         */

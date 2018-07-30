@@ -15,10 +15,12 @@
 #include "Dynamic_Static/System/OpenGL/Buffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/IndexBuffer.hpp"
+#include "Dynamic_Static/System/OpenGL/Mesh.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 #include "Dynamic_Static/System/OpenGL/Program.hpp"
 #include "Dynamic_Static/System/OpenGL/Shader.hpp"
 #include "Dynamic_Static/System/OpenGL/Texture.hpp"
+#include "Dynamic_Static/System/OpenGL/Vertex.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexArray.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexBuffer.hpp"
 #endif
