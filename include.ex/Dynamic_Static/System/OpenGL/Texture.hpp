@@ -85,7 +85,10 @@ namespace OpenGL {
         * Moves an instance of Texture.
         * @param [in] other The Texture to move from
         */
-        inline Texture(Texture&& other) = default;
+        inline Texture(Texture&& other)
+        {
+            *this = std::move(other);
+        }
 
         /*
         * Destroys this instance of Texture.
@@ -100,7 +103,14 @@ namespace OpenGL {
         * @param [in] other The Texture to move from
         * @return This Texture
         */
-        inline Texture& operator=(Texture&& other) = default;
+        inline Texture& operator=(Texture&& other)
+        {
+            if (this != &other) {
+                Object::operator=(std::move(other));
+                mInfo = std::move(other.mInfo);
+            }
+            return *this;
+        }
 
     public:
         /*

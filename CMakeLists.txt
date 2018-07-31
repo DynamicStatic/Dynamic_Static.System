@@ -69,6 +69,7 @@ DstCreateStaticLibrary(
         ${includePath}/OpenGL/Object.hpp
         ${includePath}/OpenGL/Program.hpp
         ${includePath}/OpenGL/Shader.hpp
+        ${includePath}/OpenGL/State.hpp
         ${includePath}/OpenGL/Texture.hpp
         ${includePath}/OpenGL/Vertex.hpp
         ${includePath}/OpenGL/VertexArray.hpp
