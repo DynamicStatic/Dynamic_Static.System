@@ -242,16 +242,12 @@ public:
             __LINE__,
             R"(
                 #version 330
-
                 uniform mat4 modelView;
                 uniform mat4 projection;
-
                 layout(location = 0) in vec3 vsPosition;
                 layout(location = 1) in vec3 vsNormal;
-
                 out vec3 fsNormal;
                 out vec3 fsViewDirection;
-
                 void main()
                 {
                     vec4 position = modelView * vec4(vsPosition, 1);
@@ -266,15 +262,11 @@ public:
             __LINE__,
             R"(
                 #version 330
-    
                 uniform vec4 color;
                 uniform vec3 lightDirection;
-    
                 in vec3 fsNormal;
                 in vec3 fsViewDirection;
-    
                 out vec4 fragColor;
-    
                 void main()
                 {
                     vec3 reflection = normalize(reflect(lightDirection, fsNormal));
@@ -378,7 +370,7 @@ public:
             dst_gl(glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, &modelViewMatrix[0][0]));
             dst_gl(glUniform4fv(colorLocation, 1, &gear.color[0]));
             gear.mesh.fillMode = wireFrame ? GL_LINE : GL_FILL;
-            gear.mesh.draw();
+            gear.mesh.draw_indexed();
         }
         program.unbind();
     }

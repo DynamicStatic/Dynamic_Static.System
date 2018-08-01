@@ -19,5 +19,5 @@ macro(CreateExample target)
 endmacro()
 
 CreateExample(BasicAudio)
+CreateExample(BasicGui)
 CreateExample(GLGears)
-CreateExample(ImGui)

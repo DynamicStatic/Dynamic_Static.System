@@ -24,26 +24,26 @@ namespace OpenGL {
     */
     struct State final
     {
-        GLenum activeTexture { };          /*!< TODO : Documentation */
-        GLint program { };                 /*!< TODO : Documentation */
-        GLint texture { };                 /*!< TODO : Documentation */
-        GLint sampler { };                 /*!< TODO : Documentation */
-        GLint arrayBuffer { };             /*!< TODO : Documentation */
-        GLint elementArrayBuffer { };      /*!< TODO : Documentation */
-        GLint vertexArray { };             /*!< TODO : Documentation */
-        GLint polygonMode[2] { };          /*!< TODO : Documentation */
-        GLint viewport[4] { };             /*!< TODO : Documentation */
-        GLint scissor[4] { };              /*!< TODO : Documentation */
-        GLenum blendSrcRgb { };            /*!< TODO : Documentation */
-        GLenum blendDstRgb { };            /*!< TODO : Documentation */
-        GLenum blendSrcAlpha { };          /*!< TODO : Documentation */
-        GLenum blendDstAlpha { };          /*!< TODO : Documentation */
-        GLenum blendEquationRgb { };       /*!< TODO : Documentation */
-        GLenum blendEquationAlpha { };     /*!< TODO : Documentation */
-        GLboolean blendEnabled { };        /*!< TODO : Documentation */
-        GLboolean cullFaceEnabled { };     /*!< TODO : Documentation */
-        GLboolean depthTestEnabled { };    /*!< TODO : Documentation */
-        GLboolean scissorTestEnabled { };  /*!< TODO : Documentation */
+        GLenum activeTexture { };          /*!< This OpenGL State's active texture */
+        GLint program { };                 /*!< This OpenGL State's program */
+        GLint texture2D { };               /*!< This OpenGL State's texture2D */
+        GLint sampler { };                 /*!< This OpenGL State's sampler */
+        GLint arrayBuffer { };             /*!< This OpenGL State's arrayBuffer */
+        GLint elementArrayBuffer { };      /*!< This OpenGL State's element array buffer */
+        GLint vertexArray { };             /*!< This OpenGL State's vertex array */
+        GLint polygonMode[2] { };          /*!< This OpenGL State's polygon mode */
+        GLint viewport[4] { };             /*!< This OpenGL State's viewport */
+        GLint scissor[4] { };              /*!< This OpenGL State's scissor */
+        GLenum blendSrcRgb { };            /*!< This OpenGL State's blend src RRGB */
+        GLenum blendDstRgb { };            /*!< This OpenGL State's blend dst RGB */
+        GLenum blendSrcAlpha { };          /*!< This OpenGL State's blend src alpha */
+        GLenum blendDstAlpha { };          /*!< This OpenGL State's blend dst alpha */
+        GLenum blendEquationRgb { };       /*!< This OpenGL State's blend equation rgb */
+        GLenum blendEquationAlpha { };     /*!< This OpenGL State's blend equation alpha */
+        GLboolean blendEnabled { };        /*!< Whether or not this OpenGL State has blend enabled */
+        GLboolean cullFaceEnabled { };     /*!< Whether or not this OpenGL State has cull face enabled */
+        GLboolean depthTestEnabled { };    /*!< Whether or not this OpenGL State has depth test enabled */
+        GLboolean scissorTestEnabled { };  /*!< Whether or not this OpenGL State has scissor test enabled */
 
         /*
         * Records this State's snap shot of the current OpenGL state.
@@ -53,7 +53,7 @@ namespace OpenGL {
             dst_gl(glGetIntegerv(GL_ACTIVE_TEXTURE, reinterpret_cast<GLint*>(&activeTexture)));
             dst_gl(GL_TEXTURE0);
             dst_gl(glGetIntegerv(GL_CURRENT_PROGRAM, &program));
-            dst_gl(glGetIntegerv(GL_TEXTURE_BINDING_2D, &texture));
+            dst_gl(glGetIntegerv(GL_TEXTURE_BINDING_2D, &texture2D));
             dst_gl(glGetIntegerv(GL_SAMPLER_BINDING, &sampler));
             dst_gl(glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &arrayBuffer));
             dst_gl(glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &elementArrayBuffer));
@@ -80,7 +80,7 @@ namespace OpenGL {
         {
             dst_gl(glActiveTexture(activeTexture));
             dst_gl(glUseProgram(program));
-            dst_gl(glBindTexture(GL_TEXTURE_2D, texture));
+            dst_gl(glBindTexture(GL_TEXTURE_2D, texture2D));
             dst_gl(glBindSampler(0, sampler));
             dst_gl(glBindBuffer(GL_ARRAY_BUFFER, arrayBuffer));
             dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer));

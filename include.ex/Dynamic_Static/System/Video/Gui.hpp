@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "Dynamic_Static/Core/NonCopyable.hpp"
 #include "Dynamic_Static/Core/Time.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
@@ -28,6 +29,7 @@ namespace System {
     * Provides high level control over rendering an ImGui graphical user interface.
     */
     class Gui final
+        : NonCopyable
     {
     private:
         gl::Texture mTexture;
@@ -41,6 +43,10 @@ namespace System {
         */
         inline Gui()
         {
+            // IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() or ImGui::SetCurrentContext()?");
+
+            ImGui::CreateContext();
+
             int fontWidth = 0;
             int fontHeight = 0;
             unsigned char* fontData = nullptr;
@@ -62,6 +68,7 @@ namespace System {
                         uniform mat4 projection;
                         in vec2 vsPosition;
                         in vec2 vsTexCoord;
+                        in vec4 vsColor;
                         out vec2 fsTexCoord;
                         out vec4 fsColor;
                         void main()
@@ -89,8 +96,8 @@ namespace System {
                 }
             }};
             mProgram = gl::Program(shaders);
-
             mProjectionLocation = mProgram.get_uniform_location("projection");
+
             io.KeyMap[ImGuiKey_Tab]        = static_cast<int>(Keyboard::Key::Tab);
             io.KeyMap[ImGuiKey_LeftArrow]  = static_cast<int>(Keyboard::Key::LeftArrow);
             io.KeyMap[ImGuiKey_RightArrow] = static_cast<int>(Keyboard::Key::RightArrow);
@@ -118,7 +125,7 @@ namespace System {
         /*
         * TODO : Documentation.
         */
-        inline void begin_frame(
+        inline void update(
             const Clock& clock,
             Window& window
         )
@@ -126,7 +133,10 @@ namespace System {
             const auto& input = window.get_input();
             auto& io = ImGui::GetIO();
             auto resolution = window.get_resolution();
-            io.DisplaySize = { static_cast<float>(resolution.width), static_cast<float>(resolution.height) };
+            io.DisplaySize = {
+                static_cast<float>(resolution.width),
+                static_cast<float>(resolution.height)
+            };
             io.DisplayFramebufferScale = { 1, 1 };
             io.DeltaTime = clock.elapsed<dst::Second<float>>();
             io.MousePos.x = input.mouse.current.position.x;
@@ -161,17 +171,67 @@ namespace System {
         /*
         * TODO : Documentation.
         */
-        inline void end_frame()
+        inline void draw()
         {
+            ImGui::Render();
+            const auto& io = ImGui::GetIO();
+            auto drawData = ImGui::GetDrawData();
+            drawData->ScaleClipRects(io.DisplayFramebufferScale);
 
-        }
+            gl::State glState;
+            glState.stash();
+            dst_gl(glBindSampler(0, 0));
+            dst_gl(glEnable(GL_BLEND));
+            dst_gl(glBlendEquation(GL_FUNC_ADD));
+            dst_gl(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+            dst_gl(glDisable(GL_CULL_FACE));
+            dst_gl(glDisable(GL_DEPTH_TEST));
+            dst_gl(glEnable(GL_SCISSOR_TEST));
+            dst_gl(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+            dst_gl(glViewport(
+                0,
+                0,
+                static_cast<GLsizei>(io.DisplaySize.x),
+                static_cast<GLsizei>(io.DisplaySize.y)
+            ));
 
-        /*
-        * TODO : Documentation.
-        */
-        inline void render()
-        {
+            float projection[4][4] = {
+                {  2.0f / io.DisplaySize.x, 0,                         0, 0 },
+                {  0,                       2.0f / -io.DisplaySize.y,  0, 0 },
+                {  0,                       0,                        -1, 0 },
+                { -1,                       1,                         0, 1 }
+            };
+            mProgram.bind();
+            dst_gl(glUniformMatrix4fv(mProjectionLocation, 1, GL_FALSE, &projection[0][0]));
 
+            for (int cmdList_i = 0; cmdList_i < drawData->CmdListsCount; ++cmdList_i) {
+                auto cmdList = drawData->CmdLists[cmdList_i];
+                mMesh.write<ImDrawVert, ImDrawIdx>(
+                    { cmdList->VtxBuffer.Data, cmdList->VtxBuffer.Size },
+                    { cmdList->IdxBuffer.Data, cmdList->IdxBuffer.Size }
+                );
+                const ImDrawIdx* indexPtr = 0;
+                for (int cmd_i = 0; cmd_i < cmdList->CmdBuffer.Size; ++cmd_i) {
+                    const auto& cmd = cmdList->CmdBuffer[cmd_i];
+                    if (cmd.UserCallback) {
+                        cmd.UserCallback(cmdList, &cmd);
+                    } else {
+                        dst_gl(glActiveTexture(GL_TEXTURE0));
+                        mTexture.bind();
+                        dst_gl(glScissor(
+                            static_cast<GLint>(cmd.ClipRect.x),
+                            static_cast<GLint>(io.DisplaySize.y - cmd.ClipRect.w),
+                            static_cast<GLsizei>(cmd.ClipRect.z - cmd.ClipRect.x),
+                            static_cast<GLsizei>(cmd.ClipRect.w - cmd.ClipRect.y)
+                        ));
+                        mMesh.draw_indexed(cmd.ElemCount, indexPtr);
+                    }
+                    indexPtr += cmd.ElemCount;
+                }
+            }
+
+            mProgram.unbind();
+            glState.apply();
         }
 
     private:

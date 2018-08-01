@@ -74,12 +74,26 @@ namespace OpenGL {
         /*
         * Draws this Mesh.
         */
-        inline void draw() const
+        inline void draw_indexed() const
+        {
+            draw_indexed(indexBuffer.get_element_count(), nullptr);
+        }
+
+        /*
+        * Draws this Mesh.
+        * @param [in] count The number of vertices to draw
+        * @param [in] indices A pointer into this Mesh's IndexBuffer to start drawing from
+        * \n NOTE : This pointer treats the start of this Mesh's IndexBuffer storage as address 0
+        */
+        inline void draw_indexed(
+            GLsizei count,
+            const void* indices
+        ) const
         {
             vertexArray.bind();
             dst_gl(glFrontFace(windingMode));
             dst_gl(glPolygonMode(GL_FRONT_AND_BACK, fillMode));
-            dst_gl(glDrawElements(prmitiveType, indexBuffer.get_element_count(), indexBuffer.get_element_type(), nullptr));
+            dst_gl(glDrawElements(prmitiveType, count, indexBuffer.get_element_type(), indices));
             vertexArray.unbind();
         }
     };

@@ -44,7 +44,7 @@ namespace OpenGL {
         /*
         * Constructs an instance of Program.
         */
-        inline Program(const gsl::span<Shader>& shaders)
+        inline Program(gsl::span<Shader> shaders)
         {
             dst_gl(mHandle = glCreateProgram());
             for (const auto& shader : shaders) {
