@@ -213,6 +213,7 @@ namespace OpenGL {
                 mInfo.internalFormat = mInfo.format;
             }
             bind();
+            dst_gl(glPixelStorei(GL_UNPACK_ROW_LENGTH, 0));
             dst_gl(glTexImage2D(
                 mInfo.target,
                 0,

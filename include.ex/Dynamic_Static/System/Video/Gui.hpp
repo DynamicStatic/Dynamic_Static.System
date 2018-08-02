@@ -43,7 +43,7 @@ namespace System {
         */
         inline Gui()
         {
-            // IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() or ImGui::SetCurrentContext()?");
+            // TODO : Investiage ImGui::SetCurrentContext().
 
             ImGui::CreateContext();
 
@@ -74,7 +74,7 @@ namespace System {
                         void main()
                         {
                             gl_Position = projection * vec4(vsPosition.xy, 0, 1);
-                            fsTexCoord =- vsTexCoord;
+                            fsTexCoord = vsTexCoord;
                             fsColor = vsColor;
                         }
                     )"
@@ -90,7 +90,7 @@ namespace System {
                         out vec4 fragColor;
                         void main()
                         {
-                            fragColor = texture(image, fsTexCoord) * fsColor;
+                            fragColor = texture(image, fsTexCoord).rrrr * fsColor;
                         }
                     )"
                 }
@@ -123,7 +123,9 @@ namespace System {
 
     public:
         /*
-        * TODO : Documentation.
+        * Updates this Gui.
+        * @param [in] clock The clock used to maintain update and drawing timing
+        * @param [in] window The Window to draw this Gui on
         */
         inline void update(
             const Clock& clock,
@@ -169,7 +171,7 @@ namespace System {
         }
 
         /*
-        * TODO : Documentation.
+        * Draws this Gui on the Window passed in update().
         */
         inline void draw()
         {
@@ -217,7 +219,7 @@ namespace System {
                         cmd.UserCallback(cmdList, &cmd);
                     } else {
                         dst_gl(glActiveTexture(GL_TEXTURE0));
-                        mTexture.bind();
+                        reinterpret_cast<gl::Texture*>(cmd.TextureId)->bind();
                         dst_gl(glScissor(
                             static_cast<GLint>(cmd.ClipRect.x),
                             static_cast<GLint>(io.DisplaySize.y - cmd.ClipRect.w),
@@ -264,7 +266,7 @@ namespace dstgl {
         dst::gl::enable_vertex_attributes<ImDrawVert, 3>({{
             { GL_FLOAT, 2 },
             { GL_FLOAT, 2 },
-            { GL_UNSIGNED_INT, 1 }
+            { GL_UNSIGNED_BYTE, 4, GL_TRUE }
         }});
     }
 
