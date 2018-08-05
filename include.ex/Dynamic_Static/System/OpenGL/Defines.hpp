@@ -11,9 +11,10 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#if defined(DYNAMIC_STATIC_WINDOWS)
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+
+#ifdef DYNAMIC_STATIC_WINDOWS
 #include "GL/glew.h"
 #include "GL/wglew.h"
 #endif
@@ -23,7 +24,7 @@
 #include <stdexcept>
 
 #define DYNAMIC_STATIC_VALIDATE_GL_CALLS
-#if defined(DYNAMIC_STATIC_VALIDATE_GL_CALLS)
+#ifdef DYNAMIC_STATIC_VALIDATE_GL_CALLS
 #define dst_gl(GL_CALL)                                           \
 {                                                                 \
     GL_CALL;                                                      \
@@ -62,7 +63,7 @@ namespace OpenGL {
         // TODO : Set up proper logging mechanism...
         GLenum glError = glGetError();
         if (glError != GL_NO_ERROR) {
-            #if defined(DYNAMIC_STATIC_WINDOWS)
+            #ifdef DYNAMIC_STATIC_WINDOWS
             auto errorStr = reinterpret_cast<const char*>(gluErrorString(glError));
             if (!errorStr) {
                 errorStr = "Unknown";
@@ -105,7 +106,7 @@ namespace OpenGL {
 
 namespace detail {
 
-    #if defined(DYNAMIC_STATIC_WINDOWS)
+    #ifdef DYNAMIC_STATIC_WINDOWS
     /*
     * Initializes OpenGL entry points.
     * \n NOTE : An OpenGL context must exist before calling this function
@@ -136,4 +137,4 @@ namespace gl = OpenGL;
 namespace gl = System::OpenGL;
 } // namespace Dynamic_Static
 
-#endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+#endif // DYNAMIC_STATIC_OPENGL_ENABLED

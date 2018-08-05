@@ -53,7 +53,7 @@ namespace System {
             bool visible { true };                            /*!< Whether or not the configured Window is visiable */
             bool fullScreen { false };                        /*!< Whether or not the configured Window is full screen */
 
-            #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+            #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
             /*
             * The configured Window's OpenGL context info
             * \n NOTE : This member is ignored if this Info's graphicsApi member isn't set to OpenGL
@@ -193,7 +193,7 @@ namespace System {
         */
         virtual Resolution get_resolution() const = 0;
 
-        #if defined(DYNAMIC_STATIC_WINDOWS)
+        #ifdef DYNAMIC_STATIC_WINDOWS
         /*
         * Gets this Window's HWND.
         * @return This Window's HWND
@@ -202,7 +202,7 @@ namespace System {
         virtual HWND get_hwnd() const = 0;
         #endif
 
-        #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+        #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         /*
         * Makes this Window's OpenGL context current.
         * \n NOTE : This method is a noop if this Window's GraphicsApi isn't OpenGL

@@ -11,7 +11,8 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+
+#ifdef DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED
 
 #include "Dynamic_Static/System/Video/GLFW.hpp"
 #include "Dynamic_Static/System/Video/Window.hpp"
@@ -188,7 +189,7 @@ namespace System {
             return { width, height };
         }
 
-        #if defined(DYNAMIC_STATIC_WINDOWS)
+        #ifdef DYNAMIC_STATIC_WINDOWS
         /*
         * Gets this GLFWWindow's HWND.
         * @return This GLFWWindow's HWND
@@ -200,7 +201,7 @@ namespace System {
         }
         #endif
 
-        #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+        #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         /*
         * Makes this GLFWWindow's OpenGL context current.
         * \n NOTE : This method is a noop if this GLFWWindow's GraphicsApi isn't OpenGL
@@ -345,7 +346,7 @@ namespace System {
                         }
 
                         switch (windowInfo.graphicsApi) {
-                            #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+                            #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
                             case GraphicsApi::OpenGL:
                             {
                                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, windowInfo.glContextInfo.version.major);
@@ -354,7 +355,7 @@ namespace System {
                             } break;
                             #endif
 
-                            #if defined(DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED)
+                            #ifdef DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED
                             case GraphicsApi::Vulkan:
                             #endif
                             default:
@@ -381,11 +382,11 @@ namespace System {
                         throw std::runtime_error("Failed to create GLFW Window : " + errorMessage);
                     }
 
-                    #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+                    #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
                     if (windowInfo.graphicsApi == GraphicsApi::OpenGL) {
                         glfwMakeContextCurrent(glfwWindow);
                         glfwSwapInterval(windowInfo.glContextInfo.vSync ? 1 : 0);
-                        #if defined(DYNAMIC_STATIC_WINDOWS)
+                        #ifdef DYNAMIC_STATIC_WINDOWS
                         try {
                             gl::detail::initialize_glew();
                         } catch (const std::runtime_error& e) {
@@ -579,4 +580,4 @@ namespace System {
 } // namespace System
 } // namespace Dynamic_Static
 
-#endif // defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
+#endif // DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED

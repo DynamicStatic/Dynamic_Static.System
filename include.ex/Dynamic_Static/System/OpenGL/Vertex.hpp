@@ -11,7 +11,8 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 
@@ -112,4 +113,4 @@ namespace dstgl {
 
 } // namespace dstgl
 
-#endif // defined(DYNAMIC_STATIC_OPENGL_ENABLED)
+#endif // DYNAMIC_STATIC_OPENGL_ENABLED

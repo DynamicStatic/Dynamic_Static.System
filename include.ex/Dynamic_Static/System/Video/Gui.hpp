@@ -162,7 +162,7 @@ namespace System {
                 input.keyboard.down(Keyboard::Key::LeftWindow) ||
                 input.keyboard.down(Keyboard::Key::RightWindow);
             io.ClipboardUserData = &window;
-            #if defined(DYNAMIC_STATIC_WINDOWS)
+            #ifdef DYNAMIC_STATIC_WINDOWS
             io.ImeWindowHandle = window.get_hwnd();
             #endif
             ImGui::NewFrame();
@@ -271,7 +271,7 @@ namespace dstgl {
 } // namespace dstgl
 
 #define DYNAMIC_STATIC_SYSTEM_IMPLEMENTATION
-#if defined(DYNAMIC_STATIC_SYSTEM_IMPLEMENTATION)
+#ifdef DYNAMIC_STATIC_SYSTEM_IMPLEMENTATION
 #include "imgui.cpp"
 #include "imgui_demo.cpp"
 #include "imgui_draw.cpp"
