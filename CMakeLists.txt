@@ -8,11 +8,10 @@
 
 # CMake configuration for Dynamic_Static.System
 cmake_minimum_required(VERSION 3.3)
-option(SDK_BUILD "TODO : This shouldn't be the default" ON)
-if(SDK_BUILD)
-    include("$ENV{DYNAMIC_STATIC_SDK}/Dynamic_Static.CMake/.cmake")
+if(DEFINED ENV{DYNAMIC_STATIC_SDK})
+    include("$ENV{DYNAMIC_STATIC_SDK}/Dynamic_Static.Cmake/.cmake")
 else()
-    include("external/Dynamic_Static.CMake/.cmake")
+    include("external/Dynamic_Static.cmake/.cmake")
 endif()
 DstCreateProject(Dynamic_Static.System)
 
@@ -20,6 +19,7 @@ include("external/Dynamic_Static.Core.cmake")
 include("external/FMOD.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
+include("external/glm.cmake")
 include("external/imgui.cmake")
 
 if(MSVC)
@@ -47,61 +47,67 @@ DstCreateStaticLibrary(
     folder Dynamic_Static.System/
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
+        ${Dynamic_Static.Core.includeDirectories}
         ${FMOD.includeDirectories}
         ${glew.includeDirectories}
+        ${glm.includeDirectories}
         ${imgui.includeDirectories}
 
     staticLibraries
-        Dynamic_Static.Core
         ${FMOD.staticLibraries}
         glfw
         ${glew.staticLibraries}
         ${systemLibraries}
 
     includeFiles
-        ${includePath}/Audio/Defines.hpp
-        ${includePath}/Input/Keyboard.hpp
-        ${includePath}/Input/Mouse.hpp
-        ${includePath}/OpenGL/Buffer.hpp
-        ${includePath}/OpenGL/Defines.hpp
-        ${includePath}/OpenGL/IndexBuffer.hpp
-        ${includePath}/OpenGL/Mesh.hpp
-        ${includePath}/OpenGL/Object.hpp
-        ${includePath}/OpenGL/Program.hpp
-        ${includePath}/OpenGL/Shader.hpp
-        ${includePath}/OpenGL/State.hpp
-        ${includePath}/OpenGL/Texture.hpp
-        ${includePath}/OpenGL/Vertex.hpp
-        ${includePath}/OpenGL/VertexArray.hpp
-        ${includePath}/OpenGL/VertexBuffer.hpp
-        ${includePath}/Video/GLFW.hpp
-        ${includePath}/Video/GLFWWindow.hpp
-        ${includePath}/Video/Gui.hpp
-        ${includePath}/Video/Resolution.hpp
-        ${includePath}/Video/Window.hpp
-        ${includePath}/Video/Window.hpp
-        ${includePath}/Audio.hpp
-        ${includePath}/Defines.hpp
-        ${includePath}/Input.hpp
-        ${includePath}/OpenGL.hpp
-        ${includePath}/Video.hpp
+        "${includePath}/Audio/Defines.hpp"
+        "${includePath}/Input/Keyboard.hpp"
+        "${includePath}/Input/Mouse.hpp"
+        "${includePath}/OpenGL/Buffer.hpp"
+        "${includePath}/OpenGL/Defines.hpp"
+        "${includePath}/OpenGL/IndexBuffer.hpp"
+        "${includePath}/OpenGL/Mesh.hpp"
+        "${includePath}/OpenGL/Object.hpp"
+        "${includePath}/OpenGL/Program.hpp"
+        "${includePath}/OpenGL/Shader.hpp"
+        "${includePath}/OpenGL/State.hpp"
+        "${includePath}/OpenGL/Texture.hpp"
+        "${includePath}/OpenGL/Vertex.hpp"
+        "${includePath}/OpenGL/VertexArray.hpp"
+        "${includePath}/OpenGL/VertexBuffer.hpp"
+        "${includePath}/Video/GLFW.hpp"
+        "${includePath}/Video/GLFWWindow.hpp"
+        "${includePath}/Video/Gui.hpp"
+        "${includePath}/Video/Resolution.hpp"
+        "${includePath}/Video/Window.hpp"
+        "${includePath}/Video/Window.hpp"
+        "${includePath}/Audio.hpp"
+        "${includePath}/Defines.hpp"
+        "${includePath}/Input.hpp"
+        "${includePath}/OpenGL.hpp"
+        "${includePath}/Video.hpp"
         "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp"
 
     sourceFiles
-        ${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp
+        "${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp"
 )
-
-option(BUILD_TESTS "Build Dynamic_Static.System.Tests" OFF)
-if(BUILD_TESTS)
-    set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests.ex/")
-    DstCreateTests(
-        target Dynamic_Static.System
-        folder Dynamic_Static.System/
-        sourceFiles
-    )
-endif()
 
 option(BUILD_EXAMPLES "" ON)
 if(BUILD_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
 endif()
+
+# DstCreateExecutable(
+#     target Dynamic_Static.Core.Generator
+#     folder Dynamic_Static.Core/
+#     includeDirectories
+#         "${CMAKE_CURRENT_LIST_DIR}/include/"
+# 
+#     sourceFiles
+#         "${CMAKE_CURRENT_LIST_DIR}/Generator.Main.cpp"
+# )
+# target_compile_definitions(
+#     Dynamic_Static.Core.Generator
+#     PRIVATE
+#         DYNAMIC_STATIC_CORE_INCLUDE_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}/include/"
+# )

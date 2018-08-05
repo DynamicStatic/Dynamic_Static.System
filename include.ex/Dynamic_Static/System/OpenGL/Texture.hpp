@@ -13,7 +13,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/Algorithm.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 

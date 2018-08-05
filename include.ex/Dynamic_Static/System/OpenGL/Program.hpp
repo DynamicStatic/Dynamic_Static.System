@@ -13,12 +13,9 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 #include "Dynamic_Static/System/OpenGL/Shader.hpp"
-
-#include "gsl/span"
 
 #include <utility>
 
@@ -44,7 +41,7 @@ namespace OpenGL {
         /*
         * Constructs an instance of Program.
         */
-        inline Program(gsl::span<Shader> shaders)
+        inline Program(dst::Span<Shader> shaders)
         {
             dst_gl(mHandle = glCreateProgram());
             for (const auto& shader : shaders) {
@@ -100,7 +97,7 @@ namespace OpenGL {
         * @param [in] uniformName The name of the uniform to get the location for
         * @return The location for the given uniform
         */
-        inline GLint get_uniform_location(dst::string_view uniformName) const
+        inline GLint get_uniform_location(dst::StringView uniformName) const
         {
             // TODO : Setup dst::StringView to ensure null termination.
             //        See https://stackoverflow.com/a/41288372/3453616

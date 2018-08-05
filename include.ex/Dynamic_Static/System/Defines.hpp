@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Dynamic_Static/Core/Defines.hpp"
+#include "Dynamic_Static.Core.hpp"
 
 #if !defined(DYNAMIC_STATIC_DISABLE_GLFW_SUPPORT)
     #define DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED

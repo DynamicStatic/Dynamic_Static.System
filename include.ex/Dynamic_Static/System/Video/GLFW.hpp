@@ -12,17 +12,17 @@
 
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
-    #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
-        #include "Dynamic_Static/System/OpenGL.hpp"
-    #endif
-    #include "GLFW/glfw3.h"
-    #if defined(DYNAMIC_STATIC_WINDOWS)
-        #define GLFW_EXPOSE_NATIVE_WIN32
-    #elif defined(DYNAMIC_STATIC_LINUX)
-        #define GLFW_EXPOSE_NATIVE_X11
-        #define GLFW_EXPOSE_NATIVE_GLX
-    #endif
-    #include "GLFW/glfw3native.h"
+#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+#include "Dynamic_Static/System/OpenGL.hpp"
+#endif
+#include "GLFW/glfw3.h"
+#if defined(DYNAMIC_STATIC_WINDOWS)
+#define GLFW_EXPOSE_NATIVE_WIN32
+#elif defined(DYNAMIC_STATIC_LINUX)
+#define GLFW_EXPOSE_NATIVE_X11
+#define GLFW_EXPOSE_NATIVE_GLX
+#endif
+#include "GLFW/glfw3native.h"
 #endif
 
 namespace Dynamic_Static {

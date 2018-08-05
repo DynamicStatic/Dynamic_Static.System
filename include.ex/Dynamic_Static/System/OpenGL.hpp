@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
-#if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #include "Dynamic_Static/System/OpenGL/Buffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/IndexBuffer.hpp"

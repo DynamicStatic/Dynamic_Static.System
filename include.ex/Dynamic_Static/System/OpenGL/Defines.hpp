@@ -13,11 +13,7 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/NonCopyable.hpp"
-#include "Dynamic_Static/Core/Version.hpp"
-
 #if defined(DYNAMIC_STATIC_WINDOWS)
-#include "Dynamic_Static/Core/Win32LeanAndMean.hpp"
 #include "GL/glew.h"
 #include "GL/wglew.h"
 #endif

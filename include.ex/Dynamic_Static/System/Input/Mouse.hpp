@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "Dynamic_Static/Core/Math.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 
 #include <bitset>

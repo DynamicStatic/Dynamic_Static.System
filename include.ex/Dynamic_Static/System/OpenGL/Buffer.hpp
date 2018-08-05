@@ -16,8 +16,6 @@
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 
-#include "gsl/span"
-
 #include <string>
 #include <utility>
 
@@ -207,7 +205,7 @@ namespace OpenGL {
         */
         template <typename T>
         inline void write(
-            gsl::span<T> data,
+            dst::Span<T> data,
             GLenum usage = GL_STATIC_DRAW
         )
         {

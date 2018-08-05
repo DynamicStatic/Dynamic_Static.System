@@ -13,8 +13,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED)
 
-#include "Dynamic_Static/Core/Events.hpp"
-#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/Video/GLFW.hpp"
 #include "Dynamic_Static/System/Video/Window.hpp"
 
@@ -96,7 +94,7 @@ namespace System {
         * Sets this GLFWwindow's name.
         * @param [in] name This GLFWwindow's name
         */
-        void set_name(dst::string_view name) override final
+        void set_name(dst::StringView name) override final
         {
             if (mName != name) {
                 mName = name;
@@ -150,7 +148,7 @@ namespace System {
         * Sets this GLFWwindow's clipboard.
         * @param [in] This GLFWwindow's clipboard
         */
-        void set_clipboard(dst::string_view clipboard) override final
+        void set_clipboard(dst::StringView clipboard) override final
         {
             // TODO : Setup dst::StringView to ensure null termination.
             //        See https://stackoverflow.com/a/41288372/3453616

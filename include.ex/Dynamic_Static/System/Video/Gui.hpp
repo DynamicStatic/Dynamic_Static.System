@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include "Dynamic_Static/Core/NonCopyable.hpp"
-#include "Dynamic_Static/Core/Time.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/OpenGL.hpp"
@@ -209,8 +207,8 @@ namespace System {
             for (int cmdList_i = 0; cmdList_i < drawData->CmdListsCount; ++cmdList_i) {
                 auto cmdList = drawData->CmdLists[cmdList_i];
                 mMesh.write<ImDrawVert, ImDrawIdx>(
-                    { cmdList->VtxBuffer.Data, cmdList->VtxBuffer.Size },
-                    { cmdList->IdxBuffer.Data, cmdList->IdxBuffer.Size }
+                    { cmdList->VtxBuffer.Data, static_cast<size_t>(cmdList->VtxBuffer.Size) },
+                    { cmdList->IdxBuffer.Data, static_cast<size_t>(cmdList->IdxBuffer.Size) }
                 );
                 const ImDrawIdx* indexPtr = 0;
                 for (int cmd_i = 0; cmd_i < cmdList->CmdBuffer.Size; ++cmd_i) {

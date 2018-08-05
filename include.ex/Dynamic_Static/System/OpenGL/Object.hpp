@@ -13,8 +13,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/NonCopyable.hpp"
-#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 
 #include <string>
@@ -98,7 +96,7 @@ namespace OpenGL {
         * Sets this Object's name.
         * @param [in] name This Object's name
         */
-        inline void set_name(dst::string_view name)
+        inline void set_name(dst::StringView name)
         {
             mName = name;
             mName += "(" + std::to_string(mHandle) + ")";

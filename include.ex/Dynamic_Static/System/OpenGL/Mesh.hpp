@@ -13,14 +13,11 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/IndexBuffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Vertex.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexArray.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexBuffer.hpp"
-
-#include "gsl/span"
 
 #include <string>
 
@@ -57,8 +54,8 @@ namespace OpenGL {
             typename IndexType
         >
         inline void write(
-            gsl::span<VertexType> vertices,
-            gsl::span<IndexType> indices,
+            dst::Span<VertexType> vertices,
+            dst::Span<IndexType> indices,
             GLenum usage = GL_STATIC_DRAW
         )
         {

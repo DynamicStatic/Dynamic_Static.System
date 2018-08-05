@@ -13,7 +13,6 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #if defined(DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED)
 
-#include "Dynamic_Static/Core/StringUtilities.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 
@@ -46,7 +45,7 @@ namespace OpenGL {
         */
         inline Shader(
             GLenum stage,
-            dst::string_view source
+            dst::StringView source
         )
             : Shader(stage, 0, source)
         {
@@ -61,7 +60,7 @@ namespace OpenGL {
         inline Shader(
             GLenum stage,
             int line,
-            dst::string_view source
+            dst::StringView source
         )
         {
             // TODO : Line offset is _sometimes_ incorrect...wtf?
