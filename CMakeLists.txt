@@ -95,18 +95,6 @@ DstCreateStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp"
 )
 
-option(BUILD_TESTS "Build Dynamic_Static.System.Tests" ON)
-if(BUILD_TESTS)
-    set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests/")
-    DstCreateTests(
-        target Dynamic_Static.System
-        folder Dynamic_Static.System/
-
-        sourceFiles
-            "${testsPath}/Input/Keyboard.Tests.cpp"
-    )
-endif()
-
 option(BUILD_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
 if(BUILD_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
