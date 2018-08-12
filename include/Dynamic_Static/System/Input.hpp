@@ -1,49 +1,43 @@
 
 /*
 ==========================================
-    Copyright (c) 2016 Dynamic_Static
-    Licensed under the MIT license
+  Copyright (c) 2011-2018 Dynamic_Static
+    Patrick Purcell
+      Licensed under the MIT license
     http://opensource.org/licenses/MIT
 ==========================================
 */
 
 #pragma once
 
-#include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input/Keyboard.hpp"
 #include "Dynamic_Static/System/Input/Mouse.hpp"
+#include "Dynamic_Static/System/Defines.hpp"
 
 namespace Dynamic_Static {
 namespace System {
 
-    /**
-     * Provides methods for input device queries.
-     */
+    /*
+    * Provides high level control over input device queries.
+    */
     struct Input final
     {
-        /**
-         * This Input's Keyboard.
-         */
-        Keyboard keyboard { };
+        Keyboard keyboard { };  /*!< This Input's Keyboard */
+        Mouse mouse { };        /*!< This Input's Mouse */
 
-        /**
-         * This Input's Mouse.
-         */
-        Mouse mouse { };
-
-        /**
-         * Updates this Input.
-         * \n NOTE : This method must be called periodically to keep this Input up to date.
-         */
+        /*
+        * Updates this Input.
+        * \n NOTE : This method must be called periodically to keep this Input up to date.
+        */
         inline void update()
         {
             keyboard.update();
             mouse.update();
         }
 
-        /**
-         * Resets this Input.
-         */
+        /*
+        * Resets this Input.
+        */
         inline void reset()
         {
             keyboard.reset();

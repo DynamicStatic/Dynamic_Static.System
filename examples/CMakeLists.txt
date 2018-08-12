@@ -1,16 +1,28 @@
 
-macro(add_example target)
-    dst_add_executable(
+#==========================================
+#    Copyright 2011-2018 Dynamic_Static
+#        Patrick Purcell
+#    Licensed under the MIT license
+#    http://opensource.org/licenses/MIT
+#==========================================
+
+macro(CreateExample target)
+    DstCreateExecutable(
         target ${target}
-        folder examples
-        buildDependencies Dynamic_Static.System
-        linkLibraries Dynamic_Static.System
-        sourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/${target}.cpp"
+        folder Dynamic_Static.System/examples/
+
+        sharedLibraries
+            ${FMOD.sharedLibraries}
+            ${glew.sharedLibraries}
+
+        staticLibraries
+            Dynamic_Static.System
+
+        sourceFiles
+            "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
     )
 endmacro()
 
-add_example(GLGears)
-
-if(BUILD_AUDIO_SUPPORT)
-    add_example(OggVorbis)
-endif()
+CreateExample(BasicAudio)
+CreateExample(BasicGui)
+CreateExample(GLGears)

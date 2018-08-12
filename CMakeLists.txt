@@ -14,6 +14,7 @@ if(DEFINED ENV{DYNAMIC_STATIC_SDK})
 else()
     include("external/Dynamic_Static.cmake/.cmake")
 endif()
+
 DstCreateProject(Dynamic_Static.System)
 
 include("external/Dynamic_Static.Core.cmake")
@@ -41,13 +42,14 @@ else()
     )
 endif()
 
-set(includePath "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static/System/")
-set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/Dynamic_Static/System/")
+set(includePath "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/")
+set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/")
 DstCreateStaticLibrary(
     target Dynamic_Static.System
     folder Dynamic_Static.System/
+
     includeDirectories
-        "${CMAKE_CURRENT_LIST_DIR}/include.ex/"
+        "${CMAKE_CURRENT_LIST_DIR}/include/"
         ${Dynamic_Static.Core.includeDirectories}
         ${FMOD.includeDirectories}
         ${glew.includeDirectories}
@@ -87,13 +89,25 @@ DstCreateStaticLibrary(
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
         "${includePath}/Video.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include.ex/Dynamic_Static.System.hpp"
+        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
 
     sourceFiles
         "${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp"
 )
 
-option(BUILD_EXAMPLES "" ON)
+option(BUILD_TESTS "Build Dynamic_Static.System.Tests" ON)
+if(BUILD_TESTS)
+    set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests/")
+    DstCreateTests(
+        target Dynamic_Static.System
+        folder Dynamic_Static.System/
+
+        sourceFiles
+            "${testsPath}/Input/Keyboard.Tests.cpp"
+    )
+endif()
+
+option(BUILD_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
 if(BUILD_EXAMPLES)
-    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
+    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
 endif()

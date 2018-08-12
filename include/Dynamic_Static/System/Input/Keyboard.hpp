@@ -1,8 +1,9 @@
 
 /*
 ==========================================
-    Copyright (c) 2017 Dynamic_Static
-    Licensed under the MIT license
+  Copyright (c) 2011-2018 Dynamic_Static
+    Patrick Purcell
+      Licensed under the MIT license
     http://opensource.org/licenses/MIT
 ==========================================
 */
@@ -13,23 +14,26 @@
 
 #include <bitset>
 
+#define DST_KEY_UP false
+#define DST_KEY_DOWN true
+
 namespace Dynamic_Static {
 namespace System {
 
-    /**
-     * Provides methods for Keyboard queries.
-     */
+    /*
+    * Provides high level control over Keyboard queries.
+    */
     struct Keyboard final
     {
-        /**
-         * Specifies Keyboard keys.
-         */
+        /*
+        * Specifies Keyboard keys.
+        */
         enum class Key
         {
             // NOTE : The following table shows the symbolic constant names, hexadecimal values,
-            //         and mouse or keyboard equivalents for the virtual-key codes used by Windows.
-            //         The codes are listed in numeric order.
-            // http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+            //        and mouse or keyboard equivalents for the virtual-key codes used by Windows.
+            //        The codes are listed in numeric order.
+            //        http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 
             // Left                 = 0x01,
             // Right                = 0x02,
@@ -233,40 +237,51 @@ namespace System {
             Any,
         };
 
-        /**
-         * Represents a Keyboard's state at a single moment.
-         */
+        /*
+        * Represents a Keyboard's state at a single moment.
+        */
         using State = std::bitset<static_cast<size_t>(Key::Count)>;
 
-        State previous { }; /*!< This Keyboard's previous state */
-        State current { };  /*!< This Keyboard's current state */
-        State staged { };   /*!< This Keyboard's staging state, this state will be applied when update() is called */
+        /*
+        * This Keyboard's previous state
+        */
+        State previous { };
 
-        /**
-         * Gets a value indicating whether or not a given Key is up.
-         * @param [in] key The Key to check
-         * @return Whether or not the given Key is up
-         */
+        /*
+        * This Keyboard's current state
+        */
+        State current { };
+
+        /*
+        * This Keyboard's staging state, this state will be applied when update() is called
+        */
+        State staged { };
+
+        /*
+        * Gets a value indicating whether or not a given Key is up.
+        * @param [in] key The Key to check
+        * @return Whether or not the given Key is up
+        */
         inline bool up(Key key) const
         {
             return current[static_cast<size_t>(key)] == DST_KEY_UP;
         }
 
-        /**
-         * Gets a value indicating whether or not a given Key is down.
-         * @param [in] key The Key to check
-         * @return Whether or not the given Key is down
-         */
+        /*
+        * Gets a value indicating whether or not a given Key is down.
+        * @param [in] key The Key to check
+        * @return Whether or not the given Key is down
+        */
         inline bool down(Key key) const
         {
             return current[static_cast<size_t>(key)] == DST_KEY_DOWN;
         }
 
-        /**
-         * Gets a value indicating whether or not a given Key has been held.
-         * @param [in] key The Key to check
-         * @return Whether or not the given Key has been held
-         */
+        /*
+        * Gets a value indicating whether or not a given Key has been held.
+        * @param [in] key The Key to check
+        * @return Whether or not the given Key has been held
+        */
         inline bool held(Key key) const
         {
             return
@@ -274,11 +289,11 @@ namespace System {
                 current [static_cast<size_t>(key)] == DST_KEY_DOWN;
         }
 
-        /**
-         * Gets a value indicating whether or not a given Key has been pressed.
-         * @param [in] key The Key to check
-         * @return Whether or not the given Key has been pressed
-         */
+        /*
+        * Gets a value indicating whether or not a given Key has been pressed.
+        * @param [in] key The Key to check
+        * @return Whether or not the given Key has been pressed
+        */
         inline bool pressed(Key key) const
         {
             return
@@ -286,11 +301,11 @@ namespace System {
                 current [static_cast<size_t>(key)] == DST_KEY_DOWN;
         }
 
-        /**
-         * Gets a value indicating whether or not a given Key has been released.
-         * @param [in] key The Key to check
-         * @return Whether or not the given Key has been released
-         */
+        /*
+        * Gets a value indicating whether or not a given Key has been released.
+        * @param [in] key The Key to check
+        * @return Whether or not the given Key has been released
+        */
         inline bool released(Key key) const
         {
             return
@@ -298,19 +313,19 @@ namespace System {
                 current [static_cast<size_t>(key)] == DST_KEY_UP;
         }
 
-        /**
-         * Updates this Keyboard with its staged state.
-         * \n NOTE : This method must be called periodically to keep this Keyboard up to date.
-         */
+        /*
+        * Updates this Keyboard with its staged state.
+        * \n NOTE : This method must be called periodically to keep this Keyboard up to date.
+        */
         inline void update()
         {
             previous = current;
             current = staged;
         }
 
-        /**
-         * Resets this Keyboard.
-         */
+        /*
+        * Resets this Keyboard.
+        */
         inline void reset()
         {
             previous.reset();
@@ -318,19 +333,6 @@ namespace System {
             staged.reset();
         }
     };
-
-} // namespace System
-} // namespace Dynamic_Static
-
-namespace Dynamic_Static {
-namespace System {
-
-    /**
-     * Converts a GLFW key to a Keyboard::Key.
-     * @param [in] glfwJKey The GLFW key to convert to a Keyboard::Key
-     * @return The converted Keyboard::Key
-     */
-    Keyboard::Key glfw_to_dst_key(int glfwKey);
 
 } // namespace System
 } // namespace Dynamic_Static

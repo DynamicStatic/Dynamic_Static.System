@@ -1,46 +1,53 @@
 
 /*
 ==========================================
-    Copyright (c) 2017 Dynamic_Static
-    Licensed under the MIT license
+  Copyright (c) 2011-2018 Dynamic_Static
+    Patrick Purcell
+      Licensed under the MIT license
     http://opensource.org/licenses/MIT
 ==========================================
 */
 
 #pragma once
 
-#include "Dynamic_Static/Core/Defines.hpp"
+#include "Dynamic_Static.Core.hpp"
 
-#ifndef DYNAMIC_STATIC_OPENGL_SUPPORT_DISABLED
-    #define DYNAMIC_STATIC_OPENGL_SUPPORTED (1)
+#ifndef DYNAMIC_STATIC_DISABLE_GLFW_SUPPORT
+#define DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED
 #endif
 
-#ifndef DYNAMIC_STATIC_VULKAN_SUPPORT_DISABLED
-    #define DYNAMIC_STATIC_VULKAN_SUPPORTED (1)
+#ifndef DYNAMIC_STATIC_OPENGL_DISABLED
+#define DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #endif
 
-#define DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR (0)
-#define DYNAMIC_STATIC_SYSTEM_VERSION_MINOR (0)
-#define DYNAMIC_STATIC_SYSTEM_VERSION_PATCH (1)
+#ifndef DYNAMIC_STATIC_VULKAN_DISABLED
+#define DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED
+#endif
 
-#define DST_KEY_UP (false)
-#define DST_KEY_DOWN (true)
-#define DST_BUTTON_UP (false)
-#define DST_BUTTON_DOWN (true)
+#define DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR 1
+#define DYNAMIC_STATIC_SYSTEM_VERSION_MINOR 0
+#define DYNAMIC_STATIC_SYSTEM_VERSION_PATCH 0
 
 namespace Dynamic_Static {
 namespace System {
 
-    enum class API
-    {
-        Unknown, /*!< TODO : Documentation. */
+    static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR }; /*!< Dynamic_Static.System major version */
+    static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; /*!< Dynamic_Static.System minor version */
+    static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH }; /*!< Dynamic_Static.System patch version */
 
-        #if DYNAMIC_STATIC_OPENGL_SUPPORTED
-        OpenGL, /*!< TODO : Documentation. */
+    /*
+    * Specifies system graphics apis.
+    */
+    enum class GraphicsApi
+    {
+        Unknown,
+
+        #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+        OpenGL,
         #endif
 
-        #if DYNAMIC_STATIC_VULKAN_SUPPORTED
-        Vulkan, /*!< TODO : Documentation. */
+        #ifdef DYNAMIC_STATIC_SYSTEM_VULKAN_ENABLED
+        Vulkan,
         #endif
     };
 

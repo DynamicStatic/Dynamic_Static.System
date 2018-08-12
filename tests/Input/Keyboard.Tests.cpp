@@ -1,6 +1,29 @@
 
 /*
 ==========================================
+  Copyright (c) 2017-2018 Dynamic_Static
+    Patrick Purcell
+      Licensed under the MIT license
+    http://opensource.org/licenses/MIT
+==========================================
+*/
+
+#include "Dynamic_Static/System/Input.hpp"
+#include "Dynamic_Static/Core/Random.hpp"
+
+#include "catch.hpp"
+
+namespace Dynamic_Static {
+namespace Tests {
+
+
+
+} // namespace Tests
+} // namespace Dynamic_Static
+
+#if 0
+/*
+==========================================
     Copyright (c) 2017 Dynamic_Static
     Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -315,3 +338,5 @@ namespace Tests {
 } // namespace Tests
 } // namespace System
 } // namespace Dynamic_Static
+
+#endif
