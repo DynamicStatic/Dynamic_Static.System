@@ -67,6 +67,7 @@ namespace OpenGL {
         )
             : mInfo { info }
         {
+            set_name("Texture");
             // TODO : More detailed support for every method in here, ie. 1D and 3D textures, mip maps, etc...
             mInfo.width = std::max(1, mInfo.width);
             mInfo.height = std::max(1, mInfo.height);
@@ -78,7 +79,6 @@ namespace OpenGL {
                 mInfo.depth = 1;
             }
             create_gl_resources(data);
-            set_name("Texture");
         }
 
         /*

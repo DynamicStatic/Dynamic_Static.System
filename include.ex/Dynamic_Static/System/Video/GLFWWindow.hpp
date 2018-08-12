@@ -70,7 +70,7 @@ namespace System {
         * @param [in] other The GLFWWindow to move from
         * @return This GLFWWindow
         */
-        GLFWWindow& operator=(GLFWWindow&& other)
+        inline GLFWWindow& operator=(GLFWWindow&& other)
         {
             if (this != &other) {
                 IWindow::operator=(std::move(other));
@@ -95,7 +95,7 @@ namespace System {
         * Sets this GLFWwindow's name.
         * @param [in] name This GLFWwindow's name
         */
-        void set_name(dst::StringView name) override final
+        inline void set_name(dst::StringView name) override final
         {
             if (mName != name) {
                 mName = name;
@@ -107,7 +107,7 @@ namespace System {
         * Gets this GLFWwindow's CursorMode.
         * @return This GLFWwindow's CursorMode
         */
-        CursorMode get_cursor_mode() const override final
+        inline CursorMode get_cursor_mode() const override final
         {
             auto cursorMode = CursorMode::Visible;
             switch (glfwGetInputMode(mGlfwWindow, GLFW_CURSOR)) {
@@ -123,7 +123,7 @@ namespace System {
         * Sets this GLFWwindow's CursorMode.
         * @param [in] cursorMode This GLFWwindow's CursorMode
         */
-        void set_cursor_mode(CursorMode cursorMode) override final
+        inline void set_cursor_mode(CursorMode cursorMode) override final
         {
             auto glfwCursorMode = GLFW_CURSOR_NORMAL;
             switch (cursorMode) {
@@ -139,7 +139,7 @@ namespace System {
         * Gets this GLFWwindow's clipboard.
         * @return This GLFWwindow's clipboard
         */
-        std::string get_clipboard() const override final
+        inline std::string get_clipboard() const override final
         {
             auto clipboard = glfwGetClipboardString(mGlfwWindow);
             return clipboard ? std::string(clipboard) : std::string();
@@ -149,7 +149,7 @@ namespace System {
         * Sets this GLFWwindow's clipboard.
         * @param [in] This GLFWwindow's clipboard
         */
-        void set_clipboard(dst::StringView clipboard) override final
+        inline void set_clipboard(dst::StringView clipboard) override final
         {
             // TODO : Setup dst::StringView to ensure null termination.
             //        See https://stackoverflow.com/a/41288372/3453616
@@ -160,7 +160,7 @@ namespace System {
         * Gets a value indicating whether or not this GLFWwindow is visible.
         * @return Whether or not this GLFWwindow is visible
         */
-        bool is_visible() const override final
+        inline bool is_visible() const override final
         {
             return glfwGetWindowAttrib(mGlfwWindow, GLFW_VISIBLE) == 1;
         }
@@ -169,7 +169,7 @@ namespace System {
         * Sets a value indicating whether or not this GLFWwindow is visible.
         * @param [in] isVisible Whether or not this GLFWwindow is visible
         */
-        void is_visible(bool isVisible) override final
+        inline void is_visible(bool isVisible) override final
         {
             if (isVisible) {
                 glfwShowWindow(mGlfwWindow);
@@ -195,7 +195,7 @@ namespace System {
         * @return This GLFWWindow's HWND
         * \n NOTE : This method is only available on Windows
         */
-        HWND get_hwnd() const override final
+        inline HWND get_hwnd() const override final
         {
             return glfwGetWin32Window(mGlfwWindow);
         }
@@ -207,7 +207,7 @@ namespace System {
         * \n NOTE : This method is a noop if this GLFWWindow's GraphicsApi isn't OpenGL
         * \n NOTE : This method is only available when Dynamic_Static.System is built with DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         */
-        virtual void make_context_current() override final
+        inline virtual void make_context_current() override final
         {
             if (mGraphicsApi == GraphicsApi::OpenGL) {
                 glfwMakeContextCurrent(mGlfwWindow);

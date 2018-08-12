@@ -33,7 +33,7 @@ namespace OpenGL {
         GLuint mHandle { 0 };
 
     private:
-        std::string mName { "GLObject(0)" };
+        std::string mName { "GLObject" };
 
     public:
         /*
@@ -100,7 +100,6 @@ namespace OpenGL {
         inline void set_name(dst::StringView name)
         {
             mName = name;
-            mName += "(" + std::to_string(mHandle) + ")";
         }
 
         /*

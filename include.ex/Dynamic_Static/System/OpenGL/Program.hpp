@@ -44,6 +44,7 @@ namespace OpenGL {
         */
         inline Program(dst::Span<Shader> shaders)
         {
+            set_name("Program");
             dst_gl(mHandle = glCreateProgram());
             for (const auto& shader : shaders) {
                 dst_gl(glAttachShader(mHandle, shader.get_handle()));
@@ -60,7 +61,6 @@ namespace OpenGL {
                 dst_gl(glDeleteProgram(mHandle));
                 mHandle = 0;
             }
-            set_name("Program");
         }
 
         /*

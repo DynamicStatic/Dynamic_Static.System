@@ -52,8 +52,8 @@ namespace OpenGL {
         inline Buffer(GLenum type)
             : mTarget { type }
         {
-            dst_gl(glGenBuffers(1, &mHandle));
             set_name("Buffer");
+            dst_gl(glGenBuffers(1, &mHandle));
         }
 
         /*

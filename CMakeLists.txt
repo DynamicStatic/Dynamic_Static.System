@@ -7,6 +7,7 @@
 # ==========================================
 
 # CMake configuration for Dynamic_Static.System
+
 cmake_minimum_required(VERSION 3.3)
 if(DEFINED ENV{DYNAMIC_STATIC_SDK})
     include("$ENV{DYNAMIC_STATIC_SDK}/Dynamic_Static.Cmake/.cmake")
@@ -96,18 +97,3 @@ option(BUILD_EXAMPLES "" ON)
 if(BUILD_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
 endif()
-
-# DstCreateExecutable(
-#     target Dynamic_Static.Core.Generator
-#     folder Dynamic_Static.Core/
-#     includeDirectories
-#         "${CMAKE_CURRENT_LIST_DIR}/include/"
-# 
-#     sourceFiles
-#         "${CMAKE_CURRENT_LIST_DIR}/Generator.Main.cpp"
-# )
-# target_compile_definitions(
-#     Dynamic_Static.Core.Generator
-#     PRIVATE
-#         DYNAMIC_STATIC_CORE_INCLUDE_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}/include/"
-# )

@@ -36,8 +36,8 @@ namespace OpenGL {
         */
         inline VertexArray()
         {
-            dst_gl(glGenVertexArrays(1, &mHandle));
             set_name("VertexArray");
+            dst_gl(glGenVertexArrays(1, &mHandle));
         }
 
         /*
