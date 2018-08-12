@@ -20,6 +20,11 @@ list(
         "${imgui.includeDirectories}/stb_textedit.h"
         "${imgui.includeDirectories}/stb_truetype.h"
 )
+set(imgui.sourceFiles
+    "${imgui.includeDirectories}/imgui.cpp"
+    "${imgui.includeDirectories}/imgui_demo.cpp"
+    "${imgui.includeDirectories}/imgui_draw.cpp"
+)
 if(imgui.clutter)
     file(REMOVE_RECURSE ${imgui.clutter})
 endif()

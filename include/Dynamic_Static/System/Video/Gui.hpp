@@ -259,7 +259,7 @@ namespace System {
 namespace dstgl {
 
     template <>
-    void enable_vertex_attributes<ImDrawVert>()
+    inline void enable_vertex_attributes<ImDrawVert>()
     {
         dst::gl::enable_vertex_attributes<ImDrawVert, 3>({{
             { GL_FLOAT, 2 },
@@ -269,10 +269,3 @@ namespace dstgl {
     }
 
 } // namespace dstgl
-
-#define DYNAMIC_STATIC_SYSTEM_IMPLEMENTATION
-#ifdef DYNAMIC_STATIC_SYSTEM_IMPLEMENTATION
-#include "imgui.cpp"
-#include "imgui_demo.cpp"
-#include "imgui_draw.cpp"
-#endif

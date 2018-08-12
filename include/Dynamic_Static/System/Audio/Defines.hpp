@@ -17,7 +17,7 @@
 namespace Dynamic_Static {
 namespace System {
 
-    FMOD::System* fmod_init()
+    inline FMOD::System* fmod_init()
     {
         FMOD::System* system = nullptr;
         auto fmResult = FMOD::System_Create(&system);
@@ -37,12 +37,12 @@ namespace System {
         return system;
     }
 
-    void fmod_update(FMOD::System* system)
+    inline void fmod_update(FMOD::System* system)
     {
         system->update();
     }
 
-    void fmod_shutdown(FMOD::System* system)
+    inline void fmod_shutdown(FMOD::System* system)
     {
         system->release();
     }

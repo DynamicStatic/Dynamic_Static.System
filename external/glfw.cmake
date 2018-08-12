@@ -14,5 +14,5 @@ add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/glfw/")
 set_target_properties(
     glfw
     PROPERTIES FOLDER
-        external/GLFW3/
+        Dynamic_Static.System/external/GLFW3/
 )

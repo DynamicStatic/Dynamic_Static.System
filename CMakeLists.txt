@@ -48,6 +48,12 @@ DstCreateStaticLibrary(
     target Dynamic_Static.System
     folder Dynamic_Static.System/
 
+    staticLibraries
+        glfw
+        ${FMOD.staticLibraries}
+        ${glew.staticLibraries}
+        ${systemLibraries}
+
     includeDirectories
         "${CMAKE_CURRENT_LIST_DIR}/include/"
         ${Dynamic_Static.Core.includeDirectories}
@@ -55,12 +61,6 @@ DstCreateStaticLibrary(
         ${glew.includeDirectories}
         ${glm.includeDirectories}
         ${imgui.includeDirectories}
-
-    staticLibraries
-        ${FMOD.staticLibraries}
-        glfw
-        ${glew.staticLibraries}
-        ${systemLibraries}
 
     includeFiles
         "${includePath}/Audio/Defines.hpp"
@@ -92,7 +92,7 @@ DstCreateStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
 
     sourceFiles
-        "${CMAKE_CURRENT_LIST_DIR}/ForceCMakeBuild.cpp"
+        "${imgui.sourceFiles}"
 )
 
 option(BUILD_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
