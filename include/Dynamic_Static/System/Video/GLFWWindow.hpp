@@ -41,6 +41,7 @@ namespace System {
         */
         inline GLFWWindow(const IWindow::Info& windowInfo)
         {
+            mName = windowInfo.name;
             mGraphicsApi = windowInfo.graphicsApi;
             mGlfwWindow = create_glfw_window(windowInfo);
             glfwSetWindowUserPointer(mGlfwWindow, this);

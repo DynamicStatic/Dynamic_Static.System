@@ -39,13 +39,13 @@ namespace OpenGL {
         /*
         * Constructs an instance of Object.
         */
-        Object() = default;
+        inline Object() = default;
 
         /*
         * Moves an instance of Object.
         * @param [in] other The Object to move from
         */
-        Object(Object&& other)
+        inline Object(Object&& other)
         {
             *this = std::move(other);
         }
@@ -55,7 +55,7 @@ namespace OpenGL {
         * @param [in] other The Object to move from
         * @return This Object
         */
-        Object& operator=(Object&& other)
+        inline Object& operator=(Object&& other)
         {
             if (this != &other) {
                 mHandle = std::move(other.mHandle);
@@ -66,10 +66,10 @@ namespace OpenGL {
         }
 
         /*
-        * Converts this Object to its handle
-        * @return This Object's handle
+        * Converts this Object to its OpenGL handle
+        * @return This Object's OpenGL handle
         */
-        operator GLuint() const
+        inline operator GLuint() const
         {
             return mHandle;
         }
@@ -78,7 +78,7 @@ namespace OpenGL {
         * Converts this Object to a value indicating whether or not its valid.
         * @return Whether or not this Object is valid
         */
-        operator bool() const
+        inline operator bool() const
         {
             return mHandle != 0;
         }
@@ -103,10 +103,10 @@ namespace OpenGL {
         }
 
         /*
-        * Gets this Object's handle.
-        * @return This Object's handle
+        * Gets this Object's OpenGL handle.
+        * @return This Object's OpenGL handle
         */
-        GLuint get_handle() const
+        inline GLuint get_handle() const
         {
             return mHandle;
         }
