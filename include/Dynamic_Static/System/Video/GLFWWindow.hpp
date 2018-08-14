@@ -161,7 +161,7 @@ namespace System {
         * Gets a value indicating whether or not this GLFWwindow is visible.
         * @return Whether or not this GLFWwindow is visible
         */
-        inline bool is_visible() const override final
+        inline bool visible() const override final
         {
             return glfwGetWindowAttrib(mGlfwWindow, GLFW_VISIBLE) == 1;
         }
@@ -170,7 +170,7 @@ namespace System {
         * Sets a value indicating whether or not this GLFWwindow is visible.
         * @param [in] isVisible Whether or not this GLFWwindow is visible
         */
-        inline void is_visible(bool isVisible) override final
+        inline void visible(bool isVisible) override final
         {
             if (isVisible) {
                 glfwShowWindow(mGlfwWindow);

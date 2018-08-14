@@ -179,13 +179,13 @@ namespace System {
         * Gets a value indicating whether or not this Window is visible.
         * @return Whether or not this Window is visible
         */
-        virtual bool is_visible() const = 0;
+        virtual bool visible() const = 0;
 
         /*
         * Sets a value indicating whether or not this Window is visible.
         * @param [in] isVisible Whether or not this Window is visible
         */
-        virtual void is_visible(bool isVisible) = 0;
+        virtual void visible(bool visible) = 0;
 
         /*
         * Gets this Window's Resolution.

@@ -98,7 +98,7 @@ namespace OpenGL {
         * Gets a value indicating whether or not this Buffer is empty.
         * @return Whether or not this Buffer is empty
         */
-        inline bool is_empty() const
+        inline bool empty() const
         {
             return mElementCount == 0;
         }
