@@ -12,7 +12,7 @@ Dynamic_Static.System provides easy to use C++ RAII objects for interacting with
 
 If you're on Windows
   - Download and install [CMake](https://cmake.org/)
-  - Download and install [Git and Git Bash)](https://git-scm.com/)
+  - Download and install [Git and Git Bash](https://git-scm.com/)
   - Download and install [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)  
   Note that on Windows these instructions assume `Git Bash` (installed with `Git`) is used for command line steps
 
