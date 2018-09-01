@@ -42,10 +42,6 @@ If you're on Windows
   - From the main menu, select **"Build"**>**"Batch Build..."**
   - Click **"Select All"** then click **"Build"**  
 
-If you're on Ubuntu
-  - `cmake ..`
-  - `make`
-
 ----------------------------------------------------------------
 ### Run
 If you're on Windows
