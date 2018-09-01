@@ -27,9 +27,8 @@ FMOD isn't open source, but it's free for non-commercial use
 More info regarding FMOD's license can be found at https://www.fmod.com/licensing
 
 ----------------------------------------------------------------
-### Build
-If you're on Windows, the following commands should be run from `Git Bash` (installed with `Git`).  
-From your `Dynamic_Static` directory...  
+### Build 
+From your `Dynamic_Static` directory
 - `cd Dynamic_Static.System/`
 - `git submodule update --init --recursive`
 - `mkdir build`
