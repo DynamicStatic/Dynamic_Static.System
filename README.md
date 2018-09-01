@@ -1,5 +1,11 @@
-# Dynamic_Static.System
-TODO : More README...
 
-Create a directory wherever is convenient.  
-If you plan on using other `Dynamic_Static` libraries or setting up the `Dynamic_Static.SDK` this directory should be called `Dynamic_Static`.
+# Dynamic_Static.System
+
+Required tools
+  * [CMake](https://cmake.org/)
+  * [Git](https://git-scm.com/)
+  Windows
+    * [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)
+
+Create a directory called `Dynamic_Static` wherever is convenient.  
+
