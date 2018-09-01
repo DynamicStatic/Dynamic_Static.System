@@ -23,7 +23,6 @@
 #define GLFW_EXPOSE_NATIVE_GLX
 #endif
 #include "GLFW/glfw3native.h"
-#endif
 
 namespace Dynamic_Static {
 namespace System {
@@ -55,3 +54,5 @@ namespace detail {
 } // namespace detail
 } // namespace System
 } // namespace Dynamic_Static
+
+#endif // DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED

@@ -113,4 +113,4 @@ namespace dstgl {
 
 } // namespace dstgl
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

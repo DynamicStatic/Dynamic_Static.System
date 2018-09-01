@@ -18,7 +18,6 @@ endif()
 DstCreateProject(Dynamic_Static.System)
 
 include("external/Dynamic_Static.Core.cmake")
-include("external/FMOD.cmake")
 include("external/glew.cmake")
 include("external/glfw.cmake")
 include("external/glm.cmake")
@@ -42,26 +41,41 @@ else()
     )
 endif()
 
+list(APPEND external.staticLibraries
+    glfw
+    "${glew.staticLibraries}"
+    "${systemLibraries}"
+)
+list(APPEND external.includeDirectories
+    "${Dynamic_Static.Core.includeDirectories}"
+    "${glew.includeDirectories}"
+    "${glm.includeDirectories}"
+    "${imgui.includeDirectories}"
+)
+option(BUILD_DST_SYS_AUDIO "Build Dynamic_Static.System.Audio" ON)
+if(BUILD_DST_SYS_AUDIO)
+    include("external/FMOD.cmake")
+    if(${FMOD.available})
+        list(APPEND external.staticLibraries "${FMOD.staticLibraries}")
+        list(APPEND external.includeDirectories "${FMOD.includeDirectories}")
+    else()
+        set(BUILD_DST_SYS_AUDIO OFF)
+    endif()
+endif()
+
 set(includePath "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/")
 DstCreateStaticLibrary(
     target Dynamic_Static.System
     folder Dynamic_Static.System/
-
+    
     staticLibraries
-        glfw
-        ${FMOD.staticLibraries}
-        ${glew.staticLibraries}
-        ${systemLibraries}
-
+        "${external.staticLibraries}"
+        
     includeDirectories
+        "${external.includeDirectories}"
         "${CMAKE_CURRENT_LIST_DIR}/include/"
-        ${Dynamic_Static.Core.includeDirectories}
-        ${FMOD.includeDirectories}
-        ${glew.includeDirectories}
-        ${glm.includeDirectories}
-        ${imgui.includeDirectories}
-
+        
     includeFiles
         "${includePath}/Audio/Defines.hpp"
         "${includePath}/Input/Keyboard.hpp"
@@ -95,7 +109,15 @@ DstCreateStaticLibrary(
         "${imgui.sourceFiles}"
 )
 
-option(BUILD_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
-if(BUILD_EXAMPLES)
+# TODO : Add compile definitions to DstCreateStaticLibrary()
+if(BUILD_DST_SYS_AUDIO)
+    target_compile_definitions(
+        Dynamic_Static.System
+        PUBLIC DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED
+    )
+endif()
+
+option(BUILD_DST_SYS_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
+if(BUILD_DST_SYS_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
 endif()

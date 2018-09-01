@@ -7,22 +7,21 @@
 # ==========================================
 
 macro(CreateExample target)
+    list(APPEND external.sharedLibraries "${glew.sharedLibraries}")
+    if(BUILD_DST_SYS_AUDIO)
+        list(APPEND external.sharedLibraries "${FMOD.sharedLibraries}")
+    endif()
     DstCreateExecutable(
         target ${target}
         folder Dynamic_Static.System/examples/
-
-        sharedLibraries
-            ${FMOD.sharedLibraries}
-            ${glew.sharedLibraries}
-
-        staticLibraries
-            Dynamic_Static.System
-
-        sourceFiles
-            "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
+        sharedLibraries "${external.sharedLibraries}"
+        staticLibraries Dynamic_Static.System
+        sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
     )
 endmacro()
 
-CreateExample(BasicAudio)
+if(BUILD_DST_SYS_AUDIO)
+    CreateExample(BasicAudio)
+endif()
 CreateExample(BasicGui)
 CreateExample(GLGears)

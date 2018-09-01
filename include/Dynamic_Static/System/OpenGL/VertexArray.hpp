@@ -94,4 +94,4 @@ namespace OpenGL {
 } // namespace System
 } // namespace Dynamic_Static
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

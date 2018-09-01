@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2011-2018 Dynamic_Static
+  Copyright (c) 2018-2018 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -11,6 +11,8 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
+
+#ifdef DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED
 
 #include "fmod.hpp"
 
@@ -49,3 +51,5 @@ namespace System {
 
 } // namespace System
 } // namespace Dynamic_Static
+
+#endif // DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED
