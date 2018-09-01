@@ -5,6 +5,7 @@ Dynamic_Static.System provides easy to use C++ RAII objects for interacting with
 [FMOD](https://www.fmod.com/) is used for audio support.  
 [OpenGL](https://www.opengl.org/) is used for graphics support.  
 [ImGui](https://github.com/ocornut/imgui) is used for GUI elements.  
+[glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.
 
 ----------------------------------------------------------------
 ### Get Tools
@@ -27,5 +28,10 @@ More info regarding FMOD's license can be found at https://www.fmod.com/licensin
 
 ----------------------------------------------------------------
 ### Build
-- From your `Dynamic_Static` directory...
+If you're on Windows, the following commands should be run from `Git Bash` (installed with `Git`).  
+From your `Dynamic_Static` directory...  
 - `cd Dynamic_Static.System/`
+- `git submodule update --init --recursive`
+- `mkdir build`
+- `cd build/`
+-
