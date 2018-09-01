@@ -1,16 +1,18 @@
 
 # Dynamic_Static.System
 ----------------------------------------------------------------
-### Get tools
+### Get Tools
+* [Git](https://git-scm.com/) (Note that on Windows these instructions assume `Git Bash` is used for the command line)
 * [CMake](https://cmake.org/)
-* [Git](https://git-scm.com/)
 * [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)
   
 ----------------------------------------------------------------
-### Set up your environment
+### Setup Environment
+* Create a directory called `Dynamic_Static` wherever is convenient.
+* 
 
 ----------------------------------------------------------------
-### Building
+### Build
 
 Create a directory called `Dynamic_Static` wherever is convenient.  
 
