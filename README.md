@@ -8,14 +8,16 @@ Dynamic_Static.System provides easy to use C++ RAII objects for interacting with
 [glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.
 
 ----------------------------------------------------------------
-### Get Tools
-- [Git](https://git-scm.com/)
-- [CMake](https://cmake.org/)
-- [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)  
-Note that on Windows these instructions assume `Git Bash` (installed with `Git`) is used for command line steps
+### Tools
+
+If you're on Windows
+  - Download and install [CMake](https://cmake.org/)
+  - Download and install [Git and Git Bash)](https://git-scm.com/)
+  - Download and install [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)  
+  Note that on Windows these instructions assume `Git Bash` (installed with `Git`) is used for command line steps
 
 ----------------------------------------------------------------
-### Setup Environment
+### Environment
 - Create a directory called `Dynamic_Static` wherever is convenient.
 - `cd Dynamic_Static/`
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
@@ -27,7 +29,7 @@ FMOD isn't open source, but it's free for non-commercial use
 More info regarding FMOD's license can be found at https://www.fmod.com/licensing
 
 ----------------------------------------------------------------
-### Build 
+### Build
 From your `Dynamic_Static` directory
 - `cd Dynamic_Static.System/`
 - `git submodule update --init --recursive`
@@ -44,3 +46,6 @@ If you're on Windows
 If you're on Ubuntu
   - `cmake ..`
   - `make`
+
+----------------------------------------------------------------
+### Run
