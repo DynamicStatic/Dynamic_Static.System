@@ -1,11 +1,14 @@
 
 # Dynamic_Static.System
 ----------------------------------------------------------------
-### Required tools
-  * [CMake](https://cmake.org/)
-  * [Git](https://git-scm.com/)  
-  * [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)
+### Get tools
+* [CMake](https://cmake.org/)
+* [Git](https://git-scm.com/)
+* [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)
   
+----------------------------------------------------------------
+### Set up your environment
+
 ----------------------------------------------------------------
 ### Building
 
