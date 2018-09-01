@@ -12,7 +12,7 @@ if(MSVC)
         "[HKEY_CURRENT_USER\\Software\\FMOD Studio API Windows]"
         ABSOLUTE CACHE
     )
-    set(FMOD.apiDirectory "${FMOD.apiDirectory}/api-ex/")
+    set(FMOD.apiDirectory "${FMOD.apiDirectory}/api/")
     string(REPLACE "\\" "/" FMOD.apiDirectory "${FMOD.apiDirectory}")
 endif()
 if(EXISTS ${FMOD.apiDirectory})
