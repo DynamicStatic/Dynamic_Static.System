@@ -14,9 +14,10 @@ Note that on Windows these instructions assume `Git Bash` (installed with `Git`)
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
 If you're building `Dynamic_Static.Audio`  
-- Install [FMOD](https://www.fmod.com/) (They'll ask you to create an account if you haven't)  
-- FMOD isn't open source, but it's free for non-commercial use.  
-- More info regarding FMOD's license can be found at https://www.fmod.com/licensing
+- Install [FMOD](https://www.fmod.com/)
+They'll ask you to create an account if you haven't  
+FMOD isn't open source, but it's free for non-commercial use.  
+More info regarding FMOD's license can be found at https://www.fmod.com/licensing
 
 ----------------------------------------------------------------
 ### Build
