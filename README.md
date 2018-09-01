@@ -38,8 +38,8 @@ If you're on Windows
   - `cmake -G "Visual Studio 15 2017 Win64" ..`
   - Using Windows Explorer, naviagte to `/Dynamic_Static.System/build/`
   - Open `Dynamic_Static.System.sln` with `Visual Studio 2017`
-  - From the main menu, select **Build** **>** **Batch Build...**
-  - Click **Select All** then click **Build**  
+  - From the main menu, select **"Build"**>**"Batch Build..."**
+  - Click **"Select All"** then click **"Build"**  
 
 If you're on Ubuntu
   - `cmake ..`
