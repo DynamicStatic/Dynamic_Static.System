@@ -30,7 +30,7 @@ More info regarding FMOD's license can be found at https://www.fmod.com/licensin
 
 ----------------------------------------------------------------
 ### Build
-From your `Dynamic_Static` directory, run the following commands...
+From your `Dynamic_Static/` directory, run the following commands...
 - `cd Dynamic_Static.System/`
 - `git submodule update --init --recursive`
 - `mkdir build`
