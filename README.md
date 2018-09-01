@@ -22,7 +22,6 @@ If you're on Windows
 - `cd Dynamic_Static/`
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
-If you want audio support
 - Install [FMOD](https://www.fmod.com/)  
 You'll be asked to create an account if you haven't already.  
 FMOD isn't open source, but it's free for non-commercial use.  
