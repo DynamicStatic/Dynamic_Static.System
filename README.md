@@ -22,6 +22,7 @@ If you're on Windows
 - `cd Dynamic_Static/`
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
+If you want to build `Dynamic_Static.System` with audio support enabled
 - Install [FMOD](https://www.fmod.com/)  
 You'll be asked to create an account if you haven't already.  
 From the download page https://www.fmod.com/download select the **FMOD Studio API [1.10.08]** download.  
