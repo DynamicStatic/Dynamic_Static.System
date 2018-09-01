@@ -23,7 +23,9 @@ If you're on Windows
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
 - Install [FMOD](https://www.fmod.com/)  
-- You'll be asked to create an account if you haven't already.
+You'll be asked to create an account if you haven't already.  
+From the download page https://www.fmod.com/download select the **FMOD Studio API [1.10.08]** download.  
+The **FMOD Studio Tool [1.10.08]** isn't needed to build `Dynamic_Satic.System`, but is useful for creating FMOD sounds.
 FMOD isn't open source, but it's free for non-commercial use.  
 More info regarding FMOD's license can be found at https://www.fmod.com/licensing.
 
