@@ -14,12 +14,12 @@ Note that on Windows these instructions assume `Git Bash` (installed with `Git`)
 * `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
 If you're building `Dynamic_Static.Audio`  
-  Install [FMOD](https://www.fmod.com/)  
-  FMOD isn't open source, but it's free for non-commercial use.  
-  More info regarding FMOD's license can be found at https://www.fmod.com/licensing
+  - Register and install [FMOD](https://www.fmod.com/)  
+  - FMOD isn't open source, but it's free for non-commercial use.  
+  - More info regarding FMOD's license can be found at https://www.fmod.com/licensing
 
 If you're building the `Dynamic_Static.SDK`  
-  Create an environment variable called `DYNAMIC_STATIC_SDK` and point it to your `Dynamic_Static` directory.
+  - Create an environment variable called `DYNAMIC_STATIC_SDK` and point it to your `Dynamic_Static` directory.
 
 ----------------------------------------------------------------
 ### Build
