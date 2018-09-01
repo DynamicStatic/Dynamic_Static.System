@@ -14,23 +14,23 @@ If you're on Windows
   - Download and install [CMake](https://cmake.org/)
   - Download and install [Git and Git Bash](https://git-scm.com/)
   - Download and install [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)  
-  Note that on Windows these instructions assume `Git Bash` (installed with `Git`) is used for command line steps
+  Note that on Windows these instructions assume `Git Bash` (installed with `Git`) is used for command line steps.
 
 ----------------------------------------------------------------
 ### Environment
-- Create a directory called `Dynamic_Static` wherever is convenient.
+- Create a directory called `Dynamic_Static` wherever is convenient
 - `cd Dynamic_Static/`
 - `git clone https://github.com/DynamicStatic/Dynamic_Static.System.git`  
 
 If you want audio support
 - Install [FMOD](https://www.fmod.com/)  
-They'll ask you to create an account if you haven't  
-FMOD isn't open source, but it's free for non-commercial use  
-More info regarding FMOD's license can be found at https://www.fmod.com/licensing
+You'll be asked to create an account if you haven't already.  
+FMOD isn't open source, but it's free for non-commercial use.  
+More info regarding FMOD's license can be found at https://www.fmod.com/licensing.
 
 ----------------------------------------------------------------
 ### Build
-From your `Dynamic_Static` directory
+From your `Dynamic_Static` directory, run the following commands...
 - `cd Dynamic_Static.System/`
 - `git submodule update --init --recursive`
 - `mkdir build`
