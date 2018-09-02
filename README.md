@@ -27,7 +27,7 @@ If you want to build `Dynamic_Static.System` with audio support enabled
 You'll be asked to create an account if you haven't already.  
 From the download page https://www.fmod.com/download select the **FMOD Studio API [1.10.08]** download.  
 The **FMOD Studio Tool [1.10.08]** isn't needed to build `Dynamic_Satic.System`, but it's useful for creating FMOD sounds.
-FMOD isn't open source, but it's free for non-commercial use and has teired licensing for commerical use.
+FMOD isn't open source, but it's free for non-commercial use and has teired licensing for commerical use.  
 More info regarding FMOD licensing can be found at https://www.fmod.com/licensing.
 
 ----------------------------------------------------------------
