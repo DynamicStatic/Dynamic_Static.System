@@ -51,4 +51,4 @@ If you're on Windows
   - From the `Visual Studio` **Solution Explorer**
   - Open the `Dynamic_Static.System/examples/` filter
   - Right click on the project you want to run and select **"Set as StartUp Project"**
-  - Click the green play button in the main menu
+  - Click the play button in the main menu
