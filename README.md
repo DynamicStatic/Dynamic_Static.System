@@ -1,11 +1,11 @@
 
 # Dynamic_Static.System
 Dynamic_Static.System provides easy to use C++ RAII objects for interacting with various input and ouptut systems.  
-[GLFW](https://www.glfw.org/) is used for window management and input handling.  
 [FMOD](https://www.fmod.com/) is used for audio support.  
+[GLFW](https://www.glfw.org/) is used for window management and input handling.  
+[glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.  
 [OpenGL](https://www.opengl.org/) is used for graphics support.  
 [ImGui](https://github.com/ocornut/imgui) is used for GUI elements.  
-[glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.
 
 ----------------------------------------------------------------
 ### Tools
