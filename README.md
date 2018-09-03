@@ -1,11 +1,11 @@
 
 # Dynamic_Static.System
 Dynamic_Static.System provides easy to use C++ RAII objects for interacting with various input and ouptut systems.  
-[GLFW](https://www.glfw.org/) is used for window management and input handling.  
 [FMOD](https://www.fmod.com/) is used for audio support.  
+[GLFW](https://www.glfw.org/) is used for window management and input handling.  
+[glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.  
 [OpenGL](https://www.opengl.org/) is used for graphics support.  
 [ImGui](https://github.com/ocornut/imgui) is used for GUI elements.  
-[glm](https://glm.g-truc.net/0.9.9/index.html) is used for math.
 
 ----------------------------------------------------------------
 ### Tools
@@ -26,9 +26,9 @@ If you want to build `Dynamic_Static.System` with audio support enabled
 - Install [FMOD](https://www.fmod.com/)  
 You'll be asked to create an account if you haven't already.  
 From the download page https://www.fmod.com/download select the **FMOD Studio API [1.10.08]** download.  
-The **FMOD Studio Tool [1.10.08]** isn't needed to build `Dynamic_Satic.System`, but is useful for creating FMOD sounds.
-FMOD isn't open source, but it's free for non-commercial use and evaluation.  
-More info regarding FMOD's license can be found at https://www.fmod.com/licensing.
+The **FMOD Studio Tool [1.10.08]** isn't needed to build `Dynamic_Satic.System`, but it's useful for creating FMOD sounds.
+FMOD isn't open source, but it's free for non-commercial use and has teired licensing for commerical use.  
+More info regarding FMOD's licensing can be found at https://www.fmod.com/licensing.
 
 ----------------------------------------------------------------
 ### Build
@@ -51,4 +51,4 @@ If you're on Windows
   - From the `Visual Studio` **Solution Explorer**
   - Open the `Dynamic_Static.System/examples/` filter
   - Right click on the project you want to run and select **"Set as StartUp Project"**
-  - Click the green play button in the main menu
+  - Click the play button in the main menu
