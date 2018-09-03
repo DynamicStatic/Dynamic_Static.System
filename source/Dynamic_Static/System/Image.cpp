@@ -50,7 +50,7 @@ namespace System {
         auto image = stbi_load(filePath.data(), &mWidth, &mHeight, &components, STBI_rgb_alpha);
         if (image) {
             mDepth = 1;
-            mData.resize(mWidth * mHeight * components);
+            mData.resize(mWidth * mHeight * 4);
             memcpy(mData.data(), image, mData.size());
             stbi_image_free(image);
         } else {
