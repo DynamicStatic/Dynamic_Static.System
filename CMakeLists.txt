@@ -22,6 +22,7 @@ include("external/glew.cmake")
 include("external/glfw.cmake")
 include("external/glm.cmake")
 include("external/imgui.cmake")
+include("external/stb.cmake")
 
 if(MSVC)
     set(systemLibraries
@@ -51,6 +52,7 @@ list(APPEND external.includeDirectories
     "${glew.includeDirectories}"
     "${glm.includeDirectories}"
     "${imgui.includeDirectories}"
+    "${stb.includeDirectories}"
 )
 option(BUILD_DST_SYS_AUDIO "Build Dynamic_Static.System.Audio" ON)
 if(BUILD_DST_SYS_AUDIO)
@@ -100,10 +102,14 @@ DstCreateStaticLibrary(
         "${includePath}/Video/Window.hpp"
         "${includePath}/Audio.hpp"
         "${includePath}/Defines.hpp"
+        "${includePath}/Image.hpp"
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
         "${includePath}/Video.hpp"
         "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
+
+    sourceFiles
+        "${sourcePath}/Image.cpp"
 
     sourceFiles
         "${imgui.sourceFiles}"

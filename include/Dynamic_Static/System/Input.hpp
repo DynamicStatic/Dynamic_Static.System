@@ -17,17 +17,17 @@
 namespace Dynamic_Static {
 namespace System {
 
-    /*
-    * Provides high level control over input device queries.
+    /*!
+    Provides high level control over input device queries.
     */
     struct Input final
     {
         Keyboard keyboard { };  /*!< This Input's Keyboard */
         Mouse mouse { };        /*!< This Input's Mouse */
 
-        /*
-        * Updates this Input.
-        * \n NOTE : This method must be called periodically to keep this Input up to date.
+        /*!
+        Updates this Input.
+        \n NOTE : This method must be called periodically to keep this Input up to date.
         */
         inline void update()
         {
@@ -35,8 +35,8 @@ namespace System {
             mouse.update();
         }
 
-        /*
-        * Resets this Input.
+        /*!
+        Resets this Input.
         */
         inline void reset()
         {
