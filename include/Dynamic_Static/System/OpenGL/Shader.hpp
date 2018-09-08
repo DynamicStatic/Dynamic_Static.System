@@ -24,25 +24,25 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL shader.
+    /*!
+    Provides high level control over an OpenGL shader.
     */
     class Shader final
         : public Object
     {
     public:
-        /*
-        * Constructs an instance of Shader.
+        /*!
+        Constructs an instance of Shader.
         */
         inline Shader()
         {
             set_name("Shader");
         }
 
-        /*
-        * Constructs an instance of Shader.
-        * @param [in] stage This Shader's stage
-        * @param [in] source This Shader's source
+        /*!
+        Constructs an instance of Shader.
+        @param [in] stage This Shader's stage
+        @param [in] source This Shader's source
         */
         inline Shader(
             GLenum stage,
@@ -52,11 +52,11 @@ namespace OpenGL {
         {
         }
 
-        /*
-        * Constructs an instance of Shader.
-        * @param [in] stage This Shader's stage
-        * @param [in] line The starting line to use for error reporting
-        * @param [in] source This Shader's source
+        /*!
+        Constructs an instance of Shader.
+        @param [in] stage This Shader's stage
+        @param [in] line The starting line to use for error reporting
+        @param [in] source This Shader's source
         */
         inline Shader(
             GLenum stage,
@@ -84,17 +84,17 @@ namespace OpenGL {
             if (compileStatus != GL_TRUE) {
                 std::string stageStr;
                 switch (stage) {
-                    case GL_VERTEX_SHADER: stageStr = "vertex"; break;
-                    case GL_TESS_CONTROL_SHADER: stageStr = "tesselation control"; break;
-                    case GL_TESS_EVALUATION_SHADER: stageStr = "tesselation evaluation"; break;
-                    case GL_GEOMETRY_SHADER: stageStr = "geometry"; break;
-                    case GL_FRAGMENT_SHADER: stageStr = "fragment"; break;
-                    case GL_COMPUTE_SHADER: stageStr = "compute"; break;
+                    case GL_VERTEX_SHADER:          stageStr = "GL_VERTEX_SHADER"; break;
+                    case GL_TESS_CONTROL_SHADER:    stageStr = "GL_TESS_CONTROL_SHADER"; break;
+                    case GL_TESS_EVALUATION_SHADER: stageStr = "GL_TESS_EVALUATION_SHADER"; break;
+                    case GL_GEOMETRY_SHADER:        stageStr = "GL_GEOMETRY_SHADER"; break;
+                    case GL_FRAGMENT_SHADER:        stageStr = "GL_FRAGMENT_SHADER"; break;
+                    case GL_COMPUTE_SHADER:         stageStr = "GL_COMPUTE_SHADER"; break;
                     default: stageStr = "unknown";
                 }
                 // TODO : dst::core logging...
                 std::cerr
-                    << "Failed to compile " << stageStr << " shader" << std::endl
+                    << "Failed to compile " << stageStr << std::endl
                     << get_info_log() << std::endl
                     << std::endl;
                 dst_gl(glDeleteShader(mHandle));
@@ -102,17 +102,17 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Moves an instance of Shader.
-        * @param [in] other The Shader to move from
+        /*!
+        Moves an instance of Shader.
+        @param [in] other The Shader to move from
         */
         inline Shader(Shader&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Destroys this instance of Shader.
+        /*!
+        Destroys this instance of Shader.
         */
         inline ~Shader()
         {
@@ -121,10 +121,10 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Moves an instance of Shader.
-        * @param [in] other The Shader to move from
-        * @return This Shader
+        /*!
+        Moves an instance of Shader.
+        @param [in] other The Shader to move from
+        @return This Shader
         */
         inline Shader& operator=(Shader&& other)
         {
@@ -135,29 +135,29 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Gets this Shader's info log.
-        * @return This Shader's info log
+        /*!
+        Gets this Shader's info log.
+        @return This Shader's info log
         */
         inline std::string get_info_log() const
         {
             return get_info_log(mHandle);
         }
 
-        /*
-        * Gets a given Shader's info log.
-        * @param [in] shader The Shader to get the info log for
-        * @return The given Shader's info log
+        /*!
+        Gets a given Shader's info log.
+        @param [in] shader The Shader to get the info log for
+        @return The given Shader's info log
         */
         static inline std::string get_info_log(const Shader& shader)
         {
             return get_info_log(shader.get_handle());
         }
 
-        /*
-        * Gets a given Shader's info log.
-        * @param [in] handle The handle to the Shader to get the info log for
-        * @return The given Shader's info log
+        /*!
+        Gets a given Shader's info log.
+        @param [in] handle The handle to the Shader to get the info log for
+        @return The given Shader's info log
         */
         static inline std::string get_info_log(GLuint handle)
         {

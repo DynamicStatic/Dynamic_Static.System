@@ -23,15 +23,15 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL index buffer.
+    /*!
+    Provides high level control over an OpenGL index buffer.
     */
     class IndexBuffer final
         : public Buffer
     {
     public:
-        /*
-        * Constructs an instance of IndexBuffer.
+        /*!
+        Constructs an instance of IndexBuffer.
         */
         inline IndexBuffer()
             : Buffer(GL_ELEMENT_ARRAY_BUFFER)
@@ -39,19 +39,19 @@ namespace OpenGL {
             set_name("IndexBuffer");
         }
 
-        /*
-        * Moves an instance of IndexBuffer.
-        * @param [in] other The IndexBuffer to move from
+        /*!
+        Moves an instance of IndexBuffer.
+        @param [in] other The IndexBuffer to move from
         */
         inline IndexBuffer(IndexBuffer&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Moves an instance of IndexBuffer.
-        * @param [in] other The IndexBuffer to move from
-        * @return This IndexBuffer
+        /*!
+        Moves an instance of IndexBuffer.
+        @param [in] other The IndexBuffer to move from
+        @return This IndexBuffer
         */
         inline IndexBuffer& operator=(IndexBuffer&& other)
         {
@@ -62,9 +62,9 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Gets the type of elements in this IndexBuffer.
-        * @return The type of elements in this IndexBuffer
+        /*!
+        Gets the type of elements in this IndexBuffer.
+        @return The type of elements in this IndexBuffer
         */
         inline GLenum get_element_type() const
         {

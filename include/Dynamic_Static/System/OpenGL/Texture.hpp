@@ -21,15 +21,15 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL texture.
+    /*!
+    Provides high level control over an OpenGL texture.
     */
     class Texture final
         : public Object
     {
     public:
-        /*
-        * Configuration parameters for Texture construction.
+        /*!
+        Configuration parameters for Texture construction.
         */
         struct Info final
         {
@@ -48,18 +48,18 @@ namespace OpenGL {
         Info mInfo { };
 
     public:
-        /*
-        * Constructs an instance of Texture.
+        /*!
+        Constructs an instance of Texture.
         */
         inline Texture()
         {
             set_name("Texture");
         }
 
-        /*
-        * Constructs an instance of Texture.
-        * @param [in] info This Texture's Texture::Info
-        * @param [in] data This Texture's initial data
+        /*!
+        Constructs an instance of Texture.
+        @param [in] info This Texture's Texture::Info
+        @param [in] data This Texture's initial data
         */
         inline Texture(
             const Info& info,
@@ -81,27 +81,27 @@ namespace OpenGL {
             create_gl_resources(data);
         }
 
-        /*
-        * Moves an instance of Texture.
-        * @param [in] other The Texture to move from
+        /*!
+        Moves an instance of Texture.
+        @param [in] other The Texture to move from
         */
         inline Texture(Texture&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Destroys this instance of Texture.
+        /*!
+        Destroys this instance of Texture.
         */
         inline ~Texture()
         {
             destroy_gl_resources();
         }
 
-        /*
-        * Moves an instance of Texture.
-        * @param [in] other The Texture to move from
-        * @return This Texture
+        /*!
+        Moves an instance of Texture.
+        @param [in] other The Texture to move from
+        @return This Texture
         */
         inline Texture& operator=(Texture&& other)
         {
@@ -113,35 +113,35 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Gets this Texture's Texture::Info.
-        * @return This Texture's Texture::Info
+        /*!
+        Gets this Texture's Texture::Info.
+        @return This Texture's Texture::Info
         */
         inline const Info& get_info() const
         {
             return mInfo;
         }
 
-        /*
-        * Gets this Texture's size in bytes.
-        * @return This Texture's size in bytes
+        /*!
+        Gets this Texture's size in bytes.
+        @return This Texture's size in bytes
         */
         inline GLsizei get_size()
         {
             return get_size(mInfo.format, mInfo.width, mInfo.height, mInfo.depth);
         }
 
-        /*
-        * Gets this Texture's mip map level count.
-        * @return This Texture's mip map level count
+        /*!
+        Gets this Texture's mip map level count.
+        @return This Texture's mip map level count
         */
         inline GLint get_mip_map_level_count() const
         {
             return 1 + static_cast<GLint>(std::floor(std::log2(std::max(mInfo.width, mInfo.height))));
         }
 
-        /*
-        * Generates mip maps for this Texture.
+        /*!
+        Generates mip maps for this Texture.
         */
         inline void generate_mip_maps()
         {
@@ -156,28 +156,28 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Binds this Texture using its OpenGL target.
+        /*!
+        Binds this Texture using its OpenGL target.
         */
         inline void bind() const
         {
             dst_gl(glBindTexture(mInfo.target, mHandle));
         }
 
-        /*
-        * Unbinds the Texture at this texture's OpenGL target.
+        /*!
+        Unbinds the Texture at this texture's OpenGL target.
         */
         inline void unbind() const
         {
             dst_gl(glBindTexture(mInfo.target, 0));
         }
 
-        /*
-        * Gets the Texture size for a given format and dimensions.
-        * @param [in] format The format to use to calculate size
-        * @param [in](optional = 1) width The width in pixels to use to calculate size
-        * @param [in](optional = 1) height The height in pixels to use to calculate size
-        * @param [in](optional = 1) depth The depth in pixels to use to calculate size
+        /*!
+        Gets the Texture size for a given format and dimensions.
+        @param [in] format The format to use to calculate size
+        @param [in](optional = 1) width The width in pixels to use to calculate size
+        @param [in](optional = 1) height The height in pixels to use to calculate size
+        @param [in](optional = 1) depth The depth in pixels to use to calculate size
         */
         static inline GLsizei get_size(
             GLint format,

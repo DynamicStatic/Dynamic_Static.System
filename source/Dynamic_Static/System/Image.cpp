@@ -18,6 +18,14 @@
 namespace Dynamic_Static {
 namespace System {
 
+    uint8_t& Image::operator[](size_t index)
+    {
+        return mData[index];
+    }
+    const uint8_t& Image::operator[](size_t index) const
+    {
+        return mData[index];
+    }
     int Image::get_width() const
     {
         return mWidth;

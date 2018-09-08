@@ -24,23 +24,23 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL program.
+    /*!
+    Provides high level control over an OpenGL program.
     */
     class Program final
         : public Object
     {
     public:
-        /*
-        * Constructs an instance of Program.
+        /*!
+        Constructs an instance of Program.
         */
         inline Program()
         {
             set_name("Program");
         }
 
-        /*
-        * Constructs an instance of Program.
+        /*!
+        Constructs an instance of Program.
         */
         inline Program(dst::Span<Shader> shaders)
         {
@@ -63,9 +63,9 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Moves an instance of Program.
-        * @param [in] other The Program to move from
+        /*!
+        Moves an instance of Program.
+        @param [in] other The Program to move from
         */
         inline Program(Program&& other)
         {
@@ -79,10 +79,10 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Moves an instance of Program.
-        * @param [in] other The Program to move from
-        * @return This Program
+        /*!
+        Moves an instance of Program.
+        @param [in] other The Program to move from
+        @return This Program
         */
         inline Program& operator=(Program&& other)
         {
@@ -93,59 +93,59 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Gets a uniform location for this Program.
-        * @param [in] uniformName The name of the uniform to get the location for
-        * @return The location for the given uniform
+        /*!
+        Gets a uniform location for this Program.
+        @param [in] uniformName The name of the uniform to get the location for
+        @return The location for the given uniform
         */
         inline GLint get_uniform_location(dst::StringView uniformName) const
         {
             // TODO : Setup dst::StringView to ensure null termination.
-            //        See https://stackoverflow.com/a/41288372/3453616
+            //  See https://stackoverflow.com/a/41288372/3453616
             GLint uniformLocation = 0;
             dst_gl(uniformLocation = glGetUniformLocation(mHandle, std::string(uniformName).c_str()));
             return uniformLocation;
         }
 
-        /*
-        * Gets this Program's info log.
-        * @return This Program's info log
+        /*!
+        Gets this Program's info log.
+        @return This Program's info log
         */
         inline std::string get_info_log() const
         {
             return get_info_log(mHandle);
         }
 
-        /*
-        * Binds this Program.
+        /*!
+        Binds this Program.
         */
         inline void bind() const
         {
             dst_gl(glUseProgram(mHandle));
         }
 
-        /*
-        * Unbinds the current Program.
+        /*!
+        Unbinds the current Program.
         */
         inline void unbind() const
         {
             dst_gl(glUseProgram(0));
         }
 
-        /*
-        * Gets a given Program's info log.
-        * @param [in] shader The Program to get the info log for
-        * @return The given Program's info log
+        /*!
+        Gets a given Program's info log.
+        @param [in] shader The Program to get the info log for
+        @return The given Program's info log
         */
         static inline std::string get_info_log(const Program& program)
         {
             return get_info_log(program.get_handle());
         }
 
-        /*
-        * Gets a given Program's info log.
-        * @param [in] handle The handle to the Program to get the info log for
-        * @return The given Program's info log
+        /*!
+        Gets a given Program's info log.
+        @param [in] handle The handle to the Program to get the info log for
+        @return The given Program's info log
         */
         static inline std::string get_info_log(GLuint handle)
         {

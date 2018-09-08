@@ -23,8 +23,8 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Common base for OpenGL Objects.
+    /*!
+    Common base for OpenGL Objects.
     */
     class Object
         : NonCopyable
@@ -36,24 +36,24 @@ namespace OpenGL {
         std::string mName { "GLObject" };
 
     public:
-        /*
-        * Constructs an instance of Object.
+        /*!
+        Constructs an instance of Object.
         */
         inline Object() = default;
 
-        /*
-        * Moves an instance of Object.
-        * @param [in] other The Object to move from
+        /*!
+        Moves an instance of Object.
+        @param [in] other The Object to move from
         */
         inline Object(Object&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Moves an instance of Object.
-        * @param [in] other The Object to move from
-        * @return This Object
+        /*!
+        Moves an instance of Object.
+        @param [in] other The Object to move from
+        @return This Object
         */
         inline Object& operator=(Object&& other)
         {
@@ -65,18 +65,18 @@ namespace OpenGL {
             return *this;
         }
 
-        /*
-        * Converts this Object to its OpenGL handle
-        * @return This Object's OpenGL handle
+        /*!
+        Converts this Object to its OpenGL handle
+        @return This Object's OpenGL handle
         */
         inline operator GLuint() const
         {
             return mHandle;
         }
 
-        /*
-        * Converts this Object to a value indicating whether or not its valid.
-        * @return Whether or not this Object is valid
+        /*!
+        Converts this Object to a value indicating whether or not its valid.
+        @return Whether or not this Object is valid
         */
         inline operator bool() const
         {
@@ -84,27 +84,27 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Gets this Object's name.
-        * @return This Object's name
+        /*!
+        Gets this Object's name.
+        @return This Object's name
         */
         inline const std::string& get_name() const
         {
             return mName;
         }
 
-        /*
-        * Sets this Object's name.
-        * @param [in] name This Object's name
+        /*!
+        Sets this Object's name.
+        @param [in] name This Object's name
         */
         inline void set_name(dst::StringView name)
         {
             mName = name;
         }
 
-        /*
-        * Gets this Object's OpenGL handle.
-        * @return This Object's OpenGL handle
+        /*!
+        Gets this Object's OpenGL handle.
+        @return This Object's OpenGL handle
         */
         inline GLuint get_handle() const
         {

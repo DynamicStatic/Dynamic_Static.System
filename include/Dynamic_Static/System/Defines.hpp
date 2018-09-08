@@ -35,8 +35,8 @@ namespace System {
     static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; /*!< Dynamic_Static.System minor version */
     static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH }; /*!< Dynamic_Static.System patch version */
 
-    /*
-    * Specifies system graphics apis.
+    /*!
+    Specifies system graphics apis.
     */
     enum class GraphicsApi
     {

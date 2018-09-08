@@ -29,20 +29,12 @@ namespace System {
         Updates this Input.
         \n NOTE : This method must be called periodically to keep this Input up to date.
         */
-        inline void update()
-        {
-            keyboard.update();
-            mouse.update();
-        }
+        void update();
 
         /*!
         Resets this Input.
         */
-        inline void reset()
-        {
-            keyboard.reset();
-            mouse.reset();
-        }
+        void reset();
     };
 
 } // namespace System

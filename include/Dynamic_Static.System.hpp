@@ -11,10 +11,11 @@
 #pragma once
 
 #include "Dynamic_Static/System/Defines.hpp"
+#include "Dynamic_Static/System/Gui.hpp"
 #include "Dynamic_Static/System/Audio.hpp"
 #include "Dynamic_Static/System/Image.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #include "Dynamic_Static/System/OpenGL.hpp"
 #endif
-#include "Dynamic_Static/System/Video.hpp"
+#include "Dynamic_Static/System/Window.hpp"

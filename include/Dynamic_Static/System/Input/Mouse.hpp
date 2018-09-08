@@ -20,20 +20,20 @@
 namespace Dynamic_Static {
 namespace System {
 
-    /*
-    * Provides high level control over mouse queries.
+    /*!
+    Provides high level control over mouse queries.
     */
     struct Mouse final
     {
-        /*
-        * Specifies Mouse buttons.
+        /*!
+        Specifies Mouse buttons.
         */
         enum class Button
         {
             // NOTE : The following table shows the symbolic constant names, hexadecimal values,
-            //        and mouse or keyboard equivalents for the virtual-key codes used by Windows.
-            //        The codes are listed in numeric order.
-            // http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+            //  and mouse or keyboard equivalents for the virtual-key codes used by Windows.  The
+            //  codes are listed in numeric order.
+            //  http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 
             Left         = 0x01,
             Right        = 0x02,
@@ -49,145 +49,82 @@ namespace System {
             Any,
         };
 
-        /*
-        * Represents a Mouse's state at a single moment.
+        /*!
+        Represents a Mouse's state at a single moment.
         */
         struct State final
         {
-            /*
-            * This Mouse::State's scroll value
-            */
-            float scroll { };
+            float scroll { };                                   /*!< This Mouse::State's scroll value */
+            glm::vec2 position { };                             /*!< This Mouse::State's position */
+            std::bitset<(int)Mouse::Button::Count> buttons { }; /*!< This Mouse::State's Mouse::Button state */
 
-            /*
-            * This Mouse::State's position
+            /*!
+            Resets this Mouse::State.
             */
-            glm::vec2 position { };
-
-            /*
-            * This Mouse::State's Mouse::Button state
-            */
-            std::bitset<static_cast<size_t>(Button::Count)> buttons { };
-
-            /*
-            * Resets this Mouse::State.
-            */
-            inline void reset()
-            {
-                scroll = { };
-                position = { };
-                buttons.reset();
-            }
+            void reset();
         };
 
-        /*
-        * This Mouse's previous state
-        */
-        State previous { };
+        State previous { }; /*!< This Mouse's previous state */
+        State current { };  /*!< This Mouse's current state */
+        State staged { };   /*!< This Mouse's staging state, this state will be applied when update() is called */
 
-        /*
-        * This Mouse's current state
+        /*!
+        Gets the delta between this Mouse's current and previous scroll.
+        @return The delta between this Mouse's current and previous scroll
         */
-        State current { };
+        float get_scroll_delta() const;
 
-        /*
-        * This Mouse's staging state, this state will be applied when update() is called
+        /*!
+        Gets the delta between this Mouse's current and previous position.
+        @return The delta between this Mouse's current and previous position
         */
-        State staged { };
+        glm::vec2 get_position_delta() const;
 
-        /*
-        * Gets the delta between this Mouse's current and previous scroll.
-        * @return The delta between this Mouse's current and previous scroll
+        /*!
+        Gets a value indicating whether or not a given Mouse::Button is up.
+        @param [in] button The Mouse::Button to check
+        @return Whether or not the given Mouse::Button is up
         */
-        inline float get_scroll_delta() const
-        {
-            return current.scroll - previous.scroll;
-        }
+        bool up(Mouse::Button button) const;
 
-        /*
-        * Gets the delta between this Mouse's current and previous position.
-        * @return The delta between this Mouse's current and previous position
+        /*!
+        Gets a value indicating whether or not a given Mouse::Button is down.
+        @param [in] button The Mouse::Button to check
+        @return Whether or not the given Mouse::Button is down
         */
-        inline glm::vec2 get_position_delta() const
-        {
-            return current.position - previous.position;
-        }
+        bool down(Mouse::Button button) const;
 
-        /*
-        * Gets a value indicating whether or not a given Button is up.
-        * @param [in] button The Button to check
-        * @return Whether or not the given Button is up
+        /*!
+        Gets a value indicating whether or not a given Mouse::Button has been held.
+        @param [in] button The Mouse::Button to check
+        @return Whether or not the given Mouse::Button has been held
         */
-        inline bool up(Button button) const
-        {
-            return current.buttons[static_cast<size_t>(button)] == DST_BUTTON_UP;
-        }
+        bool held(Mouse::Button button) const;
 
-        /*
-        * Gets a value indicating whether or not a given Button is down.
-        * @param [in] button The Button to check
-        * @return Whether or not the given Button is down
+        /*!
+        Gets a value indicating whether or not a given Mouse::Button has been pressed.
+        @param [in] button The Mouse::Button to check
+        @return Whether or not the given Mouse::Button has been pressed
         */
-        inline bool down(Button button) const
-        {
-            return current.buttons[static_cast<size_t>(button)] == DST_BUTTON_DOWN;
-        }
+        bool pressed(Mouse::Button button) const;
 
-        /*
-        * Gets a value indicating whether or not a given Button has been held.
-        * @param [in] button The Button to check
-        * @return Whether or not the given Button has been held
+        /*!
+        Gets a value indicating whether or not a given Mouse::Button has been released.
+        @param [in] button The Mouse::Button to check
+        @return Whether or not the given Mouse::Button has been released
         */
-        inline bool held(Button button) const
-        {
-            return
-                previous.buttons[static_cast<size_t>(button)] == DST_BUTTON_DOWN &&
-                current .buttons[static_cast<size_t>(button)] == DST_BUTTON_DOWN;
-        }
+        bool released(Mouse::Button button) const;
 
-        /*
-        * Gets a value indicating whether or not a given Button has been pressed.
-        * @param [in] button The Button to check
-        * @return Whether or not the given Button has been pressed
+        /*!
+        Updates this Mouse with its staged state.
+        \n NOTE : This method must be called periodically to keep this Mouse up to date.
         */
-        inline bool pressed(Button button) const
-        {
-            return
-                previous.buttons[static_cast<size_t>(button)] == DST_BUTTON_UP &&
-                current .buttons[static_cast<size_t>(button)] == DST_BUTTON_DOWN;
-        }
+        void update();
 
-        /*
-        * Gets a value indicating whether or not a given Button has been released.
-        * @param [in] button The Button to check
-        * @return Whether or not the given Button has been released
+        /*!
+        Resets this Mouse.
         */
-        inline bool released(Button button) const
-        {
-            return
-                previous.buttons[static_cast<size_t>(button)] == DST_BUTTON_DOWN &&
-                current .buttons[static_cast<size_t>(button)] == DST_BUTTON_UP;
-        }
-
-        /*
-        * Updates this Mouse with its staged state.
-        * \n NOTE : This method must be called periodically to keep this Mouse up to date.
-        */
-        inline void update()
-        {
-            previous = current;
-            current = staged;
-        }
-
-        /*
-        * Resets this Mouse.
-        */
-        inline void reset()
-        {
-            previous.reset();
-            current.reset();
-            staged.reset();
-        }
+        void reset();
     };
 
 } // namespace System

@@ -20,20 +20,20 @@
 namespace Dynamic_Static {
 namespace System {
 
-    /*
-    * Provides high level control over Keyboard queries.
+    /*!
+    Provides high level control over Keyboard queries.
     */
     struct Keyboard final
     {
-        /*
-        * Specifies Keyboard keys.
+        /*!
+        Specifies Keyboard keys.
         */
         enum class Key
         {
             // NOTE : The following table shows the symbolic constant names, hexadecimal values,
-            //        and mouse or keyboard equivalents for the virtual-key codes used by Windows.
-            //        The codes are listed in numeric order.
-            //        http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+            //  and mouse or keyboard equivalents for the virtual-key codes used by Windows.  The
+            //  codes are listed in numeric order.
+            //  http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 
             // Left                 = 0x01,
             // Right                = 0x02,
@@ -237,101 +237,60 @@ namespace System {
             Any,
         };
 
-        /*
-        * Represents a Keyboard's state at a single moment.
+        /*!
+        Represents a Keyboard's state at a single moment.
         */
-        using State = std::bitset<static_cast<size_t>(Key::Count)>;
+        using State = std::bitset<(int)Keyboard::Key::Count>;
 
-        /*
-        * This Keyboard's previous state
-        */
-        State previous { };
+        State previous { }; /*!< This Keyboard's previous state */
+        State current { };  /*!< This Keyboard's current state */
+        State staged { };   /*!< This Keyboard's staging state, this state will be applied when update() is called */
 
-        /*
-        * This Keyboard's current state
+        /*!
+        Gets a value indicating whether or not a given Keyboard::Key is up.
+        @param [in] key The Keyboard::Key to check
+        @return Whether or not the given Keyboard::Key is up
         */
-        State current { };
+        bool up(Keyboard::Key key) const;
 
-        /*
-        * This Keyboard's staging state, this state will be applied when update() is called
+        /*!
+        Gets a value indicating whether or not a given Keyboard::Key is down.
+        @param [in] key The Keyboard::Key to check
+        @return Whether or not the given Keyboard::Key is down
         */
-        State staged { };
+        bool down(Keyboard::Key key) const;
 
-        /*
-        * Gets a value indicating whether or not a given Key is up.
-        * @param [in] key The Key to check
-        * @return Whether or not the given Key is up
+        /*!
+        Gets a value indicating whether or not a given Keyboard::Key has been held.
+        @param [in] key The Keyboard::Key to check
+        @return Whether or not the given Keyboard::Key has been held
         */
-        inline bool up(Key key) const
-        {
-            return current[static_cast<size_t>(key)] == DST_KEY_UP;
-        }
+        bool held(Keyboard::Key key) const;
 
-        /*
-        * Gets a value indicating whether or not a given Key is down.
-        * @param [in] key The Key to check
-        * @return Whether or not the given Key is down
+        /*!
+        Gets a value indicating whether or not a given Keyboard::Key has been pressed.
+        @param [in] key The Keyboard::Key to check
+        @return Whether or not the given Keyboard::Key has been pressed
         */
-        inline bool down(Key key) const
-        {
-            return current[static_cast<size_t>(key)] == DST_KEY_DOWN;
-        }
+        bool pressed(Keyboard::Key key) const;
 
-        /*
-        * Gets a value indicating whether or not a given Key has been held.
-        * @param [in] key The Key to check
-        * @return Whether or not the given Key has been held
+        /*!
+        Gets a value indicating whether or not a given Keyboard::Key has been released.
+        @param [in] key The Keyboard::Key to check
+        @return Whether or not the given Keyboard::Key has been released
         */
-        inline bool held(Key key) const
-        {
-            return
-                previous[static_cast<size_t>(key)] == DST_KEY_DOWN &&
-                current [static_cast<size_t>(key)] == DST_KEY_DOWN;
-        }
+        bool released(Keyboard::Key key) const;
 
-        /*
-        * Gets a value indicating whether or not a given Key has been pressed.
-        * @param [in] key The Key to check
-        * @return Whether or not the given Key has been pressed
+        /*!
+        Updates this Keyboard with its staged state.
+        \n NOTE : This method must be called periodically to keep this Keyboard up to date.
         */
-        inline bool pressed(Key key) const
-        {
-            return
-                previous[static_cast<size_t>(key)] == DST_KEY_UP &&
-                current [static_cast<size_t>(key)] == DST_KEY_DOWN;
-        }
+        void update();
 
-        /*
-        * Gets a value indicating whether or not a given Key has been released.
-        * @param [in] key The Key to check
-        * @return Whether or not the given Key has been released
+        /*!
+        Resets this Keyboard.
         */
-        inline bool released(Key key) const
-        {
-            return
-                previous[static_cast<size_t>(key)] == DST_KEY_DOWN &&
-                current [static_cast<size_t>(key)] == DST_KEY_UP;
-        }
-
-        /*
-        * Updates this Keyboard with its staged state.
-        * \n NOTE : This method must be called periodically to keep this Keyboard up to date.
-        */
-        inline void update()
-        {
-            previous = current;
-            current = staged;
-        }
-
-        /*
-        * Resets this Keyboard.
-        */
-        inline void reset()
-        {
-            previous.reset();
-            current.reset();
-            staged.reset();
-        }
+        void reset();
     };
 
 } // namespace System

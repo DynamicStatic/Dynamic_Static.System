@@ -337,7 +337,7 @@ public:
 
     void draw(
         float deltaTime,
-        const dst::sys::Resolution& viewportResolution
+        const glm::ivec2& viewportResolution
     )
     {
         auto viewMatrix = glm::lookAt(
@@ -347,14 +347,14 @@ public:
         );
         auto projectionMatrix = glm::perspective(
             glm::radians(fieldOfView),
-            viewportResolution.get_aspect_ratio(),
+            dst::aspect_ratio<glm::ivec2>(viewportResolution),
             0.001f,
             100.0f
         );
         dst_gl(glEnable(GL_CULL_FACE));
         dst_gl(glCullFace(GL_BACK));
         dst_gl(glEnable(GL_DEPTH_TEST));
-        dst_gl(glViewport(0, 0, viewportResolution.width, viewportResolution.height));
+        dst_gl(glViewport(0, 0, viewportResolution.x, viewportResolution.y));
         dst_gl(glClearColor(0, 0, 0, 0));
         dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         program.bind();
@@ -397,7 +397,7 @@ int main(int argc, char* argv[])
     Window window(windowInfo);
     bool running = true;
     window.on_close =
-        [&](const IWindow&)
+        [&](const Window&)
         {
             running = false;
         };

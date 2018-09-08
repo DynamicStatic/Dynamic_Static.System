@@ -31,6 +31,19 @@ namespace System {
 
     public:
         /*!
+        Gets this Image's value at a given index.
+        @return This Image's value at a given index
+        */
+        uint8_t& operator[](size_t index);
+
+        /*!
+        Gets this Image's value at a given index.
+        @return This Image's value at a given index
+        */
+        const uint8_t& operator[](size_t index) const;
+
+    public:
+        /*!
         Gets this Image's width.
         @return This Image's width
         */

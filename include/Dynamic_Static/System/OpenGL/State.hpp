@@ -20,8 +20,8 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Represents a snapshot of OpenGL state.
+    /*!
+    Represents a snapshot of OpenGL state.
     */
     struct State final
     {
@@ -46,12 +46,12 @@ namespace OpenGL {
         GLboolean depthTestEnabled { };    /*!< Whether or not this OpenGL State has depth test enabled */
         GLboolean scissorTestEnabled { };  /*!< Whether or not this OpenGL State has scissor test enabled */
 
-        /*
-        * Records this State's snap shot of the current OpenGL state.
+        /*!
+        Records this State's snap shot of the current OpenGL state.
         */
         inline void stash()
         {
-            dst_gl(glGetIntegerv(GL_ACTIVE_TEXTURE, reinterpret_cast<GLint*>(&activeTexture)));
+            dst_gl(glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint*)&activeTexture));
             dst_gl(GL_TEXTURE0);
             dst_gl(glGetIntegerv(GL_CURRENT_PROGRAM, &program));
             dst_gl(glGetIntegerv(GL_TEXTURE_BINDING_2D, &texture2D));
@@ -62,20 +62,20 @@ namespace OpenGL {
             dst_gl(glGetIntegerv(GL_POLYGON_MODE, polygonMode));
             dst_gl(glGetIntegerv(GL_VIEWPORT, viewport));
             dst_gl(glGetIntegerv(GL_SCISSOR_BOX, scissor));
-            dst_gl(glGetIntegerv(GL_BLEND_SRC_RGB, reinterpret_cast<GLint*>(&blendSrcRgb)));
-            dst_gl(glGetIntegerv(GL_BLEND_DST_RGB, reinterpret_cast<GLint*>(&blendDstRgb)));
-            dst_gl(glGetIntegerv(GL_BLEND_SRC_ALPHA, reinterpret_cast<GLint*>(&blendSrcAlpha)));
-            dst_gl(glGetIntegerv(GL_BLEND_DST_ALPHA, reinterpret_cast<GLint*>(&blendDstAlpha)));
-            dst_gl(glGetIntegerv(GL_BLEND_EQUATION_RGB, reinterpret_cast<GLint*>(&blendEquationRgb)));
-            dst_gl(glGetIntegerv(GL_BLEND_EQUATION_ALPHA, reinterpret_cast<GLint*>(&blendEquationAlpha)));
+            dst_gl(glGetIntegerv(GL_BLEND_SRC_RGB, (GLint*)&blendSrcRgb));
+            dst_gl(glGetIntegerv(GL_BLEND_DST_RGB, (GLint*)&blendDstRgb));
+            dst_gl(glGetIntegerv(GL_BLEND_SRC_ALPHA, (GLint*)&blendSrcAlpha));
+            dst_gl(glGetIntegerv(GL_BLEND_DST_ALPHA, (GLint*)&blendDstAlpha));
+            dst_gl(glGetIntegerv(GL_BLEND_EQUATION_RGB, (GLint*)&blendEquationRgb));
+            dst_gl(glGetIntegerv(GL_BLEND_EQUATION_ALPHA, (GLint*)&blendEquationAlpha));
             dst_gl(blendEnabled = glIsEnabled(GL_BLEND));
             dst_gl(cullFaceEnabled = glIsEnabled(GL_CULL_FACE));
             dst_gl(depthTestEnabled = glIsEnabled(GL_DEPTH_TEST));
             dst_gl(scissorTestEnabled = glIsEnabled(GL_SCISSOR_TEST));
         }
 
-        /*
-        * Sets the OpenGL state to this State's recorded snap shot.
+        /*!
+        Sets the OpenGL state to this State's recorded snap shot.
         */
         inline void apply() const
         {
@@ -87,8 +87,8 @@ namespace OpenGL {
             dst_gl(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer));
             dst_gl(glBindVertexArray(vertexArray));
             dst_gl(glPolygonMode(GL_FRONT_AND_BACK, polygonMode[0]));
-            dst_gl(glViewport(viewport[0], viewport[1], static_cast<GLsizei>(viewport[2]), static_cast<GLsizei>(viewport[3])));
-            dst_gl(glScissor(scissor[0], scissor[1], static_cast<GLsizei>(scissor[2]), static_cast<GLsizei>(scissor[3])));
+            dst_gl(glViewport(viewport[0], viewport[1], (GLsizei)viewport[2], (GLsizei)viewport[3]));
+            dst_gl(glScissor(scissor[0], scissor[1], (GLsizei)scissor[2], (GLsizei)scissor[3]));
             dst_gl(glBlendEquationSeparate(blendEquationRgb, blendEquationAlpha));
             dst_gl(glBlendFuncSeparate(blendSrcRgb, blendDstRgb, blendSrcAlpha, blendDstAlpha));
             if (blendEnabled) {

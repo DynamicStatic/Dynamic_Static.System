@@ -24,15 +24,15 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL vertex array.
+    /*!
+    Provides high level control over an OpenGL vertex array.
     */
     class VertexArray final
         : public Object
     {
     public:
-        /*
-        * Constructs an instance of VertexArray.
+        /*!
+        Constructs an instance of VertexArray.
         */
         inline VertexArray()
         {
@@ -40,17 +40,17 @@ namespace OpenGL {
             dst_gl(glGenVertexArrays(1, &mHandle));
         }
 
-        /*
-        * Moves an instance of VertexArray.
-        * @param [in] other The VertexArray to move from
+        /*!
+        Moves an instance of VertexArray.
+        @param [in] other The VertexArray to move from
         */
         inline VertexArray(VertexArray&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Destroys this instance of VertexArray.
+        /*!
+        Destroys this instance of VertexArray.
         */
         inline ~VertexArray()
         {
@@ -59,10 +59,10 @@ namespace OpenGL {
             }
         }
 
-        /*
-        * Moves an instance of VertexArray.
-        * @param [in] other The VertexArray to move from
-        * @return This VertexArray
+        /*!
+        Moves an instance of VertexArray.
+        @param [in] other The VertexArray to move from
+        @return This VertexArray
         */
         inline VertexArray& operator=(VertexArray&& other)
         {
@@ -73,16 +73,16 @@ namespace OpenGL {
         }
 
     public:
-        /*
-        * Binds this VertexArray.
+        /*!
+        Binds this VertexArray.
         */
         inline void bind() const
         {
             dst_gl(glBindVertexArray(mHandle));
         }
 
-        /*
-        * Unbinds the current VertexArray.
+        /*!
+        Unbinds the current VertexArray.
         */
         inline void unbind() const
         {

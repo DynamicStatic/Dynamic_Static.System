@@ -94,25 +94,22 @@ DstCreateStaticLibrary(
         "${includePath}/OpenGL/Vertex.hpp"
         "${includePath}/OpenGL/VertexArray.hpp"
         "${includePath}/OpenGL/VertexBuffer.hpp"
-        "${includePath}/Video/GLFW.hpp"
-        "${includePath}/Video/GLFWWindow.hpp"
-        "${includePath}/Video/Gui.hpp"
-        "${includePath}/Video/Resolution.hpp"
-        "${includePath}/Video/Window.hpp"
-        "${includePath}/Video/Window.hpp"
         "${includePath}/Audio.hpp"
         "${includePath}/Defines.hpp"
+        "${includePath}/Gui.hpp"
         "${includePath}/Image.hpp"
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
-        "${includePath}/Video.hpp"
         "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
 
     sourceFiles
-        "${sourcePath}/Image.cpp"
-
-    sourceFiles
         "${imgui.sourceFiles}"
+        "${sourcePath}/Input/Keyboard.cpp"
+        "${sourcePath}/Input/Mouse.cpp"
+        "${sourcePath}/GlfwWindow.cpp"
+        "${sourcePath}/Gui.cpp"
+        "${sourcePath}/Image.cpp"
+        "${sourcePath}/Input.cpp"
 )
 
 # TODO : Add compile definitions to DstCreateStaticLibrary()
@@ -126,4 +123,20 @@ endif()
 option(BUILD_DST_SYS_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
 if(BUILD_DST_SYS_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
+endif()
+
+# TODO : Single header generation for dst::sys doesn't work correctly yet
+option(BUILD_DST_SYS_HEADER_GENERATOR "Build Dynamic_Static.System.HeaderGenerator" OFF)
+if(BUILD_DST_SYS_HEADER_GENERATOR)
+    DstCreateExecutable(
+        target Dynamic_Static.System.HeaderGenerator
+        folder Dynamic_Static.System
+        includeDirectories "${Dynamic_Static.Core.includeDirectories}"
+        sourceFiles "${CMAKE_CURRENT_LIST_DIR}/HeaderGenerator.Main.cpp"
+    )
+    target_compile_definitions(
+        Dynamic_Static.System.HeaderGenerator
+        PRIVATE
+            DYNAMIC_STATIC_SYSTEM_INCLUDE_DIRECTORY="${CMAKE_CURRENT_LIST_DIR}/include/"
+    )
 endif()

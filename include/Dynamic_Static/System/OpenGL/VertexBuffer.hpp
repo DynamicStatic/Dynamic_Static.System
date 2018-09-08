@@ -23,15 +23,15 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Provides high level control over an OpenGL vertex buffer.
+    /*!
+    Provides high level control over an OpenGL vertex buffer.
     */
     class VertexBuffer final
         : public Buffer
     {
     public:
-        /*
-        * Constructs an instance of VertexBuffer.
+        /*!
+        Constructs an instance of VertexBuffer.
         */
         inline VertexBuffer()
             : Buffer(GL_ARRAY_BUFFER)
@@ -39,19 +39,19 @@ namespace OpenGL {
             set_name("VertexBuffer");
         }
 
-        /*
-        * Moves an instance of VertexBuffer.
-        * @param [in] other The VertexBuffer to move from
+        /*!
+        Moves an instance of VertexBuffer.
+        @param [in] other The VertexBuffer to move from
         */
         inline VertexBuffer(VertexBuffer&& other)
         {
             *this = std::move(other);
         }
 
-        /*
-        * Moves an instance of VertexBuffer.
-        * @param [in] other The VertexBuffer to move from
-        * @return This VertexBuffer
+        /*!
+        Moves an instance of VertexBuffer.
+        @param [in] other The VertexBuffer to move from
+        @return This VertexBuffer
         */
         inline VertexBuffer& operator=(VertexBuffer&& other)
         {

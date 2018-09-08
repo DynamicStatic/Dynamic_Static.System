@@ -22,8 +22,8 @@ namespace Dynamic_Static {
 namespace System {
 namespace OpenGL {
 
-    /*
-    * Describes vertex attribute for enabling.
+    /*!
+    Describes vertex attribute for enabling.
     */
     struct VertexAttributeInfo final
     {
@@ -32,11 +32,11 @@ namespace OpenGL {
         GLboolean normalized { GL_FALSE }; /*!< Whether or not the described vertex attribute should be normalized */
     };
 
-    /*
-    * Enables vertex attributes described by a given std::array<VertexAttributeInfo>.
-    * @param <VertexType> The type of vertex to enable attributes for
-    * @param <VertexAttributeCount> The number of vertex attriubutes to enable
-    * @param [in] vertexAttributeInfos The VertexAttributeInfos describing the vertex attributes to enable
+    /*!
+    Enables vertex attributes described by a given std::array<VertexAttributeInfo>.
+    @param <VertexType> The type of vertex to enable attributes for
+    @param <VertexAttributeCount> The number of vertex attriubutes to enable
+    @param [in] vertexAttributeInfos The VertexAttributeInfos describing the vertex attributes to enable
     */
     template <typename VertexType, size_t VertexAttributeCount>
     inline void enable_vertex_attributes(
@@ -77,34 +77,34 @@ namespace OpenGL {
 
 namespace dstgl {
 
-    /*
-    * Specializations of this function should call dst::gl::enable_vertex_attributes<> to describe vertex attributes.
-    * @param <VertexType> The type of vertex to enable attributes for
-    * @example
-    *
-    *   struct SimpleVertex final
-    *   {
-    *       glm::vec3 position { };
-    *       glm::vec2 texCoord { };
-    *   };
-    *
-    *   namespace dstgl {
-    *
-    *       template <>
-    *       void enable_vertex_attributes<SimpleVertex>()
-    *       {
-    *           // Our VertexType is SimpleVertex, so we're specializing this
-    *           // function and calling enable_vertex_attributes<> with both
-    *           // our typename and the number of vertex attributes we're
-    *           // enabling...in this case 2 for position and texCoord.
-    *           dst::gl::enable_vertex_attributes<SimpleVertex, 2>({{
-    *               { GL_FLOAT, 3 }, // position is a vec3, so GL_FLOAT and 3
-    *               { GL_FLOAT, 2 }  // texCoord is a vec2, so GL_FLOAT and 2
-    *           }});
-    *       }
-    *
-    *   }
-    *
+    /*!
+    Specializations of this function should call dst::gl::enable_vertex_attributes<> to describe vertex attributes.
+    @param <VertexType> The type of vertex to enable attributes for
+    @example
+    
+        struct SimpleVertex final
+        {
+            glm::vec3 position { };
+            glm::vec2 texcoord { };
+        };
+    
+        namespace dstgl {
+    
+            template <>
+            void enable_vertex_attributes<SimpleVertex>()
+            {
+                // Our VertexType is SimpleVertex, so we're specializing this
+                // function and calling enable_vertex_attributes<> with both
+                // our typename and the number of vertex attributes we're
+                // enabling...in this case 2 for position and texcoord.
+                dst::gl::enable_vertex_attributes<SimpleVertex, 2>({{
+                    { GL_FLOAT, 3 }, // position is a vec3, so GL_FLOAT and 3
+                    { GL_FLOAT, 2 }  // texcoord is a vec2, so GL_FLOAT and 2
+                }});
+            }
+    
+        } // namespace dstgl
+    
     */
     template <typename VertexType>
     inline void enable_vertex_attributes()
