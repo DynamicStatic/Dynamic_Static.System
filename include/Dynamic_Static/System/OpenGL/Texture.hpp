@@ -137,7 +137,7 @@ namespace OpenGL {
         */
         inline GLint get_mip_map_level_count() const
         {
-            return 1 + static_cast<GLint>(std::floor(std::log2(std::max(mInfo.width, mInfo.height))));
+            return 1 + (GLint)(std::floor(std::log2(std::max(mInfo.width, mInfo.height))));
         }
 
         /*!

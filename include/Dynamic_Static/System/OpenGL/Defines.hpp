@@ -100,7 +100,7 @@ namespace OpenGL {
         GLint logLength = 0;
         dst_gl(getInfoLogLength(handle, GL_INFO_LOG_LENGTH, &logLength));
         std::string log(logLength, ' ');
-        dst_gl(getInfoLog(handle, static_cast<GLsizei>(log.size()), nullptr, log.data()));
+        dst_gl(getInfoLog(handle, (GLsizei)log.size(), nullptr, log.data()));
         return log.data();
     }
 

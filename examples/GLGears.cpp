@@ -80,7 +80,7 @@ public:
         auto createVertex =
         [&vertices](const glm::vec3& position)
         {
-            auto index = static_cast<GLushort>(vertices.size());
+            auto index = (GLushort)vertices.size();
             vertices.push_back({ position, { } });
             return index;
         };
@@ -93,7 +93,7 @@ public:
         };
 
         const glm::vec3 w { 0, 0, width * 0.5f };
-        const float pi = static_cast<float>(M_PI);
+        const float pi = (float)M_PI;
         const float toothAngle = 2.0f * pi / teeth;
         const float toothDivisionsAngle = toothAngle / 4;
         const float toothInnerRadius = outerRadius - toothDepth * 0.5f;
@@ -194,7 +194,7 @@ public:
         }
 
         for (size_t i = 0; i < vertices.size(); ++i) {
-            vertices[i].normal /= static_cast<float>(hits[i]);
+            vertices[i].normal /= (float)hits[i];
             vertices[i].normal = glm::normalize(vertices[i].normal);
         }
 
