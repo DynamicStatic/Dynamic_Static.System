@@ -397,10 +397,10 @@ int main(int argc, char* argv[])
     Window window(windowInfo);
     bool running = true;
     window.on_close =
-        [&](const Window&)
-        {
-            running = false;
-        };
+    [&](const Window&)
+    {
+        running = false;
+    };
 
     GLGears glGears;
     dst::Clock clock;

@@ -21,10 +21,10 @@ int main()
     Window window(windowInfo);
     bool running = true;
     window.on_close =
-        [&](const Window&)
-        {
-            running = false;
-        };
+    [&](const Window&)
+    {
+        running = false;
+    };
 
     dst::sys::Gui gui;
     dst::Clock clock;
