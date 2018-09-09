@@ -313,11 +313,9 @@ namespace System {
                     glfwMakeContextCurrent(glfwWindow);
                     glfwSwapInterval(windowInfo.glContextInfo.vSync ? 1 : 0);
                     #ifdef DYNAMIC_STATIC_WINDOWS
-                    try {
-                        gl::detail::initialize_glew();
-                    } catch (const std::runtime_error& e) {
+                    if (!gl::detail::initialize_glew()) {
                         destroy_glfw_window(glfwWindow);
-                        throw e;
+                        throw std::runtime_error("Failed to initialize GLEW");
                     }
                     #endif
                 }

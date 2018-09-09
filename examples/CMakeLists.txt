@@ -7,7 +7,7 @@
 # ==========================================
 
 macro(CreateExample target)
-    list(APPEND external.sharedLibraries "${glew.sharedLibraries}")
+    list(APPEND external.sharedLibraries)
     if(BUILD_DST_SYS_AUDIO)
         list(APPEND external.sharedLibraries "${FMOD.sharedLibraries}")
     endif()

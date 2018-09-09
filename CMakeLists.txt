@@ -18,7 +18,6 @@ endif()
 DstCreateProject(Dynamic_Static.System)
 
 include("external/Dynamic_Static.Core.cmake")
-include("external/glew.cmake")
 include("external/glfw.cmake")
 include("external/glm.cmake")
 include("external/imgui.cmake")
@@ -44,22 +43,31 @@ endif()
 
 list(APPEND external.staticLibraries
     glfw
-    "${glew.staticLibraries}"
     "${systemLibraries}"
 )
 list(APPEND external.includeDirectories
     "${Dynamic_Static.Core.includeDirectories}"
-    "${glew.includeDirectories}"
     "${glm.includeDirectories}"
     "${imgui.includeDirectories}"
     "${stb.includeDirectories}"
 )
+list(APPEND external.sourceFiles
+    "${imgui.sourceFiles}"
+)
+list(APPEND compileDefinitions)
+if(MSVC)
+    include("external/glew.cmake")
+    list(APPEND external.includeDirectories "${glew.includeDirectories}")
+    list(APPEND external.sourceFiles "${glew.sourceFiles}")
+    list(APPEND compileDefinitions "GLEW_STATIC")
+endif()
 option(BUILD_DST_SYS_AUDIO "Build Dynamic_Static.System.Audio" ON)
 if(BUILD_DST_SYS_AUDIO)
     include("external/FMOD.cmake")
     if(${FMOD.available})
         list(APPEND external.staticLibraries "${FMOD.staticLibraries}")
         list(APPEND external.includeDirectories "${FMOD.includeDirectories}")
+        list(APPEND compileDefinitions "DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED")
     else()
         set(BUILD_DST_SYS_AUDIO OFF)
     endif()
@@ -103,7 +111,7 @@ DstCreateStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
 
     sourceFiles
-        "${imgui.sourceFiles}"
+        "${external.sourceFiles}"
         "${sourcePath}/Input/Keyboard.cpp"
         "${sourcePath}/Input/Mouse.cpp"
         "${sourcePath}/GlfwWindow.cpp"
@@ -116,7 +124,7 @@ DstCreateStaticLibrary(
 if(BUILD_DST_SYS_AUDIO)
     target_compile_definitions(
         Dynamic_Static.System
-        PUBLIC DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED
+        PUBLIC ${compileDefinitions}
     )
 endif()
 

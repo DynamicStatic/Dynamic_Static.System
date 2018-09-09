@@ -16,12 +16,9 @@
 
 #ifdef DYNAMIC_STATIC_WINDOWS
 #include "GL/glew.h"
-#include "GL/wglew.h"
 #endif
 
 #include <iostream>
-#include <mutex>
-#include <stdexcept>
 
 #define DYNAMIC_STATIC_VALIDATE_GL_CALLS
 #ifdef DYNAMIC_STATIC_VALIDATE_GL_CALLS
@@ -91,7 +88,7 @@ namespace OpenGL {
         typename GetInfoLogLengthFunctionType,
         typename GetInfoLogFunctionType
     >
-    std::string get_info_log(
+    inline std::string get_info_log(
         GLuint handle,
         GetInfoLogLengthFunctionType getInfoLogLength,
         GetInfoLogFunctionType getInfoLog
@@ -112,21 +109,17 @@ namespace detail {
     \n NOTE : An OpenGL context must exist before calling this function
     \n NOTE : This function is only available on Windows
     */
-    static void initialize_glew()
+    inline bool initialize_glew()
     {
-        static std::mutex sMutex;
-        std::lock_guard<std::mutex> lock(sMutex);
         static bool sGlewInitialized;
         if (!sGlewInitialized) {
             glewExperimental = true;
             auto error = glewInit();
             if (!error) {
                 sGlewInitialized = true;
-            } else {
-                // TODO : Error message.
-                throw std::runtime_error("Failed to initialize GLEW : ");
             }
         }
+        return sGlewInitialized;
     }
     #endif
 
