@@ -22,6 +22,7 @@ include("external/glfw.cmake")
 include("external/glm.cmake")
 include("external/imgui.cmake")
 include("external/stb.cmake")
+include("external/tclap.cmake")
 
 if(MSVC)
     set(systemLibraries
@@ -50,6 +51,7 @@ list(APPEND external.includeDirectories
     "${glm.includeDirectories}"
     "${imgui.includeDirectories}"
     "${stb.includeDirectories}"
+    "${tclap.includeDirectories}"
 )
 list(APPEND external.sourceFiles
     "${imgui.sourceFiles}"
