@@ -31,16 +31,36 @@ namespace sys {
 
     public:
         /*!
+        TODO : Documentation.
+        */
+        Image() = default;
+
+        /*!
+        TODO : Documentation.
+        */
+        Image(int width, int height = 1, int depth = 1);
+
+        /*!
         Gets this Image's value at a given index.
         @return This Image's value at a given index
         */
         uint8_t& operator[](size_t index);
 
         /*!
+        TODO : Documentation.
+        */
+        uint8_t& operator[](glm::ivec2 texCoord);
+
+        /*!
         Gets this Image's value at a given index.
         @return This Image's value at a given index
         */
         const uint8_t& operator[](size_t index) const;
+
+        /*!
+        TODO : Documentation.
+        */
+        const uint8_t& operator[](glm::ivec2 texCoord) const;
 
     public:
         /*!
@@ -65,19 +85,24 @@ namespace sys {
         Gets this Image's data.
         @return This Image's data
         */
-        dst::Span<uint8_t> get_data();
+        Span<uint8_t> get_data();
 
         /*!
         Gets this Image's data.
         @return This Image's data
         */
-        dst::Span<const uint8_t> get_data() const;
+        Span<const uint8_t> get_data() const;
 
         /*!
         Reads a .png file from a given file path.
         @param [in] filePath The file path of the .png to read
         */
-        void read_png(dst::StringView filePath);
+        void read_png(const StringView filePath);
+
+        /*!
+        TODO : Documentation.
+        */
+        void save_png(const StringView filePath) const;
     };
 
 } // namespace sys

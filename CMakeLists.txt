@@ -113,6 +113,7 @@ DstCreateStaticLibrary(
         "${includePath}/Image.hpp"
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
+        "${includePath}/Text.hpp"
         "${includePath}/Window.hpp"
         "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static.System.hpp"
 

@@ -14,6 +14,11 @@ file(
 )
 file(
     DOWNLOAD
-    https://github.com/nothings/stb/blob/master/stb_truetype.h
+    https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
+    "${stb.includeDirectories}/stb_image_write.h"
+)
+file(
+    DOWNLOAD
+    https://raw.githubusercontent.com/nothings/stb/master/stb_truetype.h
     "${stb.includeDirectories}/stb_truetype.h"
 )

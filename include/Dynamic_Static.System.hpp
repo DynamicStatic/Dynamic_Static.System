@@ -18,4 +18,5 @@
 #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #include "Dynamic_Static/System/OpenGL.hpp"
 #endif
+#include "Dynamic_Static/System/Text.hpp"
 #include "Dynamic_Static/System/Window.hpp"
