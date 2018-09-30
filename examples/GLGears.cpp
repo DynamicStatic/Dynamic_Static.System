@@ -44,7 +44,9 @@ struct Vertex final
     glm::vec3 normal { };
 };
 
-namespace dstgl {
+namespace dst {
+namespace sys {
+namespace gl {
 
     template <>
     void enable_vertex_attributes<Vertex>()
@@ -55,7 +57,9 @@ namespace dstgl {
         }});
     }
 
-}
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 class Gear final
     : dst::NonCopyable

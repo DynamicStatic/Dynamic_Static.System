@@ -65,7 +65,9 @@ namespace sys {
 } // namespace sys
 } // namespace dst
 
-namespace dstgl {
+namespace dst {
+namespace sys {
+namespace gl {
 
     template <>
     inline void enable_vertex_attributes<ImDrawVert>()
@@ -77,4 +79,6 @@ namespace dstgl {
         }});
     }
 
-} // namespace dstgl
+} // namepsace gl
+} // namespace sys
+} // namespace dst

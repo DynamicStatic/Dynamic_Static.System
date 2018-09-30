@@ -71,12 +71,6 @@ namespace gl {
         }
     }
 
-} // namespace gl
-} // namespace sys
-} // namespace dst
-
-namespace dstgl {
-
     /*!
     Specializations of this function should call dst::gl::enable_vertex_attributes<> to describe vertex attributes.
     @param <VertexType> The type of vertex to enable attributes for
@@ -88,7 +82,9 @@ namespace dstgl {
             glm::vec2 texcoord { };
         };
     
-        namespace dstgl {
+        namespace dst {
+        namespace sys {
+        namespace gl {
     
             template <>
             void enable_vertex_attributes<SimpleVertex>()
@@ -103,7 +99,9 @@ namespace dstgl {
                 }});
             }
     
-        } // namespace dstgl
+        } // namespace gl
+        } // namespace sys
+        } // namespace dst
     
     */
     template <typename VertexType>
@@ -111,6 +109,8 @@ namespace dstgl {
     {
     }
 
-} // namespace dstgl
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

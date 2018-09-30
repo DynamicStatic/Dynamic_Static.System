@@ -65,7 +65,7 @@ namespace gl {
             vertexArray.bind();
             vertexBuffer.bind();
             indexBuffer.bind();
-            dstgl::enable_vertex_attributes<VertexType>();
+            dst::gl::enable_vertex_attributes<VertexType>();
             vertexArray.unbind();
         }
 
