@@ -23,8 +23,8 @@
 #endif
 #include "GLFW/glfw3native.h"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     std::mutex Window::sGlfwWindowsMutex;
     std::set<GLFWwindow*> Window::sGlfwWindows;
@@ -496,7 +496,7 @@ namespace System {
         return button;
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_GLFW_ENABLED

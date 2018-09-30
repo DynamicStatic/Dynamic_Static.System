@@ -20,8 +20,8 @@
 #include <array>
 #include <string>
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over rendering an ImGui graphical user interface.
@@ -62,8 +62,8 @@ namespace System {
         static void set_clipboard(void* userData, const char* clipboard);
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst
 
 namespace dstgl {
 

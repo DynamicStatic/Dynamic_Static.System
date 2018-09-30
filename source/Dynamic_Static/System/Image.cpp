@@ -15,8 +15,8 @@
 
 #include <iostream>
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     uint8_t& Image::operator[](size_t index)
     {
@@ -70,5 +70,5 @@ namespace System {
         }
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

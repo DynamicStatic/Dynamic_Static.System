@@ -17,8 +17,8 @@
 #define DST_KEY_UP false
 #define DST_KEY_DOWN true
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over Keyboard queries.
@@ -293,5 +293,5 @@ namespace System {
         void reset();
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

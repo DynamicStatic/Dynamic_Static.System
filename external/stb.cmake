@@ -12,3 +12,8 @@ file(
     https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
     "${stb.includeDirectories}/stb_image.h"
 )
+file(
+    DOWNLOAD
+    https://github.com/nothings/stb/blob/master/stb_truetype.h
+    "${stb.includeDirectories}/stb_truetype.h"
+)

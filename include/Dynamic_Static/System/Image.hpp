@@ -15,8 +15,8 @@
 #include <string_view>
 #include <vector>
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over reading and writing images.
@@ -80,5 +80,5 @@ namespace System {
         void read_png(dst::StringView filePath);
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

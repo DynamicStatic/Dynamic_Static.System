@@ -25,8 +25,8 @@
 struct GLFWwindow;
 #endif
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over a system window.
@@ -242,5 +242,5 @@ namespace System {
         #endif
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

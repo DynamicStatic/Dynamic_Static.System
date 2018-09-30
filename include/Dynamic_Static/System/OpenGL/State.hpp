@@ -16,9 +16,9 @@
 
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 
-namespace Dynamic_Static {
-namespace System {
-namespace OpenGL {
+namespace dst {
+namespace sys {
+namespace gl {
 
     /*!
     Represents a snapshot of OpenGL state.
@@ -114,8 +114,8 @@ namespace OpenGL {
         }
     };
 
-} // namespace OpenGL
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

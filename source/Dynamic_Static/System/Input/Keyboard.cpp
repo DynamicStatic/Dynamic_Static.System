@@ -10,8 +10,8 @@
 
 #include "Dynamic_Static/System/Input/Keyboard.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     bool Keyboard::up(Keyboard::Key key) const
     {
@@ -57,5 +57,5 @@ namespace System {
         staged.reset();
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

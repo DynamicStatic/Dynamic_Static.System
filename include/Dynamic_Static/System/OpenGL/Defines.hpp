@@ -34,9 +34,9 @@
 }
 #endif
 
-namespace Dynamic_Static {
-namespace System {
-namespace OpenGL {
+namespace dst {
+namespace sys {
+namespace gl {
 
     /*!
     Specifies configuration paramaters for an OpenGL context.
@@ -124,10 +124,9 @@ namespace detail {
     #endif
 
 } // namespace detail
-} // namespace OpenGL
-namespace gl = OpenGL;
-} // namespace System
-namespace gl = System::OpenGL;
-} // namespace Dynamic_Static
+} // namespace gl
+} // namespace sys
+namespace gl = sys::gl;
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

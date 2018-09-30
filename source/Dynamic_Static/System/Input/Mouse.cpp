@@ -10,8 +10,8 @@
 
 #include "Dynamic_Static/System/Input/Mouse.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     void Mouse::State::reset()
     {
@@ -74,5 +74,5 @@ namespace System {
         staged.reset();
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

@@ -18,9 +18,9 @@
 
 #include <array>
 
-namespace Dynamic_Static {
-namespace System {
-namespace OpenGL {
+namespace dst {
+namespace sys {
+namespace gl {
 
     /*!
     Describes vertex attribute for enabling.
@@ -71,9 +71,9 @@ namespace OpenGL {
         }
     }
 
-} // namespace OpenGL
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 namespace dstgl {
 

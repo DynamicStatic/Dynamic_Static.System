@@ -14,8 +14,8 @@
 #include "Dynamic_Static/System/Input/Mouse.hpp"
 #include "Dynamic_Static/System/Defines.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over input device queries.
@@ -37,5 +37,5 @@ namespace System {
         void reset();
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

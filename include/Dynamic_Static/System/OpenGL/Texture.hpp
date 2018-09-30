@@ -17,9 +17,9 @@
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
 
-namespace Dynamic_Static {
-namespace System {
-namespace OpenGL {
+namespace dst {
+namespace sys {
+namespace gl {
 
     /*!
     Provides high level control over an OpenGL texture.
@@ -242,8 +242,8 @@ namespace OpenGL {
         }
     };
 
-} // namespace OpenGL
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

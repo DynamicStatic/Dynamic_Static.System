@@ -28,8 +28,8 @@
 #define DYNAMIC_STATIC_SYSTEM_VERSION_MINOR 0
 #define DYNAMIC_STATIC_SYSTEM_VERSION_PATCH 0
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR }; /*!< Dynamic_Static.System major version */
     static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; /*!< Dynamic_Static.System minor version */
@@ -51,6 +51,5 @@ namespace System {
         #endif
     };
 
-} // namespace System
-namespace sys = System;
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

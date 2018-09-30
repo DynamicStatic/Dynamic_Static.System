@@ -19,9 +19,9 @@
 
 #include <utility>
 
-namespace Dynamic_Static {
-namespace System {
-namespace OpenGL {
+namespace dst {
+namespace sys {
+namespace gl {
 
     /*!
     Provides high level control over an OpenGL index buffer.
@@ -77,8 +77,8 @@ namespace OpenGL {
         }
     };
 
-} // namespace OpenGL
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace gl
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

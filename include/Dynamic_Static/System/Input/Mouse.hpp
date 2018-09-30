@@ -17,8 +17,8 @@
 #define DST_BUTTON_UP false
 #define DST_BUTTON_DOWN true
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     /*!
     Provides high level control over mouse queries.
@@ -127,5 +127,5 @@ namespace System {
         void reset();
     };
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

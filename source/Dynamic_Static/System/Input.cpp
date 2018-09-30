@@ -10,8 +10,8 @@
 
 #include "Dynamic_Static/System/Input.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     void Input::update()
     {
@@ -25,5 +25,5 @@ namespace System {
         mouse.reset();
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst

@@ -16,8 +16,8 @@
 
 #include "fmod.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     inline FMOD::System* fmod_init()
     {
@@ -49,7 +49,7 @@ namespace System {
         system->release();
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_SYSTEM_FMOD_ENABLED

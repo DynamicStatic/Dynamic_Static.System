@@ -10,8 +10,8 @@
 
 #include "Dynamic_Static/System/Gui.hpp"
 
-namespace Dynamic_Static {
-namespace System {
+namespace dst {
+namespace sys {
 
     Gui::Gui()
     {
@@ -214,5 +214,5 @@ namespace System {
         }
     }
 
-} // namespace System
-} // namespace Dynamic_Static
+} // namespace sys
+} // namespace dst
