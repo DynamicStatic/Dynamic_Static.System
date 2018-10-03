@@ -80,12 +80,12 @@ namespace gl {
         /*!
         Draws this Mesh.
         @param [in] count The number of vertices to draw
-        @param [in] indices A pointer into this Mesh's IndexBuffer to start drawing from
+        @param [in] indices A pointer into this Mesh's IndexBuffer to start drawing from (optional = nullptr)
         \n NOTE : This pointer treats the start of this Mesh's IndexBuffer storage as address 0
         */
         inline void draw_indexed(
             GLsizei count,
-            const void* indices
+            const void* indices = nullptr
         ) const
         {
             vertexArray.bind();

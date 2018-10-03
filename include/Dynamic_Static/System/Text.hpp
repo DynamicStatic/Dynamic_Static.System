@@ -13,3 +13,4 @@
 #include "Dynamic_Static/System/Text/Font.hpp"
 #include "Dynamic_Static/System/Text/Font.Atlas.hpp"
 #include "Dynamic_Static/System/Text/Glyph.hpp"
+#include "Dynamic_Static/System/Text/Layout.hpp"

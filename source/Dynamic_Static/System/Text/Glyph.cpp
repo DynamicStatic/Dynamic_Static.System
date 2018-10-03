@@ -13,21 +13,39 @@
 namespace dst {
 namespace sys {
 
+    bool Glyph::Comparator::operator()(const Glyph& lhs, const Glyph& rhs) const
+    {
+        return lhs.codepoint < rhs.codepoint;
+    }
+
+    bool Glyph::Comparator::operator()(const Glyph& lhs, const int& rhs) const
+    {
+        return lhs.codepoint < rhs;
+    }
+
+    bool Glyph::Comparator::operator()(const int& lhs, const Glyph& rhs) const
+    {
+        return lhs < rhs.codepoint;
+    }
+
     bool Glyph::is_printable() const
     {
+        return is_printable(codepoint);
+    }
+
+    bool Glyph::is_printable(int codepoint)
+    {
         bool printable = true;
-        // ASCII control characters
-        if (NullId <= id && id <= SpaceId) {
+        if (NullId <= codepoint && codepoint <= SpaceId) { // ASCII control characters
             printable = false;
         } else
-        // C1 extended control characters
-        if (127 <= id && id <= 159) {
+        if (127 <= codepoint && codepoint <= 159) { // C1 extended control characters
             printable = false;
         } else
-        if (id == LeftToRightId ||
-            id == RightToLeftId ||
-            id == LineSeperatorId ||
-            id == ParagraphSeperatorId) {
+        if (codepoint == LeftToRightId ||
+            codepoint == RightToLeftId ||
+            codepoint == LineSeperatorId ||
+            codepoint == ParagraphSeperatorId) {
             printable = false;
         }
         return printable;

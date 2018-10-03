@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <fstream>
 #include <memory>
+#include <set>
 
 namespace dst {
 
@@ -169,10 +170,23 @@ namespace dst {
 namespace dst {
 namespace sys {
 
+    const Glyph& Font::operator[](int codepoint) const
+    {
+        auto itr = std::lower_bound(mGlyphs.begin(), mGlyphs.end(), codepoint, Glyph::Comparator { });
+        return itr != mGlyphs.end() ? *itr : mNullGlyph;
+    }
+
     float Font::get_ascent() const { return mAscent; }
     float Font::get_descent() const { return mDescent; }
-    float Font::get_line_gap() const { return mLineGap; }
+    float Font::get_line_height() const { return mLineHeight; }
+    float Font::get_baseline() const { return mBaseline; }
     const Image& Font::get_image() const { return mImage; }
+
+    float Font::get_kerning(int codepoint0, int codepoint1) const
+    {
+        auto itr = mKerningPairs.find({ codepoint0, codepoint1 });
+        return itr != mKerningPairs.end() ? itr->second : 0;
+    }
 
     void Font::read_ttf(
         const dst::StringView filePath,
@@ -180,8 +194,6 @@ namespace sys {
         const dst::StringView characters
     )
     {
-        // TODO : Need to remove duplicate characters.
-        // TODO : "scratch pad" storage...
         auto ttfBytes = dst::File::read_all_bytes(filePath);
         stbtt_fontinfo fontInfo { };
         if (stbtt_InitFont(&fontInfo, (const unsigned char*)ttfBytes.data(), 0)) {
@@ -190,11 +202,14 @@ namespace sys {
             stbtt_GetFontVMetrics(&fontInfo, &ascent, &descent, &lineGap);
             mAscent = ascent * scale;
             mDescent = descent * scale;
-            mLineGap = lineGap * scale;
-
+            mLineHeight = lineGap * scale;
+            // TODO : "scratch pad" storage...
+            std::set<char> characterSet(characters.begin(), characters.end());
             std::vector<Atlas<char>::Entry> atlasEntries;
-            atlasEntries.reserve(characters.size());
-            for (auto character : characters) {
+            atlasEntries.reserve(characterSet.size());
+            for (auto character : characterSet) {
+                // TODO : Remove control characters.
+                // TODO : Remove charcaters not present in font.
                 glm::ivec2 v0;
                 glm::ivec2 v1;
                 stbtt_GetCodepointBitmapBox(&fontInfo, character, scale, scale, &v0.x, &v0.y, &v1.x, &v1.y);
@@ -207,6 +222,7 @@ namespace sys {
             Atlas<char> atlas(atlasEntries);
             mImage = Image(atlas.get_width(), atlas.get_height());
             for (auto atlasEntry : atlasEntries) {
+                auto codepoint = atlasEntry.data;
                 auto rectangle = atlasEntry.rectangle;
                 stbtt_MakeCodepointBitmap(
                     &fontInfo,
@@ -216,8 +232,34 @@ namespace sys {
                     mImage.get_width(),
                     scale,
                     scale,
-                    atlasEntry.data
+                    codepoint
                 );
+                int advanceWidth, leftSideBearing;
+                stbtt_GetCodepointHMetrics(&fontInfo, codepoint, &advanceWidth, &leftSideBearing);
+                glm::ivec2 v0;
+                glm::ivec2 v1;
+                stbtt_GetCodepointBitmapBox(&fontInfo, codepoint, 1, 1, &v0.x, &v0.y, &v1.x, &v1.y);
+                Glyph glyph { };
+                assert(v0.x == leftSideBearing);
+                glyph.codepoint = codepoint;
+                glyph.width = (float)rectangle.width;
+                glyph.height = (float)rectangle.height;
+                glyph.xOffset = (float)v0.x * scale;
+                glyph.yOffset = (float)v0.y * scale;
+                glyph.xAdvance = (float)advanceWidth * scale;
+                glyph.page = 0;
+                glyph.chnl = 0;
+                glyph.texcoord.x = (rectangle.x + 2 + rectangle.width * 0.5f) / (float)mImage.get_width();
+                glyph.texcoord.y = (rectangle.y + 2 + rectangle.height * 0.5f) / (float)mImage.get_height();
+                mGlyphs.insert(std::upper_bound(mGlyphs.begin(), mGlyphs.end(), glyph, Glyph::Comparator { }), glyph);
+            }
+            for (auto c0 : characterSet) {
+                for (auto c1 : characterSet) {
+                    int kerning = stbtt_GetCodepointKernAdvance(&fontInfo, c0, c1);
+                    if (kerning) {
+                        mKerningPairs[std::make_pair(c0, c1)] = (float)kerning * scale;
+                    }
+                }
             }
             int breaker = 0;
         }

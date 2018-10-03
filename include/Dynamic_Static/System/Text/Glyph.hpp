@@ -32,7 +32,28 @@ namespace sys {
         static constexpr int NullInputId          { 9618 }; // &#9618 U+2592
         static constexpr const char* const LineFeed { "\n" };
 
-        int id { };             //!< TODO : Documentation.
+        /*!
+        TODO : Documentation.
+        */
+        struct Comparator final
+        {
+            /*!
+            TODO : Documentation.
+            */
+            bool operator()(const Glyph& lhs, const Glyph& rhs) const;
+
+            /*!
+            TODO : Documentation.
+            */
+            bool operator()(const Glyph& lhs, const int& rhs) const;
+
+            /*!
+            TODO : Documentation.
+            */
+            bool operator()(const int& lhs, const Glyph& rhs) const;
+        };
+
+        int codepoint { };      //!< TODO : Documentation.
         float width { };        //!< TODO : Documentation.
         float height { };       //!< TODO : Documentation.
         float xOffset { };      //!< TODO : Documentation.
@@ -40,12 +61,17 @@ namespace sys {
         float xAdvance { };     //!< TODO : Documentation.
         int page { };           //!< TODO : Documentation.
         int chnl { };           //!< TODO : Documentation.
-        glm::vec2 texCoord { }; //!< TODO : Documentation.
+        glm::vec2 texcoord { }; //!< TODO : Documentation.
 
         /*!
         TODO : Documentation.
         */
         bool is_printable() const;
+
+        /*!
+        TODO : Documentation.
+        */
+        static bool is_printable(int codepoint);
     };
 
 } // namespace sys

@@ -14,7 +14,9 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Image.hpp"
 
+#include <map>
 #include <unordered_map>
+#include <utility>
 
 namespace dst {
 namespace sys {
@@ -33,17 +35,51 @@ namespace sys {
         };
 
     private:
-        float mAscent { 0 };
-        float mDescent { 0 };
-        float mLineGap { 0 };
-        std::unordered_map<int, Glyph> mGlyphs;
+        float mAscent { };
+        float mDescent { };
+        float mLineHeight { };
+        float mBaseline { };
+        Glyph mNullGlyph { };
+        std::vector<Glyph> mGlyphs;
+        std::map<std::pair<int, int>, float> mKerningPairs;
         Image mImage;
 
     public:
+        /*!
+        TODO : Documentation.
+        */
+        const Glyph& operator[](int codepoint) const;
+
+    public:
+        /*!
+        TODO : Documentation.
+        */
         float get_ascent() const;
+
+        /*!
+        TODO : Documentation.
+        */
         float get_descent() const;
-        float get_line_gap() const;
+
+        /*!
+        TODO : Documentation.
+        */
+        float get_line_height() const;
+
+        /*!
+        TODO : Documentation.
+        */
+        float get_baseline() const;
+
+        /*!
+        TODO : Documentation.
+        */
         const Image& get_image() const;
+
+        /*!
+        TODO : Documentation.
+        */
+        float get_kerning(int codepoint0, int codepoint1) const;
 
         /*!
         TODO : Documentation.
