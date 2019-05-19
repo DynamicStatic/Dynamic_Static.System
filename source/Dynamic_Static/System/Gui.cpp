@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2017-2018 Dynamic_Static
+  Copyright (c) 2017-2019 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT

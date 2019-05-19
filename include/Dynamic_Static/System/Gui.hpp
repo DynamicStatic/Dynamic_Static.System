@@ -14,11 +14,6 @@
 #include "Dynamic_Static/System/Input.hpp"
 #include "Dynamic_Static/System/Window.hpp"
 
-#include "Dynamic_Static/System/OpenGL/Mesh.hpp"
-#include "Dynamic_Static/System/OpenGL/Program.hpp"
-#include "Dynamic_Static/System/OpenGL/State.hpp"
-#include "Dynamic_Static/System/OpenGL/Texture.hpp"
-
 #include "imgui.h"
 
 #include <array>
@@ -57,12 +52,6 @@ namespace sys {
 
     private:
         std::unique_ptr<Renderer> mRenderer;
-#if 0
-        gl::Texture mTexture;
-        gl::Program mProgram;
-        GLuint mProjectionLocation { 0 };
-        gl::Mesh mMesh;
-#endif
 
     public:
         /*!
