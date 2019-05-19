@@ -24,7 +24,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Common base for OpenGL Objects.
+    Common base for OpenGL Objects
     */
     class Object
         : NonCopyable
@@ -37,12 +37,12 @@ namespace gl {
 
     public:
         /*!
-        Constructs an instance of Object.
+        Constructs an instance of Object
         */
         inline Object() = default;
 
         /*!
-        Moves an instance of Object.
+        Moves an instance of Object
         @param [in] other The Object to move from
         */
         inline Object(Object&& other)
@@ -51,7 +51,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Object.
+        Moves an instance of Object
         @param [in] other The Object to move from
         @return This Object
         */
@@ -75,7 +75,7 @@ namespace gl {
         }
 
         /*!
-        Converts this Object to a value indicating whether or not its valid.
+        Converts this Object to a value indicating whether or not its valid
         @return Whether or not this Object is valid
         */
         inline operator bool() const
@@ -85,7 +85,7 @@ namespace gl {
 
     public:
         /*!
-        Gets this Object's name.
+        Gets this Object's name
         @return This Object's name
         */
         inline const std::string& get_name() const
@@ -94,7 +94,7 @@ namespace gl {
         }
 
         /*!
-        Sets this Object's name.
+        Sets this Object's name
         @param [in] name This Object's name
         */
         inline void set_name(dst::StringView name)
@@ -103,7 +103,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Object's OpenGL handle.
+        Gets this Object's OpenGL handle
         @return This Object's OpenGL handle
         */
         inline GLuint get_handle() const

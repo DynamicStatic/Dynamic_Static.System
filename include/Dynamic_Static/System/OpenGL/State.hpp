@@ -21,7 +21,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Represents a snapshot of OpenGL state.
+    Represents a snapshot of OpenGL state
     */
     struct State final
     {
@@ -47,7 +47,7 @@ namespace gl {
         GLboolean scissorTestEnabled { };  /*!< Whether or not this OpenGL State has scissor test enabled */
 
         /*!
-        Records this State's snap shot of the current OpenGL state.
+        Records this State's snap shot of the current OpenGL state
         */
         inline void stash()
         {
@@ -75,7 +75,7 @@ namespace gl {
         }
 
         /*!
-        Sets the OpenGL state to this State's recorded snap shot.
+        Sets the OpenGL state to this State's recorded snap shot
         */
         inline void apply() const
         {

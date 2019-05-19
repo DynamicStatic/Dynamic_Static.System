@@ -25,14 +25,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL shader.
+    Provides high level control over an OpenGL shader
     */
     class Shader final
         : public Object
     {
     public:
         /*!
-        Constructs an instance of Shader.
+        Constructs an instance of Shader
         */
         inline Shader()
         {
@@ -40,7 +40,7 @@ namespace gl {
         }
 
         /*!
-        Constructs an instance of Shader.
+        Constructs an instance of Shader
         @param [in] stage This Shader's stage
         @param [in] source This Shader's source
         */
@@ -53,7 +53,7 @@ namespace gl {
         }
 
         /*!
-        Constructs an instance of Shader.
+        Constructs an instance of Shader
         @param [in] stage This Shader's stage
         @param [in] line The starting line to use for error reporting
         @param [in] source This Shader's source
@@ -103,7 +103,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Shader.
+        Moves an instance of Shader
         @param [in] other The Shader to move from
         */
         inline Shader(Shader&& other)
@@ -122,7 +122,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Shader.
+        Moves an instance of Shader
         @param [in] other The Shader to move from
         @return This Shader
         */
@@ -136,7 +136,7 @@ namespace gl {
 
     public:
         /*!
-        Gets this Shader's info log.
+        Gets this Shader's info log
         @return This Shader's info log
         */
         inline std::string get_info_log() const
@@ -145,7 +145,7 @@ namespace gl {
         }
 
         /*!
-        Gets a given Shader's info log.
+        Gets a given Shader's info log
         @param [in] shader The Shader to get the info log for
         @return The given Shader's info log
         */
@@ -155,7 +155,7 @@ namespace gl {
         }
 
         /*!
-        Gets a given Shader's info log.
+        Gets a given Shader's info log
         @param [in] handle The handle to the Shader to get the info log for
         @return The given Shader's info log
         */

@@ -25,14 +25,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL program.
+    Provides high level control over an OpenGL program
     */
     class Program final
         : public Object
     {
     public:
         /*!
-        Constructs an instance of Program.
+        Constructs an instance of Program
         */
         inline Program()
         {
@@ -40,7 +40,7 @@ namespace gl {
         }
 
         /*!
-        Constructs an instance of Program.
+        Constructs an instance of Program
         */
         inline Program(dst::Span<Shader> shaders)
         {
@@ -64,7 +64,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Program.
+        Moves an instance of Program
         @param [in] other The Program to move from
         */
         inline Program(Program&& other)
@@ -80,7 +80,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Program.
+        Moves an instance of Program
         @param [in] other The Program to move from
         @return This Program
         */
@@ -94,7 +94,7 @@ namespace gl {
 
     public:
         /*!
-        Gets a uniform location for this Program.
+        Gets a uniform location for this Program
         @param [in] uniformName The name of the uniform to get the location for
         @return The location for the given uniform
         */
@@ -108,7 +108,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Program's info log.
+        Gets this Program's info log
         @return This Program's info log
         */
         inline std::string get_info_log() const
@@ -117,7 +117,7 @@ namespace gl {
         }
 
         /*!
-        Binds this Program.
+        Binds this Program
         */
         inline void bind() const
         {
@@ -125,7 +125,7 @@ namespace gl {
         }
 
         /*!
-        Unbinds the current Program.
+        Unbinds the current Program
         */
         inline void unbind() const
         {
@@ -133,7 +133,7 @@ namespace gl {
         }
 
         /*!
-        Gets a given Program's info log.
+        Gets a given Program's info log
         @param [in] shader The Program to get the info log for
         @return The given Program's info log
         */
@@ -143,7 +143,7 @@ namespace gl {
         }
 
         /*!
-        Gets a given Program's info log.
+        Gets a given Program's info log
         @param [in] handle The handle to the Program to get the info log for
         @return The given Program's info log
         */

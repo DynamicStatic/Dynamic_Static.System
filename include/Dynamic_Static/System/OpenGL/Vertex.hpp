@@ -23,7 +23,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Describes vertex attribute for enabling.
+    Describes vertex attribute for enabling
     */
     struct VertexAttributeInfo final
     {
@@ -33,7 +33,7 @@ namespace gl {
     };
 
     /*!
-    Enables vertex attributes described by a given std::array<VertexAttributeInfo>.
+    Enables vertex attributes described by a given std::array<VertexAttributeInfo>
     @param <VertexType> The type of vertex to enable attributes for
     @param <VertexAttributeCount> The number of vertex attriubutes to enable
     @param [in] vertexAttributeInfos The VertexAttributeInfos describing the vertex attributes to enable
@@ -72,7 +72,7 @@ namespace gl {
     }
 
     /*!
-    Specializations of this function should call dst::gl::enable_vertex_attributes<> to describe vertex attributes.
+    Specializations of this function should call dst::gl::enable_vertex_attributes<> to describe vertex attributes
     @param <VertexType> The type of vertex to enable attributes for
     @example
     

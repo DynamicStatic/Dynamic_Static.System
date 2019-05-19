@@ -39,7 +39,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Specifies configuration paramaters for an OpenGL context.
+    Specifies configuration paramaters for an OpenGL context
     */
     struct ContextInfo final
     {
@@ -51,7 +51,7 @@ namespace gl {
     };
 
     /*!
-    Logs any errors that occured during the last OpenGL call.
+    Logs any errors that occured during the last OpenGL call
     @param [in] message The message to print with the OpenGL error message
     @param [in] glCall The string representation of last OpenGL call
     */
@@ -76,7 +76,7 @@ namespace gl {
     }
 
     /*!
-    Gets the info log for a given OpenGL object.
+    Gets the info log for a given OpenGL object
     @param <GetInfoLogLengthFunctionType> The type of function to use to get the info log length
     @param <GetInfoLogFunctionType> The type of function to use to get the info log
     @param [in] handle The handle to the OpenGL object to get the info log for
@@ -105,7 +105,7 @@ namespace detail {
 
     #ifdef DYNAMIC_STATIC_WINDOWS
     /*!
-    Initializes OpenGL entry points.
+    Initializes OpenGL entry points
     \n NOTE : An OpenGL context must exist before calling this function
     \n NOTE : This function is only available on Windows
     */

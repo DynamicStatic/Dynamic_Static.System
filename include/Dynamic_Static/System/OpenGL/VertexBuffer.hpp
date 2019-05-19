@@ -24,14 +24,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL vertex buffer.
+    Provides high level control over an OpenGL vertex buffer
     */
     class VertexBuffer final
         : public Buffer
     {
     public:
         /*!
-        Constructs an instance of VertexBuffer.
+        Constructs an instance of VertexBuffer
         */
         inline VertexBuffer()
             : Buffer(GL_ARRAY_BUFFER)
@@ -40,7 +40,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of VertexBuffer.
+        Moves an instance of VertexBuffer
         @param [in] other The VertexBuffer to move from
         */
         inline VertexBuffer(VertexBuffer&& other)
@@ -49,7 +49,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of VertexBuffer.
+        Moves an instance of VertexBuffer
         @param [in] other The VertexBuffer to move from
         @return This VertexBuffer
         */

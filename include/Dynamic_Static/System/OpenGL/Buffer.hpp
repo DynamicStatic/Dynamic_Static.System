@@ -25,7 +25,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL buffer.
+    Provides high level control over an OpenGL buffer
     */
     class Buffer
         : public Object
@@ -38,7 +38,7 @@ namespace gl {
 
     public:
         /*!
-        Constructs an instance of Buffer.
+        Constructs an instance of Buffer
         */
         inline Buffer()
         {
@@ -46,7 +46,7 @@ namespace gl {
         }
 
         /*!
-        Constructs an instance of Buffer.
+        Constructs an instance of Buffer
         @param [in] type This Buffer's type
         */
         inline Buffer(GLenum type)
@@ -67,7 +67,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Buffer.
+        Moves an instance of Buffer
         @param [in] other The Buffer to move from
         */
         inline Buffer(Buffer&& other)
@@ -76,7 +76,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Buffer.
+        Moves an instance of Buffer
         @param [in] other The Buffer to move from
         @return This Buffer
         */
@@ -95,7 +95,7 @@ namespace gl {
 
     public:
         /*!
-        Gets a value indicating whether or not this Buffer is empty.
+        Gets a value indicating whether or not this Buffer is empty
         @return Whether or not this Buffer is empty
         */
         inline bool empty() const
@@ -104,7 +104,7 @@ namespace gl {
         }
 
         /*!
-        Gets the size in bytes of a single element in this Buffer.
+        Gets the size in bytes of a single element in this Buffer
         @return The size in bytes of a single element in this Buffer
         */
         inline GLsizei get_element_size() const
@@ -113,7 +113,7 @@ namespace gl {
         }
 
         /*!
-        Gets the number of elements in this Buffer.
+        Gets the number of elements in this Buffer
         @return The number of elements in this Buffer
         */
         inline GLsizei get_element_count() const
@@ -122,7 +122,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Buffer's size in bytes.
+        Gets this Buffer's size in bytes
         @return This Buffer's size in bytes
         */
         inline GLsizei get_size() const
@@ -131,7 +131,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Buffer's mapped ptr.
+        Gets this Buffer's mapped ptr
         @return This Buffer's mapped ptr or nullptr if this Buffer isn't mapped
         */
         inline void* get_mapped_ptr()
@@ -140,7 +140,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Buffer's mapped ptr.
+        Gets this Buffer's mapped ptr
         @return This Buffer's mapped ptr or nullptr if this Buffer isn't mapped
         */
         inline const void* get_mapped_ptr() const
@@ -149,7 +149,7 @@ namespace gl {
         }
 
         /*!
-        Binds this Buffer using its OpenGL target.
+        Binds this Buffer using its OpenGL target
         */
         inline void bind() const
         {
@@ -157,7 +157,7 @@ namespace gl {
         }
 
         /*!
-        Unbinds the Buffer at this Buffer's OpenGL target.
+        Unbinds the Buffer at this Buffer's OpenGL target
         */
         inline void unbind() const
         {
@@ -165,7 +165,7 @@ namespace gl {
         }
 
         /*!
-        Maps this Buffer.
+        Maps this Buffer
         @param [in] access This Buffer's access policy given as GL_READ_ONLY, GL_WRITE_ONLY, or GL_READ_WRITE (optional = GL_WRITE_ONLY)
         @param [in] usage This Buffer's usage pattern given as GL_ STREAM/STATIC/DYNAMIC_ DRAW/READ/COPY (optional = GL_STREAM_DRAW)
         */
@@ -186,7 +186,7 @@ namespace gl {
         }
 
         /*!
-        Unmaps this Buffer.
+        Unmaps this Buffer
         */
         inline void unmap()
         {
@@ -199,7 +199,7 @@ namespace gl {
         }
 
         /*!
-        Writes data to this Buffer.
+        Writes data to this Buffer
         @param <T> The type of data to write to this Buffer
         @param [in] data The data to write to this Buffer
         @param [in](optional = GL_STATIC_DRAW) usage This Buffer's usage pattern given as GL_ STREAM/STATIC/DYNAMIC_ DRAW/READ/COPY

@@ -13,7 +13,7 @@
 #include "Dynamic_Static/System/Defines.hpp"
 #include "Dynamic_Static/System/Input.hpp"
 #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
-#include "Dynamic_Static/System/OpenGL.hpp"
+#include "Dynamic_Static/System/OpenGL/Defines.hpp"
 #endif
 
 #include <mutex>

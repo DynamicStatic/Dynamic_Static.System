@@ -26,7 +26,7 @@ int main()
         running = false;
     };
 
-    dst::sys::Gui gui;
+    Gui gui(std::make_unique<gl::GuiRenderer>());
     dst::Clock clock;
     while (running) {
         clock.update();

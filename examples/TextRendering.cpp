@@ -139,7 +139,7 @@ int main()
 
     layout.scale = glm::vec2 { 0.12f, 0.12f };
 
-    dst::sys::Gui gui;
+    dst::sys::Gui gui(std::make_unique<gl::GuiRenderer>());
     dst::Clock clock;
     while (running) {
         clock.update();

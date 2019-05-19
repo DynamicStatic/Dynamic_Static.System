@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-    Copyright 2017-2018 Dynamic_Static
+    Copyright 2017-2019 Dynamic_Static
         Patrick Purcell
     Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -25,4 +25,4 @@
 #include "Dynamic_Static/System/OpenGL/Vertex.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexArray.hpp"
 #include "Dynamic_Static/System/OpenGL/VertexBuffer.hpp"
-#endif
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

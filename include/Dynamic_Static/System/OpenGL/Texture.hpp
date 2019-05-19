@@ -22,14 +22,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL texture.
+    Provides high level control over an OpenGL texture
     */
     class Texture final
         : public Object
     {
     public:
         /*!
-        Configuration parameters for Texture construction.
+        Configuration parameters for Texture construction
         */
         struct Info final
         {
@@ -49,7 +49,7 @@ namespace gl {
 
     public:
         /*!
-        Constructs an instance of Texture.
+        Constructs an instance of Texture
         */
         inline Texture()
         {
@@ -57,7 +57,7 @@ namespace gl {
         }
 
         /*!
-        Constructs an instance of Texture.
+        Constructs an instance of Texture
         @param [in] info This Texture's Texture::Info
         @param [in] data This Texture's initial data
         */
@@ -82,7 +82,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Texture.
+        Moves an instance of Texture
         @param [in] other The Texture to move from
         */
         inline Texture(Texture&& other)
@@ -91,7 +91,7 @@ namespace gl {
         }
 
         /*!
-        Destroys this instance of Texture.
+        Destroys this instance of Texture
         */
         inline ~Texture()
         {
@@ -99,7 +99,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of Texture.
+        Moves an instance of Texture
         @param [in] other The Texture to move from
         @return This Texture
         */
@@ -114,7 +114,7 @@ namespace gl {
 
     public:
         /*!
-        Gets this Texture's Texture::Info.
+        Gets this Texture's Texture::Info
         @return This Texture's Texture::Info
         */
         inline const Info& get_info() const
@@ -123,7 +123,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Texture's size in bytes.
+        Gets this Texture's size in bytes
         @return This Texture's size in bytes
         */
         inline GLsizei get_size()
@@ -132,7 +132,7 @@ namespace gl {
         }
 
         /*!
-        Gets this Texture's mip map level count.
+        Gets this Texture's mip map level count
         @return This Texture's mip map level count
         */
         inline GLint get_mip_map_level_count() const
@@ -141,7 +141,7 @@ namespace gl {
         }
 
         /*!
-        Generates mip maps for this Texture.
+        Generates mip maps for this Texture
         */
         inline void generate_mip_maps()
         {
@@ -157,7 +157,7 @@ namespace gl {
         }
 
         /*!
-        Binds this Texture using its OpenGL target.
+        Binds this Texture using its OpenGL target
         */
         inline void bind() const
         {
@@ -165,7 +165,7 @@ namespace gl {
         }
 
         /*!
-        Unbinds the Texture at this texture's OpenGL target.
+        Unbinds the Texture at this texture's OpenGL target
         */
         inline void unbind() const
         {
@@ -173,7 +173,7 @@ namespace gl {
         }
 
         /*!
-        Gets the Texture size for a given format and dimensions.
+        Gets the Texture size for a given format and dimensions
         @param [in] format The format to use to calculate size
         @param [in](optional = 1) width The width in pixels to use to calculate size
         @param [in](optional = 1) height The height in pixels to use to calculate size

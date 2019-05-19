@@ -24,14 +24,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL index buffer.
+    Provides high level control over an OpenGL index buffer
     */
     class IndexBuffer final
         : public Buffer
     {
     public:
         /*!
-        Constructs an instance of IndexBuffer.
+        Constructs an instance of IndexBuffer
         */
         inline IndexBuffer()
             : Buffer(GL_ELEMENT_ARRAY_BUFFER)
@@ -40,7 +40,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of IndexBuffer.
+        Moves an instance of IndexBuffer
         @param [in] other The IndexBuffer to move from
         */
         inline IndexBuffer(IndexBuffer&& other)
@@ -49,7 +49,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of IndexBuffer.
+        Moves an instance of IndexBuffer
         @param [in] other The IndexBuffer to move from
         @return This IndexBuffer
         */
@@ -63,7 +63,7 @@ namespace gl {
 
     public:
         /*!
-        Gets the type of elements in this IndexBuffer.
+        Gets the type of elements in this IndexBuffer
         @return The type of elements in this IndexBuffer
         */
         inline GLenum get_element_type() const

@@ -25,14 +25,14 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL vertex array.
+    Provides high level control over an OpenGL vertex array
     */
     class VertexArray final
         : public Object
     {
     public:
         /*!
-        Constructs an instance of VertexArray.
+        Constructs an instance of VertexArray
         */
         inline VertexArray()
         {
@@ -41,7 +41,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of VertexArray.
+        Moves an instance of VertexArray
         @param [in] other The VertexArray to move from
         */
         inline VertexArray(VertexArray&& other)
@@ -50,7 +50,7 @@ namespace gl {
         }
 
         /*!
-        Destroys this instance of VertexArray.
+        Destroys this instance of VertexArray
         */
         inline ~VertexArray()
         {
@@ -60,7 +60,7 @@ namespace gl {
         }
 
         /*!
-        Moves an instance of VertexArray.
+        Moves an instance of VertexArray
         @param [in] other The VertexArray to move from
         @return This VertexArray
         */
@@ -74,7 +74,7 @@ namespace gl {
 
     public:
         /*!
-        Binds this VertexArray.
+        Binds this VertexArray
         */
         inline void bind() const
         {
@@ -82,7 +82,7 @@ namespace gl {
         }
 
         /*!
-        Unbinds the current VertexArray.
+        Unbinds the current VertexArray
         */
         inline void unbind() const
         {

@@ -27,7 +27,7 @@ namespace sys {
 namespace gl {
 
     /*!
-    Provides high level control over an OpenGL mesh.
+    Provides high level control over an OpenGL mesh
     */
     class Mesh final
     {
@@ -42,7 +42,7 @@ namespace gl {
 
     public:
         /*!
-        Writes vertex and index data to this Mesh.
+        Writes vertex and index data to this Mesh
         @param <VertexType> The type of vertex data to write to this Mesh
         @param <IndexType> The type of index data to write to this Mesh
         @param [in] vertices The vertex data to write to this Mesh
@@ -70,7 +70,7 @@ namespace gl {
         }
 
         /*!
-        Draws this Mesh.
+        Draws this Mesh
         */
         inline void draw_indexed() const
         {
@@ -78,7 +78,7 @@ namespace gl {
         }
 
         /*!
-        Draws this Mesh.
+        Draws this Mesh
         @param [in] count The number of vertices to draw
         @param [in] indices A pointer into this Mesh's IndexBuffer to start drawing from (optional = nullptr)
         \n NOTE : This pointer treats the start of this Mesh's IndexBuffer storage as address 0
