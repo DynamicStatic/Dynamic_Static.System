@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2017-2018 Dynamic_Static
+  Copyright (c) 2017-2019 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -18,17 +18,46 @@
 #include "imgui.h"
 
 #include <array>
+#include <memory>
 #include <string>
 
 namespace dst {
 namespace sys {
 
     /*!
-    Provides high level control over rendering an ImGui graphical user interface.
+    Provides high level control over rendering an ImGui graphical user interface
     */
     class Gui final
         : NonCopyable
     {
+    public:
+        /*!
+        Provides a common interface for Gui renderers
+        */
+        class Renderer
+        {
+        public:
+            /*!
+
+            */
+            virtual ~Renderer() = 0;
+
+            /*!
+            Updates this Gui.Renderer
+            @param [in] clock The clock used to maintain update and drawing timing
+            @param [in] window The Window to draw this Gui on
+             */
+            virtual void update(
+                const Clock& clock,
+                Window& window
+            ) = 0;
+
+            /*!
+            Renders this Gui.Renderer on the Window passed in update()
+            */
+            virtual void render() = 0;
+        };
+
     private:
         gl::Texture mTexture;
         gl::Program mProgram;
@@ -37,13 +66,13 @@ namespace sys {
 
     public:
         /*!
-        Constructs an instance of Gui.
+        Constructs an instance of Gui
         */
         Gui();
 
     public:
         /*!
-        Updates this Gui.
+        Updates this Gui
         @param [in] clock The clock used to maintain update and drawing timing
         @param [in] window The Window to draw this Gui on
         */
@@ -53,11 +82,12 @@ namespace sys {
         );
 
         /*!
-        Draws this Gui on the Window passed in update().
+        Draws this Gui on the Window passed in update()
         */
         void draw();
 
     private:
+        std::unique_ptr<Renderer> mRenderer;
         static const char* get_clipboard(void* userData);
         static void set_clipboard(void* userData, const char* clipboard);
     };

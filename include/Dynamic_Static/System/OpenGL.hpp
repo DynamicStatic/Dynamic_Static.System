@@ -14,6 +14,7 @@
 #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #include "Dynamic_Static/System/OpenGL/Buffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Defines.hpp"
+#include "Dynamic_Static/System/OpenGL/Gui.Renderer.hpp"
 #include "Dynamic_Static/System/OpenGL/IndexBuffer.hpp"
 #include "Dynamic_Static/System/OpenGL/Mesh.hpp"
 #include "Dynamic_Static/System/OpenGL/Object.hpp"
