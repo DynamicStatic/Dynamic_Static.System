@@ -47,7 +47,7 @@ namespace sys {
         io.SetClipboardTextFn = set_clipboard;
     }
 
-    void Gui::update(
+    void Gui::begin_frame(
         const Clock& clock,
         Window& window
     )
@@ -86,6 +86,12 @@ namespace sys {
         io.ImeWindowHandle = window.get_hwnd();
         #endif
         ImGui::NewFrame();
+    }
+
+    void Gui::end_frame()
+    {
+        assert(mRenderer);
+        mRenderer->draw();
     }
 
     void Gui::draw()

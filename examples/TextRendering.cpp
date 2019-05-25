@@ -260,7 +260,7 @@ int main()
         texture.unbind();
         program.unbind();
 
-        gui.update(clock, window);
+        gui.begin_frame(clock, window);
         // ImGui::ShowDemoWindow();
         ImGui::SliderFloat("Scale X", &layout.scale.x, 0.1f, 1);
         ImGui::SliderFloat("Scale Y", &layout.scale.y, 0.1f, 1);

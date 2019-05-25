@@ -63,14 +63,19 @@ namespace sys {
 
     public:
         /*!
-        Updates this Gui
+        TODO : Documentation
         @param [in] clock The clock used to maintain update and drawing timing
-        @param [in] window The Window to draw this Gui on
+        @param [in] window The Window associated with this Gui
         */
-        void update(
+        void begin_frame(
             const Clock& clock,
             Window& window
         );
+
+        /*!
+        TODO : Documentation
+        */
+        void end_frame();
 
         /*!
         Draws this Gui to the Window passed in update()

@@ -111,8 +111,10 @@ DstCreateStaticLibrary(
         "${includePath}/Text/Layout.hpp"
         "${includePath}/Audio.hpp"
         "${includePath}/Defines.hpp"
+        "${includePath}/Format.hpp"
         "${includePath}/Gui.hpp"
         "${includePath}/Image.hpp"
+        "${includePath}/Image.Ex.hpp"
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
         "${includePath}/Text.hpp"
@@ -127,9 +129,11 @@ DstCreateStaticLibrary(
         "${sourcePath}/Text/Font.Atlas.cpp"
         "${sourcePath}/Text/Glyph.cpp"
         "${sourcePath}/Text/Layout.cpp"
+        "${sourcePath}/Format.cpp"
         "${sourcePath}/GlfwWindow.cpp"
         "${sourcePath}/Gui.cpp"
         "${sourcePath}/Image.cpp"
+        "${sourcePath}/Image.Ex.cpp"
         "${sourcePath}/Input.cpp"
 )
 
@@ -144,6 +148,17 @@ endif()
 option(BUILD_DST_SYS_EXAMPLES "Build Dynamic_Static.System.Examples" ON)
 if(BUILD_DST_SYS_EXAMPLES)
     add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
+endif()
+
+option(BUILD_DST_SYS_TESTS "Build Dynamic_Static.System.Tests" ON)
+if(BUILD_DST_SYS_TESTS)
+    set(testsPath "${CMAKE_CURRENT_LIST_DIR}/tests/")
+    DstCreateTests(
+        target Dynamic_Static.System
+        folder Dynamic_Static.System/
+        sourceFiles
+            "${testsPath}/Image.Tests.cpp"
+    )
 endif()
 
 # TODO : Single header generation for dst::sys doesn't work correctly yet

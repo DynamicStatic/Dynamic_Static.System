@@ -10,14 +10,14 @@
 
 #include "Dynamic_Static/System/Image.hpp"
 
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
+// #ifndef STB_IMAGE_IMPLEMENTATION
+// #define STB_IMAGE_IMPLEMENTATION
+// #endif
 #include "stb_image.h"
-
-#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#endif
+// 
+// #ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+// #define STB_IMAGE_WRITE_IMPLEMENTATION
+// #endif
 #include "stb_image_write.h"
 
 #include <iostream>

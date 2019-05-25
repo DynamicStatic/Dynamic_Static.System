@@ -36,7 +36,7 @@ int main()
         if (input.keyboard.down(Keyboard::Key::Escape)) {
             running = false;
         }
-        gui.update(clock, window);
+        gui.begin_frame(clock, window);
         ImGui::ShowDemoWindow();
         window.make_context_current();
         auto resolution = window.get_resolution();
