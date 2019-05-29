@@ -12,13 +12,15 @@
 
 #include "Dynamic_Static/System/Defines.hpp"
 
+#include <string>
+
 namespace dst {
 namespace sys {
 
     /*!
     TODO : Documentation
     */
-    enum Format
+    enum class Format
     {
         Unknown,
         R8_Unorm,
@@ -38,4 +40,12 @@ namespace sys {
     int get_format_bytes_per_pixel(Format format);
 
 } // namespace sys
+
+    /*!
+    Gets the std::string representation of a given Format
+    @param [in] value The Format to get the std::string representation of
+    @return The std::string representation of the given Format
+    */
+    std::string to_string(sys::Format format);
+
 } // namespace dst

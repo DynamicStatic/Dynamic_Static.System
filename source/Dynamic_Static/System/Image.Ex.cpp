@@ -22,40 +22,55 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace dst {
 namespace sys {
 
-    Image::Image(const Info& info)
+    ImageEx::ImageEx()
     {
-        resize(info);
+        clear();
     }
 
-    const Image::Info& Image::get_info() const
+    ImageEx::ImageEx(
+        const Info& info,
+        uint8_t* data,
+        bool managed
+    )
+        : mInfo { info }
+    {
+        resize(mInfo);
+    }
+
+    const ImageEx::Info& ImageEx::get_info() const
     {
         return mInfo;
     }
 
-    void Image::resize(const Image::Info& info)
+    void ImageEx::resize(const ImageEx::Info& info)
     {
-        mInfo = info;
-        auto bpp = get_format_bytes_per_pixel(mInfo.format);
-        mData.resize(mInfo.width * mInfo.height * mInfo.depth * bpp);
-        if (mData.empty()) {
-            clear();
-        }
+        mManagedData.resize(size_bytes());
     }
 
-    void Image::clear()
+    void ImageEx::clear()
     {
+#if 0
         mInfo.format = Format::Unknown;
         mInfo.width = 0;
         mInfo.height = 0;
-        mInfo.depth = 0;
-        mData.clear();
+        mInfo.managed = false;
+        mManagedData.clear();
+        mUnmanagedData = nullptr;
+#endif
     }
 
-    void Image::read_png(
+    size_t ImageEx::size_bytes() const
+    {
+        auto bpp = get_format_bytes_per_pixel(mInfo.format);
+        return mInfo.width * mInfo.height * bpp;
+    }
+
+    void ImageEx::read_png(
         const dst::filesystem::path& filePath,
         Format format
     )
@@ -63,28 +78,49 @@ namespace sys {
         mInfo.format = format;
         int requestedComponents = get_format_channel_count(mInfo.format);
         if (!requestedComponents) {
-            mInfo.format = R8G8B8A8_Unorm;
+            mInfo.format = Format::R8G8B8A8_Unorm;
             requestedComponents = get_format_channel_count(mInfo.format);
         }
         int components = 0;
         auto filePathStr = filePath.string();
         auto image = stbi_load(filePathStr.c_str(), &mInfo.width, &mInfo.height, &components, requestedComponents);
         if (image) {
-            mInfo.depth = 1;
             resize(mInfo);
-            memcpy(mData.data(), image, mData.size());
+            memcpy(mManagedData.data(), image, mManagedData.size());
             stbi_image_free(image);
         } else {
             clear();
             std::stringstream strStr;
-            strStr << "Failed to read png @ \"" << filePathStr << "\"" << " : " << stbi_failure_reason();
+            strStr << "Failed to read png @ \"" << filePath << "\"" << " : " << stbi_failure_reason();
             throw std::runtime_error(strStr.str());
         }
     }
 
-    void Image::write_png(const dst::filesystem::path& filePath)
+    void ImageEx::write_png(
+        const ImageEx& image,
+        const dst::filesystem::path& filePath
+    )
     {
-
+        if (!image.size_bytes()) {
+            std::stringstream strStr;
+            strStr << "Failed to write png @ \"" << filePath << "\"" << " : no data";
+            throw std::runtime_error(strStr.str());
+        }
+        auto const& imageInfo = image.get_info();
+        auto components = get_format_channel_count(imageInfo.format);
+        auto stride = imageInfo.width * get_format_bytes_per_pixel(imageInfo.format);
+        if (!components || !stride) {
+            std::stringstream strStr;
+            strStr << "Failed to write png @ \"" << filePath << "\"" << " : unsupported Format::" << to_string(imageInfo.format) << "";
+            throw std::runtime_error(strStr.str());
+        }
+        auto filePathStr = filePath.string();
+        auto error = stbi_write_png(filePathStr.c_str(), imageInfo.width, imageInfo.height, components, nullptr, stride);
+        if (error) {
+            std::stringstream strStr;
+            strStr << "Failed to write png @ \"" << filePath << "\" : stbi_write_png() failed";
+            throw std::runtime_error(strStr.str());
+        }
     }
 
 } // namespace sys
