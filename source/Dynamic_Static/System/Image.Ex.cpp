@@ -7,7 +7,7 @@
     http://opensource.org/licenses/MIT
 ==========================================
 */
-
+#if 0
 #include "Dynamic_Static/System/Image.Ex.hpp"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
@@ -27,21 +27,6 @@
 namespace dst {
 namespace sys {
 
-    ImageEx::ImageEx()
-    {
-        clear();
-    }
-
-    ImageEx::ImageEx(
-        const Info& info,
-        uint8_t* data,
-        bool managed
-    )
-        : mInfo { info }
-    {
-        resize(mInfo);
-    }
-
     const ImageEx::Info& ImageEx::get_info() const
     {
         return mInfo;
@@ -49,6 +34,8 @@ namespace sys {
 
     void ImageEx::resize(const ImageEx::Info& info)
     {
+        mInfo = info;
+        mManagedData.clear();
         mManagedData.resize(size_bytes());
     }
 
@@ -125,3 +112,4 @@ namespace sys {
 
 } // namespace sys
 } // namespace dst
+#endif

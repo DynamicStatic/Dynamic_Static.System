@@ -1,7 +1,7 @@
-#if 0
+
 /*
 ==========================================
-  Copyright (c) 2018-2019 Dynamic_Static
+  Copyright (c) 2019-2019 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -14,51 +14,50 @@
 #include "Dynamic_Static/System/Format.hpp"
 
 #include <algorithm>
-#include <vector>
 
 namespace dst {
 namespace sys {
+namespace detail {
 
     /*!
     TODO : Documentation
     */
-    template <typename DataType = uint8_t>
-    class ImageEx final
+    template <typename CRT>
+    class BasicImage
     {
     public:
         /*!
         TODO : Documentation
         */
-        struct Info final
+        struct Info
         {
-            Format format { Format::Unknown };
-            int width { 1 };
-            int height { 1 };
+            Format format { Format::Unknown }; //!< TODO : Documentation
+            int width { 1 };                   //!< TODO : Documentation
+            int height { 1 };                  //!< TODO : Documentation
         };
 
     public:
         /*!
         TODO : Documentation
         */
-        ImageEx() = default;
+        inline BasicImage()
+        {
+            clear();
+        }
 
         /*!
         TODO : Documentation
         */
-        template <typename PixelType = uint8_t>
-        inline ImageEx(
-            const Info& info,
-            const PixelType* data = nullptr
-        )
-        {
-            reset<PixelType>(info, data);
-        }
+        virtual ~BasicImage() = 0;
 
     public:
         /*!
         TODO : Documentation
         */
-        const Info& get_info() const;
+        inline const Info& get_info() const
+        {
+            return mInfo;
+        }
 
         /*!
         TODO : Documentation
@@ -66,9 +65,8 @@ namespace sys {
         template <typename PixelType = uint8_t>
         inline Span<const PixelType> get_pixels() const
         {
-            auto data = !mManagedData.empty() ? mManagedData.data() : nullptr;
             auto count = size_bytes() / sizeof(PixelType);
-            return Span<PixelType>(reinterpret_cast<PixelType*>(data), count);
+            return Span<PixelType>(reinterpret_cast<PixelType*>(data()), count);
         }
 
         /*!
@@ -77,9 +75,8 @@ namespace sys {
         template <typename PixelType = uint8_t>
         inline Span<PixelType> get_pixels()
         {
-            auto data = !mManagedData.empty() ? mManagedData.data() : nullptr;
             auto count = size_bytes() / sizeof(PixelType);
-            return Span<PixelType>(reinterpret_cast<PixelType*>(data), count);
+            return Span<PixelType>(reinterpret_cast<PixelType*>(data()), count);
         }
 
         /*!
@@ -107,59 +104,42 @@ namespace sys {
         /*!
         TODO : Documentation
         */
-        void resize(const Info& info);
-
-        /*!
-        TODO : Documentation
-        */
-        template <typename PixelType = uint8_t>
-        inline void reset(
-            const Info& info,
-            const PixelType* data = nullptr
-        )
+        inline size_t size_bytes() const
         {
-            resize(info);
-            if (data) {
-                memcpy(mManagedData.data(), data, size_bytes());
-            }
+            auto bpp = get_format_bytes_per_pixel(mInfo.format);
+            return mInfo.width * mInfo.height * bpp;
         }
 
         /*!
         TODO : Documentation
         */
-        void clear();
-
-        /*!
-        TODO : Documentation
-        */
-        size_t size_bytes() const;
-
-        /*!
-        TODO : Documentation
-        */
-        void read_png(
-            const dst::filesystem::path& filePath,
-            Format format = Format::R8G8B8A8_Unorm
-        );
-
-        /*!
-        TODO : Documentation
-        */
-        static void write_png(
-            const ImageEx& image,
-            const dst::filesystem::path& filePath
-        );
+        virtual void clear()
+        {
+            mInfo.format = Format::Unknown;
+            mInfo.width = 0;
+            mInfo.height = 0;
+        }
 
     private:
+        const uint8_t* data() const
+        {
+            return static_cast<const CRT*>(this)->data();
+        }
+
+        uint8_t* data()
+        {
+            return static_cast<CRT*>(this)->data();
+        }
+
+    protected:
         Info mInfo { };
-        DataType* mData { nullptr };
-#if 0
-        std::vector<uint8_t> mManagedData;
-        uint8_t* mUnmanagedMutableData { nullptr };
-        const uint8_t* mUnmanagedReadonlyData { nullptr };
-#endif
     };
 
+    template <typename CRT>
+    inline BasicImage<CRT>::~BasicImage()
+    {
+    }
+
+} // namespace detail
 } // namespace sys
 } // namespace dst
-#endif

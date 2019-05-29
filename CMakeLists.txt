@@ -90,6 +90,9 @@ DstCreateStaticLibrary(
         
     includeFiles
         "${includePath}/Audio/Defines.hpp"
+        "${includePath}/Image/BasicImage.hpp"
+        "${includePath}/Image/UnmanagedImage.hpp"
+        "${includePath}/Image/ManagedImage.hpp"
         "${includePath}/Input/Keyboard.hpp"
         "${includePath}/Input/Mouse.hpp"
         "${includePath}/OpenGL/Buffer.hpp"
