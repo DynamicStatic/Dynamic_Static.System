@@ -50,7 +50,7 @@ namespace sys {
         return mData[index];
     }
 
-    const uint8_t& Image::operator[](glm::ivec2 texCoord) const
+    const uint8_t& Image::operator[](glm::ivec2 /* texCoord */) const
     {
         assert(false && "TODO");
         return mData[0];

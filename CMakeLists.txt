@@ -62,6 +62,7 @@ if(MSVC)
     list(APPEND external.includeDirectories "${glew.includeDirectories}")
     list(APPEND external.sourceFiles "${glew.sourceFiles}")
     list(APPEND compileDefinitions "GLEW_STATIC")
+    set_source_files_properties("${glew.sourceFiles}" PROPERTIES COMPILE_FLAGS /w)
 endif()
 option(BUILD_DST_SYS_AUDIO "Build Dynamic_Static.System.Audio" ON)
 if(BUILD_DST_SYS_AUDIO)
@@ -131,7 +132,6 @@ DstCreateStaticLibrary(
         "${sourcePath}/Text/Font.cpp"
         "${sourcePath}/Text/Font.Atlas.cpp"
         "${sourcePath}/Text/Glyph.cpp"
-        "${sourcePath}/Text/Layout.cpp"
         "${sourcePath}/Format.cpp"
         "${sourcePath}/GlfwWindow.cpp"
         "${sourcePath}/Gui.cpp"

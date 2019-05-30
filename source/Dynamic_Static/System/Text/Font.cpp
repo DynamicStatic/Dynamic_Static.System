@@ -261,7 +261,6 @@ namespace sys {
                     }
                 }
             }
-            int breaker = 0;
         }
     }
 

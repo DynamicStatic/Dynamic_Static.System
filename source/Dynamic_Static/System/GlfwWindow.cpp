@@ -205,6 +205,8 @@ namespace sys {
 
     void Window::glfw_framebuffer_size_callback(GLFWwindow* glfwWindow, int width, int height)
     {
+        (void)width;
+        (void)height;
         auto dstWindow = (Window*)glfwGetWindowUserPointer(glfwWindow);
         assert(dstWindow);
         dstWindow->on_resize(*dstWindow);
@@ -221,6 +223,10 @@ namespace sys {
 
     void Window::glfw_keyboard_callback(GLFWwindow* glfwWindow, int key, int scanCode, int action, int mods)
     {
+        (void)key;
+        (void)scanCode;
+        (void)action;
+        (void)mods;
         auto dstWindow = (Window*)glfwGetWindowUserPointer(glfwWindow);
         assert(dstWindow);
         auto dstKey = (int)glfw_to_dst_key(key);
@@ -234,6 +240,7 @@ namespace sys {
 
     void Window::glfw_mouse_button_callback(GLFWwindow* glfwWindow, int button, int action, int mods)
     {
+        (void)mods;
         auto dstWindow = (Window*)glfwGetWindowUserPointer(glfwWindow);
         assert(dstWindow);
         auto dstButton = (int)glfw_to_dst_mouse_button(button);
@@ -254,6 +261,7 @@ namespace sys {
 
     void Window::glfw_mouse_scroll_callback(GLFWwindow* glfwWindow, double xOffset, double yOffset)
     {
+        (void)xOffset;
         auto dstWindow = (Window*)glfwGetWindowUserPointer(glfwWindow);
         assert(dstWindow);
         dstWindow->mInput.mouse.staged.scroll += (float)yOffset;

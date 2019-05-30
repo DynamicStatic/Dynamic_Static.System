@@ -215,6 +215,7 @@ int main()
                 const auto& indices
             )
             {
+                (void)glyph;
                 for (int i = 0; i < 4; ++i) {
                     Vtx vertex;
                     vertex.position.x = vertices[i].x;

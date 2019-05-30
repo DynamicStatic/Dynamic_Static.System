@@ -15,7 +15,9 @@
 #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #ifdef DYNAMIC_STATIC_WINDOWS
+#pragma warning(push, 0)
 #include "GL/glew.h"
+#pragma warning(pop)
 #endif
 
 #include <iostream>

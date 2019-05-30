@@ -18,27 +18,26 @@ namespace dst {
 namespace sys {
 
     /*!
-    TODO : Documentation
+    Provides high level control over unmanaged image data
     */
     template <typename DataType = uint8_t>
     class UnmanagedImage final
-        : public detail::BasicImage<UnmanagedImage<DataType>>
+        : public BasicImage
     {
     public:
-        typedef detail::BasicImage<UnmanagedImage<DataType>> BasicImage;
-        typedef typename BasicImage::Info Info;
-        friend class BasicImage;
-
-    public:
         /*!
-        TODO : Documentation
+        Constructs an instance of UnmanagedImage
         */
         UnmanagedImage() = default;
 
         /*!
-        TODO : Documentation
+        Constructs an instance of UnmanagedImage
+        @param [in] info This UnmanagedImage's Image::Info
+        @param [in] data (optional = nullptr) A pointer to the data to access via this UnmanagedImage
+        \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
+        \n NOTE : If data is null this UnmanagedImage will be cleared
         */
-        inline UnmanagedImage(
+        UnmanagedImage(
             const Info& info,
             DataType* data
         )
@@ -48,7 +47,11 @@ namespace sys {
 
     public:
         /*!
-        TODO : Documentation
+        Assigns an Image::Info and pixel data to this UnmanagedImage
+        @param [in] info This UnmanagedImage's Image::Info
+        @param [in] data (optional = nullptr) A pointer to the data to access via this UnmanagedImage
+        \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
+        \n NOTE : If data is null this UnmanagedImage will be cleared
         */
         inline void assign(
             const Info& info,
@@ -64,22 +67,66 @@ namespace sys {
         }
 
         /*!
-        TODO : Documentation
+        Gets this UnmanagedImage's pixel data
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        @return This UnmanagedImage's pixel data
         */
-        inline void clear()
+        template <typename PixelType = uint8_t>
+        typename std::enable_if<std::is_const<DataType>::value, Span<const PixelType>>::type
+        inline get_pixels() const
+        {
+            return BasicImage::get_pixels<PixelType>();
+        }
+
+        /*!
+        Gets this UnmanagedImage's pixel data
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        @return This UnmanagedImage's pixel data
+        */
+        template <typename PixelType = uint8_t>
+        typename std::enable_if<!std::is_const<DataType>::value, Span<PixelType>>::type
+        inline get_pixels()
+        {
+            return { mData, size_bytes() / sizeof(PixelType) };
+        }
+
+        /*!
+        Gets this UnmanagedImage's pixel at the given uv coordinate
+        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        @param [in] uv The uv coordinate of the pixel to get
+        */
+        template <typename PixelType = uint8_t>
+        typename std::enable_if<std::is_const<DataType>::value, const PixelType&>::type
+        inline get_pixel(glm::ivec2 uv) const
+        {
+            return BasicImage::get_pixel<PixelType>(uv);
+        }
+
+        /*!
+        Gets this UnmanagedImage's pixel at the given uv coordinate
+        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        @param [in] uv The uv coordinate of the pixel to get
+        */
+        template <typename PixelType = uint8_t>
+        typename std::enable_if<!std::is_const<DataType>::value, PixelType&>::type
+        inline get_pixel(glm::ivec2 uv)
+        {
+            return const_cast<PixelType&>(BasicImage::get_pixel(uv));
+        }
+
+        /*!
+        Clears this ManagedImage
+        */
+        inline void clear() override final
         {
             BasicImage::clear();
             mData = nullptr;
         }
 
     private:
-        inline const uint8_t* getcdata() const
-        {
-            return mData;
-        }
-
-        // template <typename = typename std::enable_if<!std::is_const<DataType>::value>::type>
-        inline uint8_t* getdata()
+        inline const uint8_t* data() const
         {
             return mData;
         }

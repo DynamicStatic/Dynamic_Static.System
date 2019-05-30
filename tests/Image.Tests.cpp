@@ -50,7 +50,7 @@ namespace tests {
         std::vector<uint8_t> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                data[y * width + x] = rng.range(0, 256);
+                data[y * width + x] = rng.range<uint8_t>(0, 255);
             }
         }
 
@@ -66,8 +66,12 @@ namespace tests {
 
     TEST_CASE("ManagedImage can read / write individual pixels", "[Image]")
     {
-        UnmanagedImage<const uint8_t> ui;
+        uint8_t uydata;
+        BasicImage::Info info { };
+        UnmanagedImage<const uint8_t> ui(info, &uydata);
         auto r = ui.get_pixel({ 0,0 });
+        // ui.get_pixel({ 0, 0 }) = (uint8_t)0;
+        (void)r;
 
         RandomNumberGenerator rng;
 
@@ -76,7 +80,7 @@ namespace tests {
         std::vector<uint8_t> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                data[y * width + x] = rng.range(0, 256);
+                data[y * width + x] = rng.range<uint8_t>(0, 255);
             }
         }
 
@@ -91,7 +95,7 @@ namespace tests {
             for (int x = 0; x < width; ++x) {
                 auto index = y * width + x;
                 CHECK(image.get_pixel({ x, y }) == data[index]);
-                auto value = rng.range(0, 256);
+                auto value = rng.range<uint8_t>(0, 255);
                 image.get_pixel({ x, y }) = value;
                 data[index] = value;
             }
@@ -108,7 +112,7 @@ namespace tests {
         std::vector<uint8_t> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                data[y * width + x] = rng.range(0, 256);
+                data[y * width + x] = rng.range<uint8_t>(0, 255);
             }
         }
 

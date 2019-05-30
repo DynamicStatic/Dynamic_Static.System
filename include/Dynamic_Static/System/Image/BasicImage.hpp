@@ -1,7 +1,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2019-2019 Dynamic_Static
+  Copyright (c) 2018-2019 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -17,42 +17,35 @@
 
 namespace dst {
 namespace sys {
-namespace detail {
 
     /*!
-    TODO : Documentation
+    Provides high level control over image data
     */
-    template <typename CRT>
     class BasicImage
     {
     public:
         /*!
-        TODO : Documentation
+        Provides configuration parameters for an Image
         */
         struct Info
         {
-            Format format { Format::Unknown }; //!< TODO : Documentation
-            int width { 1 };                   //!< TODO : Documentation
-            int height { 1 };                  //!< TODO : Documentation
+            Format format { Format::Unknown }; //!< The Image's Format
+            int width { 0 };                   //!< The Image's width
+            int height { 0 };                  //!< The Image's height
         };
 
     public:
         /*!
-        TODO : Documentation
+        Destroys this instance of Image
         */
-        inline BasicImage()
+        virtual ~BasicImage() = 0
         {
-            clear();
         }
-
-        /*!
-        TODO : Documentation
-        */
-        virtual ~BasicImage() = 0;
 
     public:
         /*!
-        TODO : Documentation
+        Gets this Image's Image::Info
+        @return This Image's Image::Info
         */
         inline const Info& get_info() const
         {
@@ -60,27 +53,21 @@ namespace detail {
         }
 
         /*!
-        TODO : Documentation
+        Gets this Image's pixel data
+        @param <PixelType = uint8_t> The type to interpret this Image's pixel data as
+        @return This Image's pixel data
         */
         template <typename PixelType = uint8_t>
         inline Span<const PixelType> get_pixels() const
         {
-            auto count = size_bytes() / sizeof(PixelType);
-            return Span<PixelType>(reinterpret_cast<PixelType*>(data()), count);
+            return { data(), size_bytes() / sizeof(PixelType) };
         }
 
         /*!
-        TODO : Documentation
-        */
-        template <typename PixelType = uint8_t>
-        inline Span<PixelType> get_pixels()
-        {
-            auto count = size_bytes() / sizeof(PixelType);
-            return Span<PixelType>(reinterpret_cast<PixelType*>(data()), count);
-        }
-
-        /*!
-        TODO : Documentation
+        Gets this Image's pixel at the given uv coordinate
+        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this Image
+        @param <PixelType = uint8_t> The type to interpret this Image's pixel data as
+        @param [in] uv The uv coordinate of the pixel to get
         */
         template <typename PixelType = uint8_t>
         inline const PixelType& get_pixel(glm::ivec2 uv) const
@@ -91,55 +78,39 @@ namespace detail {
         }
 
         /*!
-        TODO : Documentation
-        */
-        template <typename PixelType = uint8_t>
-        inline PixelType& get_pixel(glm::ivec2 uv)
-        {
-            uv.x = std::clamp(uv.x, 0, mInfo.width - 1);
-            uv.y = std::clamp(uv.y, 0, mInfo.height - 1);
-            return get_pixels<PixelType>()[uv.y * mInfo.width + uv.x];
-        }
-
-        /*!
-        TODO : Documentation
+        Gets this Image's size in bytes
+        @return This Image's size in bytes
         */
         inline size_t size_bytes() const
         {
-            auto bpp = get_format_bytes_per_pixel(mInfo.format);
-            return mInfo.width * mInfo.height * bpp;
+            return size_bytes(mInfo);
         }
 
         /*!
-        TODO : Documentation
+        Clears this Image
         */
-        virtual void clear()
+        virtual void clear() = 0
         {
-            mInfo.format = Format::Unknown;
-            mInfo.width = 0;
-            mInfo.height = 0;
+            mInfo = { };
+        }
+
+        /*!
+        Gets the size in bytes required for a given Image::Info
+        @param [in] info The Image::Info to get the required size in bytes for
+        @return This Image's size in bytes
+        */
+        static size_t size_bytes(const Info& info)
+        {
+            auto bpp = get_format_bytes_per_pixel(info.format);
+            return info.width * info.height * bpp;
         }
 
     private:
-        const uint8_t* data() const
-        {
-            return static_cast<const CRT*>(this)->data();
-        }
-
-        uint8_t* data()
-        {
-            return static_cast<CRT*>(this)->data();
-        }
+        virtual const uint8_t* data() const = 0;
 
     protected:
         Info mInfo { };
     };
 
-    template <typename CRT>
-    inline BasicImage<CRT>::~BasicImage()
-    {
-    }
-
-} // namespace detail
 } // namespace sys
 } // namespace dst

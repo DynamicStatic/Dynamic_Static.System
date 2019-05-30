@@ -18,24 +18,22 @@ namespace dst {
 namespace sys {
 
     /*!
-    TODO : Documentation
+    Provides high level control over managed image data
     */
     class ManagedImage final
-        : public detail::BasicImage<ManagedImage>
+        : public BasicImage
     {
     public:
-        typedef detail::BasicImage<ManagedImage> BasicImage;
-        typedef typename BasicImage::Info Info;
-        friend class BasicImage;
-
-    public:
         /*!
-        TODO : Documentation
+        Constructs an instance of ManagedImage
         */
         ManagedImage() = default;
 
         /*!
-        TODO : Documentation
+        Constructs an instance of ManagedImage
+        @param [in] info This ManagedImage's Image::Info
+        @param [in] data (optional = nullptr) A pointer to the data to copy to this ManagedImage
+        \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         */
         inline ManagedImage(
             const Info& info,
@@ -47,11 +45,14 @@ namespace sys {
 
     public:
         /*!
-        TODO : Documentation
+        Assigns an Image::Info and optionaly pixel data to this ManagedImage
+        @param [in] info This ManagedImage's Image::Info
+        @param [in] data (optional = nullptr) A pointer to the data to copy to this ManagedImage
+        \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         */
         inline void assign(
             const Info& info,
-            const uint8_t* data
+            const uint8_t* data = nullptr
         )
         {
             resize(info);
@@ -61,16 +62,30 @@ namespace sys {
         }
 
         /*!
-        TODO : Documentation
+        Gets this ManagedImage's pixel data
+        @param <PixelType = uint8_t> The type to interpret this ManagedImage's pixel data as
+        @return This ManagedImage's pixel data
         */
-        inline void resize(const Info& info)
+        template <typename PixelType = uint8_t>
+        inline Span<PixelType> get_pixels()
         {
-            mInfo = info;
-            mData.resize(size_bytes(), 0);
+            return { mData.data(), size_bytes() / sizeof(PixelType) };
         }
 
         /*!
-        TODO : Documentation
+        Gets this ManagedImage's pixel at the given uv coordinate
+        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this ManagedImage
+        @param <PixelType = uint8_t> The type to interpret this ManagedImage's pixel data as
+        @param [in] uv The uv coordinate of the pixel to get
+        */
+        template <typename PixelType = uint8_t>
+        inline PixelType& get_pixel(glm::ivec2 uv)
+        {
+            return const_cast<PixelType&>(BasicImage::get_pixel(uv));
+        }
+
+        /*!
+        Clears this ManagedImage
         */
         inline void clear()
         {
@@ -78,13 +93,18 @@ namespace sys {
             mData.clear();
         }
 
-    private:
-        inline const uint8_t* getcdata() const
+        /*!
+        Resizes this ManagedImage
+        \n NOTE : Existing pixel data will be cleared
+        */
+        inline void resize(const Info& info)
         {
-            return !mData.empty() ? mData.data() : nullptr;
+            mInfo = info;
+            mData.resize(size_bytes(), 0);
         }
 
-        inline uint8_t* getdata()
+    private:
+        inline const uint8_t* data() const
         {
             return !mData.empty() ? mData.data() : nullptr;
         }

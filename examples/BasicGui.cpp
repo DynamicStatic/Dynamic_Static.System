@@ -31,7 +31,6 @@ int main()
     while (running) {
         clock.update();
         Window::poll_events();
-        auto deltaTime = clock.elapsed<dst::Second<float>>();
         const auto& input = window.get_input();
         if (input.keyboard.down(Keyboard::Key::Escape)) {
             running = false;
