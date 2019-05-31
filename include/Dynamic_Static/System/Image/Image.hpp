@@ -14,6 +14,7 @@
 #include "Dynamic_Static/System/Format.hpp"
 
 #include <algorithm>
+#include <utility>
 
 namespace dst {
 namespace sys {
@@ -36,21 +37,52 @@ namespace sys {
 
     public:
         /*!
+        Constructs an instance of Image
+        */
+        BasicImage() = default;
+
+        /*!
         Destroys this instance of Image
         */
-        virtual ~BasicImage() = 0
-        {
-        }
+        virtual ~BasicImage() = 0;
+
+    protected:
+        /*!
+        Constructs an instance of Image
+        \n NOTE : Derived implementations must call Image::operator=()
+        @param [in] other The Image to copy from
+        */
+        BasicImage(const BasicImage& other);
+
+        /*!
+        Constructs an instance of Image
+        \n NOTE : Derived implementations must call Image::operator=()
+        @param [in] other The Image to copy from
+        @return This Image after being copied to
+        */
+        BasicImage& operator=(const BasicImage& other);
+
+        /*!
+        Moves an instance of Image
+        \n NOTE : Derived implementations must call Image::operator=(&&)
+        @param [in] other The Image to move from
+        */
+        BasicImage(BasicImage&& other);
+
+        /*!
+        Moves an instance of Image
+        \n NOTE : Derived implementations must call Image::operator=(&&)
+        @param [in] other The Image to move from
+        @return This Image after being moved to
+        */
+        BasicImage& operator=(BasicImage&& other);
 
     public:
         /*!
         Gets this Image's Image::Info
         @return This Image's Image::Info
         */
-        inline const Info& get_info() const
-        {
-            return mInfo;
-        }
+        const Info& get_info() const;
 
         /*!
         Gets this Image's pixel data
@@ -65,7 +97,7 @@ namespace sys {
 
         /*!
         Gets this Image's pixel at the given uv coordinate
-        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this Image
+        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this Image
         @param <PixelType = uint8_t> The type to interpret this Image's pixel data as
         @param [in] uv The uv coordinate of the pixel to get
         */
@@ -81,35 +113,29 @@ namespace sys {
         Gets this Image's size in bytes
         @return This Image's size in bytes
         */
-        inline size_t size_bytes() const
-        {
-            return size_bytes(mInfo);
-        }
+        size_t size_bytes() const;
 
         /*!
         Clears this Image
+        \n NOTE : Derived implementations must call Image::clear()
         */
-        virtual void clear() = 0
-        {
-            mInfo = { };
-        }
+        virtual void clear() = 0;
 
         /*!
         Gets the size in bytes required for a given Image::Info
         @param [in] info The Image::Info to get the required size in bytes for
         @return This Image's size in bytes
         */
-        static size_t size_bytes(const Info& info)
-        {
-            auto bpp = get_format_bytes_per_pixel(info.format);
-            return info.width * info.height * bpp;
-        }
-
-    private:
-        virtual const uint8_t* data() const = 0;
+        static size_t size_bytes(const Info& info);
 
     protected:
-        Info mInfo { };
+        /*!
+        Gets this Image's data
+        @return This Image's data
+        */
+        virtual const uint8_t* data() const = 0;
+
+        Info mInfo { }; //!< This Image's Image::Info
     };
 
 } // namespace sys

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Dynamic_Static/System/Image/BasicImage.hpp"
+#include "Dynamic_Static/System/Image/Image.hpp"
 
 #include <type_traits>
 
@@ -33,7 +33,7 @@ namespace sys {
         /*!
         Constructs an instance of UnmanagedImage
         @param [in] info This UnmanagedImage's Image::Info
-        @param [in] data (optional = nullptr) A pointer to the data to access via this UnmanagedImage
+        @param [in] data A pointer to the data to access via this UnmanagedImage
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         \n NOTE : If data is null this UnmanagedImage will be cleared
         */
@@ -45,11 +45,52 @@ namespace sys {
             assign(info, data);
         }
 
+        /*!
+        Constructs an instance of UnmanagedImage
+        @param [in] other The UnmanagedImage to copy from
+        */
+        inline UnmanagedImage(const UnmanagedImage& other)
+        {
+            *this = other;
+        }
+
+        /*!
+        Constructs an instance of UnmanagedImage
+        @param [in] other The UnmanagedImage to copy from
+        @return This UnmanagedImage after being copied to
+        */
+        inline UnmanagedImage& operator=(const UnmanagedImage& other)
+        {
+            mData = other.mData;
+            BasicImage::operator=(other);
+        }
+
+        /*!
+        Moves an instance of UnmanagedImage
+        @param [in] other The UnmanagedImage to move from
+        */
+        inline UnmanagedImage(UnmanagedImage&& other)
+        {
+            *this = std::move(other);
+        }
+
+        /*!
+        Moves an instance of UnmanagedImage
+        @param [in] other The UnmanagedImage to move from
+        @return This UnmanagedImage after being moved to
+        */
+        inline UnmanagedImage& operator=(UnmanagedImage&& other)
+        {
+            mData = std::move(other.mData);
+            BasicImage::operator=(std::move(other));
+            return *this;
+        }
+
     public:
         /*!
         Assigns an Image::Info and pixel data to this UnmanagedImage
         @param [in] info This UnmanagedImage's Image::Info
-        @param [in] data (optional = nullptr) A pointer to the data to access via this UnmanagedImage
+        @param [in] data A pointer to the data to access via this UnmanagedImage
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         \n NOTE : If data is null this UnmanagedImage will be cleared
         */
@@ -92,7 +133,7 @@ namespace sys {
 
         /*!
         Gets this UnmanagedImage's pixel at the given uv coordinate
-        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
+        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
         @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
         @param [in] uv The uv coordinate of the pixel to get
         */
@@ -105,7 +146,7 @@ namespace sys {
 
         /*!
         Gets this UnmanagedImage's pixel at the given uv coordinate
-        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
+        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
         @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
         @param [in] uv The uv coordinate of the pixel to get
         */
@@ -117,12 +158,12 @@ namespace sys {
         }
 
         /*!
-        Clears this ManagedImage
+        Clears this UnmanagedImage
         */
         inline void clear() override final
         {
-            BasicImage::clear();
             mData = nullptr;
+            BasicImage::clear();
         }
 
     private:

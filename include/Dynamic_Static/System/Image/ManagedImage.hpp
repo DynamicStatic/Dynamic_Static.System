@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Dynamic_Static/System/Image/BasicImage.hpp"
+#include "Dynamic_Static/System/Image/Image.hpp"
 
 #include <vector>
 
@@ -35,13 +35,36 @@ namespace sys {
         @param [in] data (optional = nullptr) A pointer to the data to copy to this ManagedImage
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         */
-        inline ManagedImage(
+        ManagedImage(
             const Info& info,
             const uint8_t* data = nullptr
-        )
-        {
-            assign(info, data);
-        }
+        );
+
+        /*!
+        Constructs an instance of ManagedImage
+        @param [in] other The Image to copy from
+        */
+        ManagedImage(const BasicImage& other);
+
+        /*!
+        Constructs an instance of ManagedImage
+        @param [in] other The Image to copy from
+        @return This ManagedImage after being copied to
+        */
+        ManagedImage& operator=(const BasicImage& other);
+
+        /*!
+        Moves an instance of ManagedImage
+        @param [in] other The ManagedImage to move from
+        */
+        ManagedImage(ManagedImage&& other);
+
+        /*!
+        Moves an instance of ManagedImage
+        @param [in] other The ManagedImage to move from
+        @return This ManagedImage after being moved to
+        */
+        ManagedImage& operator=(ManagedImage&& other);
 
     public:
         /*!
@@ -50,16 +73,10 @@ namespace sys {
         @param [in] data (optional = nullptr) A pointer to the data to copy to this ManagedImage
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
         */
-        inline void assign(
+        void assign(
             const Info& info,
             const uint8_t* data = nullptr
-        )
-        {
-            resize(info);
-            if (data) {
-                memcpy(mData.data(), data, size_bytes());
-            }
-        }
+        );
 
         /*!
         Gets this ManagedImage's pixel data
@@ -87,28 +104,16 @@ namespace sys {
         /*!
         Clears this ManagedImage
         */
-        inline void clear()
-        {
-            BasicImage::clear();
-            mData.clear();
-        }
+        void clear();
 
         /*!
         Resizes this ManagedImage
-        \n NOTE : Existing pixel data will be cleared
+        \n NOTE : This method clears existing pixel data
         */
-        inline void resize(const Info& info)
-        {
-            mInfo = info;
-            mData.resize(size_bytes(), 0);
-        }
+        void resize(const Info& info);
 
     private:
-        inline const uint8_t* data() const
-        {
-            return !mData.empty() ? mData.data() : nullptr;
-        }
-
+        const uint8_t* data() const;
         std::vector<uint8_t> mData;
     };
 

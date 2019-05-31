@@ -91,7 +91,7 @@ DstCreateStaticLibrary(
         
     includeFiles
         "${includePath}/Audio/Defines.hpp"
-        "${includePath}/Image/BasicImage.hpp"
+        "${includePath}/Image/Image.hpp"
         "${includePath}/Image/UnmanagedImage.hpp"
         "${includePath}/Image/ManagedImage.hpp"
         "${includePath}/Input/Keyboard.hpp"
@@ -127,6 +127,8 @@ DstCreateStaticLibrary(
 
     sourceFiles
         "${external.sourceFiles}"
+        "${sourcePath}/Image/Image.cpp"
+        "${sourcePath}/Image/ManagedImage.cpp"
         "${sourcePath}/Input/Keyboard.cpp"
         "${sourcePath}/Input/Mouse.cpp"
         "${sourcePath}/Text/Font.cpp"
@@ -161,6 +163,8 @@ if(BUILD_DST_SYS_TESTS)
         folder Dynamic_Static.System/
         sourceFiles
             "${testsPath}/Image.Tests.cpp"
+            "${testsPath}/ManagedImage.Tests.cpp"
+            "${testsPath}/UnmanagedImage.Tests.cpp"
     )
 endif()
 
