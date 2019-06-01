@@ -21,6 +21,7 @@
 #include "stb_image_write.h"
 
 #include <iostream>
+#include "..\..\..\include\Dynamic_Static\System\Image\Image.hpp"
 
 namespace dst {
 namespace sys {

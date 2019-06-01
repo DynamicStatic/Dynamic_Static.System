@@ -15,10 +15,22 @@ namespace sys {
 
     ManagedImage::ManagedImage(
         const Info& info,
-        const uint8_t* data
+        const void* data
     )
     {
         assign(info, data);
+    }
+
+    ManagedImage::ManagedImage(const ManagedImage& other)
+    {
+        *this = other;
+    }
+
+    ManagedImage& ManagedImage::operator=(const ManagedImage& other)
+    {
+        *this = static_cast<const BasicImage&>(other);
+        BasicImage::operator=(other);
+        return *this;
     }
 
     ManagedImage::ManagedImage(const BasicImage& other)
@@ -47,7 +59,7 @@ namespace sys {
 
     void ManagedImage::assign(
         const Info& info,
-        const uint8_t* data
+        const void* data
     )
     {
         resize(info);
@@ -66,6 +78,11 @@ namespace sys {
     {
         mInfo = info;
         mData.resize(size_bytes(), 0);
+    }
+
+    bool ManagedImage::empty() const
+    {
+        return mData.empty();
     }
 
     const uint8_t* ManagedImage::data() const

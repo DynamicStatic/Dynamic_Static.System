@@ -92,7 +92,7 @@ namespace sys {
         template <typename PixelType = uint8_t>
         inline Span<const PixelType> get_pixels() const
         {
-            return { data(), size_bytes() / sizeof(PixelType) };
+            return { reinterpret_cast<const PixelType*>(data()), size_bytes() / sizeof(PixelType) };
         }
 
         /*!
@@ -137,6 +137,50 @@ namespace sys {
 
         Info mInfo { }; //!< This Image's Image::Info
     };
+
+    /*!
+    Gets a value indicating whether or not the given Image::Infos are equal
+    @param [in] lhs The left hand side Image::Info to compare
+    @param [in] lhs The right hand side Image::Info to compare
+    @return Whether or not the given Image::Infos are equal
+    */
+    bool operator==(
+        const BasicImage::Info& lhs,
+        const BasicImage::Info& rhs
+    );
+
+    /*!
+    Gets a value indicating whether or not the given Image::Infos are inequal
+    @param [in] lhs The left hand side Image::Info to compare
+    @param [in] lhs The right hand side Image::Info to compare
+    @return Whether or not the given Image::Infos are inequal
+    */
+    bool operator!=(
+        const BasicImage::Info& lhs,
+        const BasicImage::Info& rhs
+    );
+
+    /*!
+    Gets a value indicating whether or not the given Images' contents are equal
+    @param [in] lhs The left hand side Image to compare
+    @param [in] lhs The right hand side Image to compare
+    @return Whether or not the given Images' contents are equal
+    */
+    bool operator==(
+        const BasicImage& lhs,
+        const BasicImage& rhs
+    );
+
+    /*!
+    Gets a value indicating whether or not the given Images' contents are inequal
+    @param [in] lhs The left hand side Image to compare
+    @param [in] lhs The right hand side Image to compare
+    @return Whether or not the given Images' contents are inequal
+    */
+    bool operator!=(
+        const BasicImage& lhs,
+        const BasicImage& rhs
+    );
 
 } // namespace sys
 } // namespace dst

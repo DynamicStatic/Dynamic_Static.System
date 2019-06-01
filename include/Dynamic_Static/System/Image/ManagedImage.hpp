@@ -37,8 +37,21 @@ namespace sys {
         */
         ManagedImage(
             const Info& info,
-            const uint8_t* data = nullptr
+            const void* data = nullptr
         );
+
+        /*!
+        Constructs an instance of ManagedImage
+        @param [in] other The ManagedImage to copy from
+        */
+        ManagedImage(const ManagedImage& other);
+
+        /*!
+        Constructs an instance of ManagedImage
+        @param [in] other The ManagedImage to copy from
+        @return This ManagedImage after being copied to
+        */
+        ManagedImage& operator=(const ManagedImage& other);
 
         /*!
         Constructs an instance of ManagedImage
@@ -75,7 +88,7 @@ namespace sys {
         */
         void assign(
             const Info& info,
-            const uint8_t* data = nullptr
+            const void* data = nullptr
         );
 
         /*!
@@ -86,7 +99,7 @@ namespace sys {
         template <typename PixelType = uint8_t>
         inline Span<PixelType> get_pixels()
         {
-            return { mData.data(), size_bytes() / sizeof(PixelType) };
+            return { reinterpret_cast<PixelType*>(mData.data()), size_bytes() / sizeof(PixelType) };
         }
 
         /*!
@@ -111,6 +124,12 @@ namespace sys {
         \n NOTE : This method clears existing pixel data
         */
         void resize(const Info& info);
+
+        /*!
+        Gets a value indicating whether or not this ManagedImage is empty
+        @return Whether or not this ManagedImage is empty
+        */
+        bool empty() const;
 
     private:
         const uint8_t* data() const;

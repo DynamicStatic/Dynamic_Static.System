@@ -8,8 +8,8 @@
 ==========================================
 */
 
-#if 0
 #include "Dynamic_Static/System/Image/ManagedImage.hpp"
+#include "Dynamic_Static/System/Image/UnmanagedImage.hpp"
 
 #include "catch.hpp"
 
@@ -27,27 +27,28 @@ namespace tests {
         CHECK(image.get_info().height == 0);
     }
 
-    TEST_CASE("ManagedImage storage is correctly allocated", "[ManagedImage]")
+    TEST_CASE("Storage is correctly allocated", "[ManagedImage]")
     {
         ManagedImage::Info imageInfo { };
-        imageInfo.format = Format::R8G8B8A8_Unorm;
+        imageInfo.format = Format::R8G8B8A8_UNorm;
         imageInfo.width = 16;
         imageInfo.height = 16;
         ManagedImage image(imageInfo);
-        CHECK(image.get_info().format == Format::R8G8B8A8_Unorm);
-        CHECK(image.get_info().width == 16);
-        CHECK(image.get_info().height == 16);
+        CHECK(image.get_info().format == imageInfo.format);
+        CHECK(image.get_info().width == imageInfo.width);
+        CHECK(image.get_info().height == imageInfo.height);
         auto sizeBytes = imageInfo.width * imageInfo.height * get_format_bytes_per_pixel(imageInfo.format);
         CHECK(image.size_bytes() == sizeBytes);
     }
 
-    TEST_CASE("ManagedImage can read / write pixels", "[ManagedImage]")
+    TEST_CASE("Read / write pixels", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
         int width = 16;
         int height = 32;
-        std::vector<uint8_t> data(width * height);
+        constexpr auto format = Format::R8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 data[y * width + x] = rng.range<uint8_t>(0, 255);
@@ -55,7 +56,7 @@ namespace tests {
         }
 
         ManagedImage::Info imageInfo { };
-        imageInfo.format = Format::R8_Unorm;
+        imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
         ManagedImage image(imageInfo);
@@ -64,20 +65,14 @@ namespace tests {
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
     }
 
-    TEST_CASE("ManagedImage can read / write individual pixels", "[ManagedImage]")
+    TEST_CASE("Read / write individual pixels", "[ManagedImage]")
     {
-        uint8_t uydata;
-        BasicImage::Info info { };
-        UnmanagedImage<const uint8_t> ui(info, &uydata);
-        auto r = ui.get_pixel({ 0,0 });
-        // ui.get_pixel({ 0, 0 }) = (uint8_t)0;
-        (void)r;
-
         RandomNumberGenerator rng;
 
         int width = 16;
         int height = 32;
-        std::vector<uint8_t> data(width * height);
+        constexpr auto format = Format::R8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 data[y * width + x] = rng.range<uint8_t>(0, 255);
@@ -85,7 +80,7 @@ namespace tests {
         }
 
         ManagedImage::Info imageInfo { };
-        imageInfo.format = Format::R8_Unorm;
+        imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
         ManagedImage image(imageInfo);
@@ -94,7 +89,10 @@ namespace tests {
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 auto index = y * width + x;
-                CHECK(image.get_pixel({ x, y }) == data[index]);
+                if (image.get_pixel({ x, y }) != data[index]) {
+                    CHECK(image.get_pixel({ x, y }) == data[index]);
+                    break;
+                }
                 auto value = rng.range<uint8_t>(0, 255);
                 image.get_pixel({ x, y }) = value;
                 data[index] = value;
@@ -103,29 +101,153 @@ namespace tests {
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
     }
 
-    TEST_CASE("ManagedImage ctor() copies data correctly", "[ManagedImage]")
+    TEST_CASE("ctor() copies data correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
         int width = 16;
         int height = 32;
-        std::vector<uint8_t> data(width * height);
+        constexpr auto format = Format::R8G8B8A8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                data[y * width + x] = rng.range<uint8_t>(0, 255);
+                data[y * width + x] = {
+                    rng.range(0, 255),
+                    rng.range(0, 255),
+                    rng.range(0, 255),
+                    rng.range(0, 255)
+                };
             }
         }
 
         ManagedImage::Info imageInfo { };
-        imageInfo.format = Format::R8_Unorm;
+        imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
         ManagedImage image(imageInfo, data.data());
-        REQUIRE(image.size_bytes() == data.size());
+        REQUIRE(image.size_bytes() == data.size() * sizeof(data[0]));
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
+    }
+
+    TEST_CASE("clear() works correctly", "[ManagedImage]")
+    {
+        RandomNumberGenerator rng;
+
+        int width = 16;
+        int height = 32;
+        constexpr auto format = Format::R8G8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                data[y * width + x] = {
+                    rng.range(0, 255),
+                    rng.range(0, 255)
+                };
+            }
+        }
+
+        ManagedImage::Info imageInfo { };
+        imageInfo.format = format;
+        imageInfo.width = width;
+        imageInfo.height = height;
+        ManagedImage image(imageInfo, data.data());
+        REQUIRE(image.size_bytes() == data.size() * sizeof(data[0]));
+        CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
+        image.clear();
+        CHECK(image.empty());
+    }
+
+    TEST_CASE("Comparison operators work correctly", "[ManagedImage]")
+    {
+        RandomNumberGenerator rng;
+
+        int width = 16;
+        int height = 32;
+        constexpr auto format = Format::R8G8B8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                data[y * width + x] = {
+                    rng.range(0, 255),
+                    rng.range(0, 255),
+                    rng.range(0, 255)
+                };
+            }
+        }
+
+        ManagedImage::Info imageInfo { };
+        imageInfo.format = format;
+        imageInfo.width = width;
+        imageInfo.height = height;
+        ManagedImage image0(imageInfo, data.data());
+        ManagedImage image1(imageInfo, data.data());
+        CHECK(image0 == image1);
+        for (auto& pixel : image0.get_pixels<Pixel<format>::type>()) {
+            pixel.r = rng.range<uint8_t>(0, 255);
+            pixel.g = rng.range<uint8_t>(0, 255);
+            pixel.b = rng.range<uint8_t>(0, 255);
+        }
+        CHECK(image0 != image1);
+    }
+
+    TEST_CASE("Assignment operator works correctly", "[ManagedImage]")
+    {
+        RandomNumberGenerator rng;
+
+        int width = 16;
+        int height = 32;
+        constexpr auto format = Format::R8G8B8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                data[y * width + x] = {
+                    rng.range(0, 255),
+                    rng.range(0, 255),
+                    rng.range(0, 255)
+                };
+            }
+        }
+
+        ManagedImage::Info imageInfo { };
+        imageInfo.format = format;
+        imageInfo.width = width;
+        imageInfo.height = height;
+        ManagedImage image0(imageInfo, data.data());
+        auto image1 = image0;
+        CHECK(image0 == image1);
+        image1.clear();
+        CHECK(image0 != image1);
+    }
+
+    TEST_CASE("Assignment operator from UnmanagedImage works correctly", "[ManagedImage]")
+    {
+        RandomNumberGenerator rng;
+
+        int width = 16;
+        int height = 32;
+        constexpr auto format = Format::R8G8B8_UNorm;
+        std::vector<Pixel<format>::type> data(width * height);
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                data[y * width + x] = {
+                    rng.range(0, 255),
+                    rng.range(0, 255),
+                    rng.range(0, 255)
+                };
+            }
+        }
+
+        ManagedImage::Info imageInfo { };
+        imageInfo.format = format;
+        imageInfo.width = width;
+        imageInfo.height = height;
+        UnmanagedImage image0(imageInfo, (uint8_t*)data.data());
+        ManagedImage image1 = image0;
+        CHECK(image0 == image1);
+        image0.clear();
+        CHECK(image0 != image1);
     }
 
 } // namespace tests
 } // namespace sys
 } // namespace dst
-#endif

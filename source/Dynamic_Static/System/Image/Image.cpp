@@ -60,5 +60,42 @@ namespace sys {
         return info.width * info.height * bpp;
     }
 
+    bool operator==(
+        const BasicImage::Info& lhs,
+        const BasicImage::Info& rhs
+    )
+    {
+        return
+            lhs.format == rhs.format &&
+            lhs.width == rhs.width &&
+            lhs.height == rhs.height;
+    }
+
+    bool operator!=(
+        const BasicImage::Info& lhs,
+        const BasicImage::Info& rhs
+    )
+    {
+        return !(lhs == rhs);
+    }
+
+    bool operator==(
+        const BasicImage& lhs,
+        const BasicImage& rhs
+    )
+    {
+        return
+            lhs.get_info() == rhs.get_info() &&
+            !memcmp(lhs.get_pixels().data(), rhs.get_pixels().data(), BasicImage::size_bytes(lhs.get_info()));
+    }
+
+    bool operator!=(
+        const BasicImage& lhs,
+        const BasicImage& rhs
+    )
+    {
+        return !(lhs == rhs);
+    }
+
 } // namespace sys
 } // namespace dst

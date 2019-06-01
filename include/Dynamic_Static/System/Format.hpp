@@ -23,10 +23,10 @@ namespace sys {
     enum class Format
     {
         Unknown,
-        R8_Unorm,
-        R8G8_Unorm,
-        R8G8B8_Unorm,
-        R8G8B8A8_Unorm
+        R8_UNorm,
+        R8G8_UNorm,
+        R8G8B8_UNorm,
+        R8G8B8A8_UNorm
     };
 
     /*!
@@ -38,6 +38,51 @@ namespace sys {
     TODO : Documentation
     */
     int get_format_bytes_per_pixel(Format format);
+
+    /*!
+    TODO : Documentation
+    */
+    template <Format>
+    struct Pixel final
+    {
+        typedef void type;
+    };
+
+    /*!
+    TODO : Documentation
+    */
+    template <>
+    struct Pixel<Format::R8_UNorm> final
+    {
+        typedef uint8_t type;
+    };
+
+    /*!
+    TODO : Documentation
+    */
+    template <>
+    struct Pixel<Format::R8G8_UNorm> final
+    {
+        typedef glm::u8vec2 type;
+    };
+
+    /*!
+    TODO : Documentation
+    */
+    template <>
+    struct Pixel<Format::R8G8B8_UNorm> final
+    {
+        typedef glm::u8vec3 type;
+    };
+
+    /*!
+    TODO : Documentation
+    */
+    template <>
+    struct Pixel<Format::R8G8B8A8_UNorm> final
+    {
+        typedef glm::u8vec4 type;
+    };
 
 } // namespace sys
 

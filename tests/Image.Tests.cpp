@@ -8,6 +8,7 @@
 ==========================================
 */
 
+#if 0
 #include "Dynamic_Static/System/Image/ManagedImage.hpp"
 #include "Dynamic_Static/System/Image/UnmanagedImage.hpp"
 
@@ -128,3 +129,4 @@ namespace tests {
 } // namespace tests
 } // namespace sys
 } // namespace dst
+#endif
