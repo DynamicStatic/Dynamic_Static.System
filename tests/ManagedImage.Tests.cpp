@@ -19,17 +19,18 @@ namespace dst {
 namespace sys {
 namespace tests {
 
-    TEST_CASE("Default ctor() zeros out all info fields", "[ManagedImage]")
+    TEST_CASE("Default ManagedImage::ctor() zeros out all fields", "[ManagedImage]")
     {
         ManagedImage image;
         CHECK(image.get_info().format == Format::Unknown);
         CHECK(image.get_info().width == 0);
         CHECK(image.get_info().height == 0);
+        CHECK(image.empty());
     }
 
-    TEST_CASE("Storage is correctly allocated", "[ManagedImage]")
+    TEST_CASE("ManagedImage storage is correctly allocated", "[ManagedImage]")
     {
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = Format::R8G8B8A8_UNorm;
         imageInfo.width = 16;
         imageInfo.height = 16;
@@ -41,7 +42,7 @@ namespace tests {
         CHECK(image.size_bytes() == sizeBytes);
     }
 
-    TEST_CASE("Read / write pixels", "[ManagedImage]")
+    TEST_CASE("ManagedImage read / write pixels", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -55,7 +56,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -65,7 +66,7 @@ namespace tests {
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
     }
 
-    TEST_CASE("Read / write individual pixels", "[ManagedImage]")
+    TEST_CASE("ManagedImage read / write individual pixels", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -79,7 +80,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -101,7 +102,7 @@ namespace tests {
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
     }
 
-    TEST_CASE("ctor() copies data correctly", "[ManagedImage]")
+    TEST_CASE("ManagedImage::ctor() copies data correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -120,7 +121,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -129,7 +130,7 @@ namespace tests {
         CHECK(!memcmp(image.get_pixels().data(), data.data(), image.size_bytes()));
     }
 
-    TEST_CASE("clear() works correctly", "[ManagedImage]")
+    TEST_CASE("ManagedImage::clear() works correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -146,7 +147,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -157,7 +158,7 @@ namespace tests {
         CHECK(image.empty());
     }
 
-    TEST_CASE("Comparison operators work correctly", "[ManagedImage]")
+    TEST_CASE("ManagedImage comparison operators work correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -175,7 +176,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -190,7 +191,7 @@ namespace tests {
         CHECK(image0 != image1);
     }
 
-    TEST_CASE("Assignment operator works correctly", "[ManagedImage]")
+    TEST_CASE("ManagedImage assignment operator works correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -208,7 +209,7 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
@@ -219,7 +220,7 @@ namespace tests {
         CHECK(image0 != image1);
     }
 
-    TEST_CASE("Assignment operator from UnmanagedImage works correctly", "[ManagedImage]")
+    TEST_CASE("ManagedImage assignment operator from UnmanagedImage works correctly", "[ManagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -237,11 +238,11 @@ namespace tests {
             }
         }
 
-        ManagedImage::Info imageInfo { };
+        BasicImage::Info imageInfo { };
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
-        UnmanagedImage image0(imageInfo, (uint8_t*)data.data());
+        UnmanagedImage image0(imageInfo, data.data());
         ManagedImage image1 = image0;
         CHECK(image0 == image1);
         image0.clear();

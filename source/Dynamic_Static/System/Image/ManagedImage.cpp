@@ -80,11 +80,6 @@ namespace sys {
         mData.resize(size_bytes(), 0);
     }
 
-    bool ManagedImage::empty() const
-    {
-        return mData.empty();
-    }
-
     const uint8_t* ManagedImage::data() const
     {
         return !mData.empty() ? mData.data() : nullptr;

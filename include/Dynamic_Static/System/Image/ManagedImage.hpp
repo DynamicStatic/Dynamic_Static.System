@@ -117,7 +117,7 @@ namespace sys {
         /*!
         Clears this ManagedImage
         */
-        void clear();
+        void clear() override final;
 
         /*!
         Resizes this ManagedImage
@@ -125,14 +125,8 @@ namespace sys {
         */
         void resize(const Info& info);
 
-        /*!
-        Gets a value indicating whether or not this ManagedImage is empty
-        @return Whether or not this ManagedImage is empty
-        */
-        bool empty() const;
-
     private:
-        const uint8_t* data() const;
+        const uint8_t* data() const override final;
         std::vector<uint8_t> mData;
     };
 

@@ -49,6 +49,11 @@ namespace sys {
         return size_bytes(mInfo);
     }
 
+    bool BasicImage::empty() const
+    {
+        return get_pixels().empty();
+    }
+
     void BasicImage::clear()
     {
         mInfo = { };
@@ -60,10 +65,7 @@ namespace sys {
         return info.width * info.height * bpp;
     }
 
-    bool operator==(
-        const BasicImage::Info& lhs,
-        const BasicImage::Info& rhs
-    )
+    bool operator==(const BasicImage::Info& lhs, const BasicImage::Info& rhs)
     {
         return
             lhs.format == rhs.format &&
@@ -71,28 +73,20 @@ namespace sys {
             lhs.height == rhs.height;
     }
 
-    bool operator!=(
-        const BasicImage::Info& lhs,
-        const BasicImage::Info& rhs
-    )
+    bool operator!=(const BasicImage::Info& lhs, const BasicImage::Info& rhs)
     {
         return !(lhs == rhs);
     }
 
-    bool operator==(
-        const BasicImage& lhs,
-        const BasicImage& rhs
-    )
+    bool operator==(const BasicImage& lhs, const BasicImage& rhs)
     {
-        return
-            lhs.get_info() == rhs.get_info() &&
-            !memcmp(lhs.get_pixels().data(), rhs.get_pixels().data(), BasicImage::size_bytes(lhs.get_info()));
+        auto lhsData = lhs.get_pixels().data();
+        auto rhsData = rhs.get_pixels().data();
+        auto sizeBytes = BasicImage::size_bytes(lhs.get_info());
+        return lhs.get_info() == rhs.get_info() && !memcmp(lhsData, rhsData, sizeBytes);
     }
 
-    bool operator!=(
-        const BasicImage& lhs,
-        const BasicImage& rhs
-    )
+    bool operator!=(const BasicImage& lhs, const BasicImage& rhs)
     {
         return !(lhs == rhs);
     }

@@ -46,6 +46,7 @@ namespace sys {
     struct Pixel final
     {
         typedef void type;
+        
     };
 
     /*!

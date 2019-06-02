@@ -118,7 +118,6 @@ DstCreateStaticLibrary(
         "${includePath}/Format.hpp"
         "${includePath}/Gui.hpp"
         "${includePath}/Image.hpp"
-        "${includePath}/Image.Ex.hpp"
         "${includePath}/Input.hpp"
         "${includePath}/OpenGL.hpp"
         "${includePath}/Text.hpp"
@@ -138,7 +137,6 @@ DstCreateStaticLibrary(
         "${sourcePath}/GlfwWindow.cpp"
         "${sourcePath}/Gui.cpp"
         "${sourcePath}/Image.cpp"
-        "${sourcePath}/Image.Ex.cpp"
         "${sourcePath}/Input.cpp"
 )
 

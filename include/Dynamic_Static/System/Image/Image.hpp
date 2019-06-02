@@ -116,6 +116,12 @@ namespace sys {
         size_t size_bytes() const;
 
         /*!
+        Gets a value indicating whether or not this Image is empty
+        @return Whether or not this Image is empty
+        */
+        bool empty() const;
+
+        /*!
         Clears this Image
         \n NOTE : Derived implementations must call Image::clear()
         */
@@ -144,10 +150,7 @@ namespace sys {
     @param [in] lhs The right hand side Image::Info to compare
     @return Whether or not the given Image::Infos are equal
     */
-    bool operator==(
-        const BasicImage::Info& lhs,
-        const BasicImage::Info& rhs
-    );
+    bool operator==(const BasicImage::Info& lhs, const BasicImage::Info& rhs);
 
     /*!
     Gets a value indicating whether or not the given Image::Infos are inequal
@@ -155,10 +158,7 @@ namespace sys {
     @param [in] lhs The right hand side Image::Info to compare
     @return Whether or not the given Image::Infos are inequal
     */
-    bool operator!=(
-        const BasicImage::Info& lhs,
-        const BasicImage::Info& rhs
-    );
+    bool operator!=(const BasicImage::Info& lhs, const BasicImage::Info& rhs);
 
     /*!
     Gets a value indicating whether or not the given Images' contents are equal
@@ -166,10 +166,7 @@ namespace sys {
     @param [in] lhs The right hand side Image to compare
     @return Whether or not the given Images' contents are equal
     */
-    bool operator==(
-        const BasicImage& lhs,
-        const BasicImage& rhs
-    );
+    bool operator==(const BasicImage& lhs, const BasicImage& rhs);
 
     /*!
     Gets a value indicating whether or not the given Images' contents are inequal
@@ -177,10 +174,7 @@ namespace sys {
     @param [in] lhs The right hand side Image to compare
     @return Whether or not the given Images' contents are inequal
     */
-    bool operator!=(
-        const BasicImage& lhs,
-        const BasicImage& rhs
-    );
+    bool operator!=(const BasicImage& lhs, const BasicImage& rhs);
 
 } // namespace sys
 } // namespace dst

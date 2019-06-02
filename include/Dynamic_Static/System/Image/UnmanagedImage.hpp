@@ -18,9 +18,21 @@ namespace dst {
 namespace sys {
 
     /*!
-    Provides high level control over unmanaged image data
+    Template parameter for UnmanagedImage<ReadOnly> that disables non const accessors
     */
-    template <typename DataType = uint8_t>
+    using ReadOnly = const void;
+
+    /*!
+    Template parameter for UnmanagedImage<Mutable> that enables non const accessors
+    */
+    using Mutable = void;
+
+    /*!
+    Provides high level control over unmanaged image data
+    @param <DataType = ReadOnly> The type of data accessed via this UnmanagedImage<>
+    \n NOTE : DataType must be ReadOnly or Mutable
+    */
+    template <typename DataType = ReadOnly>
     class UnmanagedImage final
         : public BasicImage
     {
@@ -31,23 +43,23 @@ namespace sys {
         UnmanagedImage() = default;
 
         /*!
-        Constructs an instance of UnmanagedImage
-        @param [in] info This UnmanagedImage's Image::Info
-        @param [in] data A pointer to the data to access via this UnmanagedImage
+        Constructs an instance of UnmanagedImage<>
+        @param [in] info This UnmanagedImage<>'s Image::Info
+        @param [in] data A pointer to the data to access via this UnmanagedImage<>
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
-        \n NOTE : If data is null this UnmanagedImage will be cleared
+        \n NOTE : If data is null this UnmanagedImage<> will be cleared
         */
         UnmanagedImage(
             const Info& info,
-            DataType* data
+            typename std::enable_if<true, DataType>::type* data
         )
         {
             assign(info, data);
         }
 
         /*!
-        Constructs an instance of UnmanagedImage
-        @param [in] other The UnmanagedImage to copy from
+        Constructs an instance of UnmanagedImage<>
+        @param [in] other The UnmanagedImage<> to copy from
         */
         inline UnmanagedImage(const UnmanagedImage& other)
         {
@@ -55,9 +67,9 @@ namespace sys {
         }
 
         /*!
-        Constructs an instance of UnmanagedImage
-        @param [in] other The UnmanagedImage to copy from
-        @return This UnmanagedImage after being copied to
+        Constructs an instance of UnmanagedImage<>
+        @param [in] other The UnmanagedImage<> to copy from
+        @return This UnmanagedImage<> after being copied to
         */
         inline UnmanagedImage& operator=(const UnmanagedImage& other)
         {
@@ -66,8 +78,8 @@ namespace sys {
         }
 
         /*!
-        Moves an instance of UnmanagedImage
-        @param [in] other The UnmanagedImage to move from
+        Moves an instance of UnmanagedImage<>
+        @param [in] other The UnmanagedImage<> to move from
         */
         inline UnmanagedImage(UnmanagedImage&& other)
         {
@@ -75,9 +87,9 @@ namespace sys {
         }
 
         /*!
-        Moves an instance of UnmanagedImage
-        @param [in] other The UnmanagedImage to move from
-        @return This UnmanagedImage after being moved to
+        Moves an instance of UnmanagedImage<>
+        @param [in] other The UnmanagedImage<> to move from
+        @return This UnmanagedImage<> after being moved to
         */
         inline UnmanagedImage& operator=(UnmanagedImage&& other)
         {
@@ -88,11 +100,11 @@ namespace sys {
 
     public:
         /*!
-        Assigns an Image::Info and pixel data to this UnmanagedImage
-        @param [in] info This UnmanagedImage's Image::Info
-        @param [in] data A pointer to the data to access via this UnmanagedImage
+        Assigns an Image::Info and pixel data to this UnmanagedImage<>
+        @param [in] info This UnmanagedImage<>'s Image::Info
+        @param [in] data A pointer to the data to access via this UnmanagedImage<>
         \n NOTE : If data is not null it must point to a region of memory at least as large as the value returned by Image::size_bytes(info)
-        \n NOTE : If data is null this UnmanagedImage will be cleared
+        \n NOTE : If data is null this UnmanagedImage<> will be cleared
         */
         inline void assign(
             const Info& info,
@@ -108,9 +120,9 @@ namespace sys {
         }
 
         /*!
-        Gets this UnmanagedImage's pixel data
-        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
-        @return This UnmanagedImage's pixel data
+        Gets this UnmanagedImage<>'s pixel data
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage<>'s pixel data as
+        @return This UnmanagedImage<>'s pixel data
         */
         template <typename PixelType = uint8_t>
         typename std::enable_if<std::is_const<DataType>::value, Span<const PixelType>>::type
@@ -120,21 +132,21 @@ namespace sys {
         }
 
         /*!
-        Gets this UnmanagedImage's pixel data
-        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
-        @return This UnmanagedImage's pixel data
+        Gets this UnmanagedImage<>'s pixel data
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage<>'s pixel data as
+        @return This UnmanagedImage<>'s pixel data
         */
         template <typename PixelType = uint8_t>
         typename std::enable_if<!std::is_const<DataType>::value, Span<PixelType>>::type
         inline get_pixels()
         {
-            return { mData, size_bytes() / sizeof(PixelType) };
+            return { reinterpret_cast<PixelType*>(mData), size_bytes() / sizeof(PixelType) };
         }
 
         /*!
-        Gets this UnmanagedImage's pixel at the given uv coordinate
-        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
-        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        Gets this UnmanagedImage<>'s pixel at the given uv coordinate
+        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage<>
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage<>'s pixel data as
         @param [in] uv The uv coordinate of the pixel to get
         */
         template <typename PixelType = uint8_t>
@@ -145,9 +157,9 @@ namespace sys {
         }
 
         /*!
-        Gets this UnmanagedImage's pixel at the given uv coordinate
-        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage
-        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage's pixel data as
+        Gets this UnmanagedImage<>'s pixel at the given uv coordinate
+        \n NOTE : uv coordinate (0, 0) returns the pixel at the top left corner of this UnmanagedImage<>
+        @param <PixelType = uint8_t> The type to interpret this UnmanagedImage<>'s pixel data as
         @param [in] uv The uv coordinate of the pixel to get
         */
         template <typename PixelType = uint8_t>
@@ -158,7 +170,7 @@ namespace sys {
         }
 
         /*!
-        Clears this UnmanagedImage
+        Clears this UnmanagedImage<>
         */
         inline void clear() override final
         {
@@ -167,17 +179,17 @@ namespace sys {
         }
 
     private:
-        inline const uint8_t* data() const
+        inline const uint8_t* data() const override final
         {
-            return mData;
+            return reinterpret_cast<const uint8_t*>(mData);
         }
 
         DataType* mData { nullptr };
 
         static_assert(
-            std::is_same<DataType, uint8_t>::value ||
-            std::is_same<DataType, const uint8_t>::value,
-            "UnmanagedImage DataType must be uint8_t or const uint8_t"
+            std::is_same<DataType, ReadOnly>::value ||
+            std::is_same<DataType, Mutable>::value,
+            "UnmanagedImage<> DataType must be ReadOnly or Mutable"
         );
     };
 
