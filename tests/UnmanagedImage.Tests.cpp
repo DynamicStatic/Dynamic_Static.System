@@ -1,4 +1,4 @@
-
+#if 0
 /*
 ==========================================
   Copyright (c) 2019-2019 Dynamic_Static
@@ -8,6 +8,7 @@
 ==========================================
 */
 
+#include "Dynamic_Static/System/Image/MutableUnmanagedImage.hpp"
 #include "Dynamic_Static/System/Image/UnmanagedImage.hpp"
 
 #include "catch.hpp"
@@ -59,12 +60,12 @@ namespace tests {
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
-        UnmanagedImage<ReadOnly> image(imageInfo, data.data());
+        UnmanagedImage image(imageInfo, data.data());
         REQUIRE(image.size_bytes() == data.size());
         CHECK(image.get_pixels().data() == data.data());
     }
 
-    TEST_CASE("UnmanagedImage<Mutable> read / write individual pixels", "[UnmanagedImage]")
+    TEST_CASE("MutableUnmanagedImage read / write individual pixels", "[UnmanagedImage]")
     {
         RandomNumberGenerator rng;
 
@@ -82,9 +83,9 @@ namespace tests {
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
-        UnmanagedImage<Mutable> image(imageInfo, data.data());
+        MutableUnmanagedImage image(imageInfo, data.data());
         REQUIRE(image.size_bytes() == data.size());
-        CHECK(image.get_pixels().data() == data.data());
+        CHECK(image.data() == data.data());
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 image.get_pixel({ x, y }) = 128;
@@ -147,8 +148,8 @@ namespace tests {
         imageInfo.format = format;
         imageInfo.width = width;
         imageInfo.height = height;
-        UnmanagedImage<ReadOnly> image0(imageInfo, data0.data());
-        UnmanagedImage<Mutable> image1(imageInfo, data1.data());
+        UnmanagedImage image0(imageInfo, data0.data());
+        MutableUnmanagedImage image1(imageInfo, data1.data());
         CHECK(image0 == image1);
         for (auto& pixel : image1.get_pixels<Pixel<format>::type>()) {
             pixel.r = rng.range<uint8_t>(0, 255);
@@ -221,3 +222,4 @@ namespace tests {
 } // namespace tests
 } // namespace sys
 } // namespace dst
+#endif

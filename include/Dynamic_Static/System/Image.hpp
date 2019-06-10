@@ -1,4 +1,5 @@
 
+#if 0
 /*
 ==========================================
   Copyright (c) 2018-2019 Dynamic_Static
@@ -107,3 +108,4 @@ namespace sys {
 
 } // namespace sys
 } // namespace dst
+#endif

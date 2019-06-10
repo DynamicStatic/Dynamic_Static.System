@@ -10,62 +10,42 @@
 
 #include "Dynamic_Static/System/Image/Image.hpp"
 
+#include <utility>
+
 namespace dst {
 namespace sys {
 
-    BasicImage::~BasicImage()
+    Image::~Image()
     {
     }
 
-    BasicImage::BasicImage(const BasicImage& other)
-    {
-        *this = other;
-    }
-
-    BasicImage& BasicImage::operator=(const BasicImage& other)
-    {
-        mInfo = other.mInfo;
-        return *this;
-    }
-
-    BasicImage::BasicImage(BasicImage&& other)
-    {
-        *this = std::move(other);
-    }
-
-    BasicImage& BasicImage::operator=(BasicImage&& other)
-    {
-        mInfo = std::move(other.mInfo);
-        return *this;
-    }
-
-    const BasicImage::Info& BasicImage::get_info() const
+    const Image::Info& Image::get_info() const
     {
         return mInfo;
     }
 
-    size_t BasicImage::size_bytes() const
-    {
-        return size_bytes(mInfo);
-    }
-
-    bool BasicImage::empty() const
-    {
-        return get_pixels().empty();
-    }
-
-    void BasicImage::clear()
+    void Image::clear()
     {
         mInfo = { };
     }
 
-    size_t BasicImage::size_bytes(const Info& info)
+    bool Image::empty() const
+    {
+        return !size_bytes();
+    }
+
+    size_t Image::size_bytes() const
+    {
+        return size_bytes(mInfo);
+    }
+
+    size_t Image::size_bytes(const Info& info)
     {
         auto bpp = get_format_bytes_per_pixel(info.format);
         return info.width * info.height * bpp;
     }
 
-    bool operator==(const BasicImage::Info& lhs, const BasicImage::Info& rhs)
+    bool operator==(const Image::Info& lhs, const Image::Info& rhs)
     {
         return
             lhs.format == rhs.format &&
@@ -73,20 +53,17 @@ namespace sys {
             lhs.height == rhs.height;
     }
 
-    bool operator!=(const BasicImage::Info& lhs, const BasicImage::Info& rhs)
+    bool operator!=(const Image::Info& lhs, const Image::Info& rhs)
     {
         return !(lhs == rhs);
     }
 
-    bool operator==(const BasicImage& lhs, const BasicImage& rhs)
+    bool operator==(const Image& lhs, const Image& rhs)
     {
-        auto lhsData = lhs.get_pixels().data();
-        auto rhsData = rhs.get_pixels().data();
-        auto sizeBytes = BasicImage::size_bytes(lhs.get_info());
-        return lhs.get_info() == rhs.get_info() && !memcmp(lhsData, rhsData, sizeBytes);
+        return lhs.get_info() == rhs.get_info() && !memcmp(lhs.data(), rhs.data(), lhs.size_bytes());
     }
 
-    bool operator!=(const BasicImage& lhs, const BasicImage& rhs)
+    bool operator!=(const Image& lhs, const Image& rhs)
     {
         return !(lhs == rhs);
     }

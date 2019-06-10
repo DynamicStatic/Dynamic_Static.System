@@ -21,40 +21,14 @@ namespace sys {
         assign(info, data);
     }
 
-    ManagedImage::ManagedImage(const ManagedImage& other)
+    const uint8_t* ManagedImage::data() const
     {
-        *this = other;
+        return !mData.empty() ? mData.data() : nullptr;
     }
 
-    ManagedImage& ManagedImage::operator=(const ManagedImage& other)
+    uint8_t* ManagedImage::data()
     {
-        *this = static_cast<const BasicImage&>(other);
-        BasicImage::operator=(other);
-        return *this;
-    }
-
-    ManagedImage::ManagedImage(const BasicImage& other)
-    {
-        *this = other;
-    }
-
-    ManagedImage& ManagedImage::operator=(const BasicImage& other)
-    {
-        assign(other.get_info(), other.get_pixels().data());
-        BasicImage::operator=(other);
-        return *this;
-    }
-
-    ManagedImage::ManagedImage(ManagedImage&& other)
-    {
-        *this = std::move(other);
-    }
-
-    ManagedImage& ManagedImage::operator=(ManagedImage&& other)
-    {
-        mData = std::move(other.mData);
-        BasicImage::operator=(std::move(other));
-        return *this;
+        return !mData.empty() ? mData.data() : nullptr;
     }
 
     void ManagedImage::assign(
@@ -68,21 +42,16 @@ namespace sys {
         }
     }
 
-    void ManagedImage::clear()
-    {
-        mData.clear();
-        BasicImage::clear();
-    }
-
     void ManagedImage::resize(const Info& info)
     {
         mInfo = info;
         mData.resize(size_bytes(), 0);
     }
 
-    const uint8_t* ManagedImage::data() const
+    void ManagedImage::clear()
     {
-        return !mData.empty() ? mData.data() : nullptr;
+        mData.clear();
+        Image::clear();
     }
 
 } // namespace sys

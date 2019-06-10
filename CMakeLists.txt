@@ -91,9 +91,13 @@ DstCreateStaticLibrary(
         
     includeFiles
         "${includePath}/Audio/Defines.hpp"
+
         "${includePath}/Image/Image.hpp"
-        "${includePath}/Image/UnmanagedImage.hpp"
         "${includePath}/Image/ManagedImage.hpp"
+        "${includePath}/Image/UnmanagedImage.hpp"
+        "${includePath}/Image/WriteableImage.hpp"
+        "${includePath}/Image/WriteableUnmanagedImage.hpp"
+
         "${includePath}/Input/Keyboard.hpp"
         "${includePath}/Input/Mouse.hpp"
         "${includePath}/OpenGL/Buffer.hpp"
@@ -126,8 +130,12 @@ DstCreateStaticLibrary(
 
     sourceFiles
         "${external.sourceFiles}"
+
         "${sourcePath}/Image/Image.cpp"
         "${sourcePath}/Image/ManagedImage.cpp"
+        "${sourcePath}/Image/UnmanagedImage.cpp"
+        "${sourcePath}/Image/WriteableUnmanagedImage.cpp"
+
         "${sourcePath}/Input/Keyboard.cpp"
         "${sourcePath}/Input/Mouse.cpp"
         "${sourcePath}/Text/Font.cpp"

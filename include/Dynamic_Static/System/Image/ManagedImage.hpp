@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include "Dynamic_Static/System/Image/Image.hpp"
+#include "Dynamic_Static/System/Image/WriteableImage.hpp"
+#include "Dynamic_Static/System/Defines.hpp"
 
 #include <vector>
 
@@ -21,7 +22,7 @@ namespace sys {
     Provides high level control over managed image data
     */
     class ManagedImage final
-        : public BasicImage
+        : public WriteableImage
     {
     public:
         /*!
@@ -40,45 +41,6 @@ namespace sys {
             const void* data = nullptr
         );
 
-        /*!
-        Constructs an instance of ManagedImage
-        @param [in] other The ManagedImage to copy from
-        */
-        ManagedImage(const ManagedImage& other);
-
-        /*!
-        Constructs an instance of ManagedImage
-        @param [in] other The ManagedImage to copy from
-        @return This ManagedImage after being copied to
-        */
-        ManagedImage& operator=(const ManagedImage& other);
-
-        /*!
-        Constructs an instance of ManagedImage
-        @param [in] other The Image to copy from
-        */
-        ManagedImage(const BasicImage& other);
-
-        /*!
-        Constructs an instance of ManagedImage
-        @param [in] other The Image to copy from
-        @return This ManagedImage after being copied to
-        */
-        ManagedImage& operator=(const BasicImage& other);
-
-        /*!
-        Moves an instance of ManagedImage
-        @param [in] other The ManagedImage to move from
-        */
-        ManagedImage(ManagedImage&& other);
-
-        /*!
-        Moves an instance of ManagedImage
-        @param [in] other The ManagedImage to move from
-        @return This ManagedImage after being moved to
-        */
-        ManagedImage& operator=(ManagedImage&& other);
-
     public:
         /*!
         Assigns an Image::Info and optionaly pixel data to this ManagedImage
@@ -92,27 +54,16 @@ namespace sys {
         );
 
         /*!
-        Gets this ManagedImage's pixel data
-        @param <PixelType = uint8_t> The type to interpret this ManagedImage's pixel data as
-        @return This ManagedImage's pixel data
+        Gets this ManagedImage's data
+        @return This ManagedImage's data
         */
-        template <typename PixelType = uint8_t>
-        inline Span<PixelType> get_pixels()
-        {
-            return { reinterpret_cast<PixelType*>(mData.data()), size_bytes() / sizeof(PixelType) };
-        }
+        const uint8_t* data() const override final;
 
         /*!
-        Gets this ManagedImage's pixel at the given uv coordinate
-        \n NOTE : Uv coordinate (0, 0) returns the pixel at the top left corner of this ManagedImage
-        @param <PixelType = uint8_t> The type to interpret this ManagedImage's pixel data as
-        @param [in] uv The uv coordinate of the pixel to get
+        Gets this ManagedImage's data
+        @return This ManagedImage's data
         */
-        template <typename PixelType = uint8_t>
-        inline PixelType& get_pixel(glm::ivec2 uv)
-        {
-            return const_cast<PixelType&>(BasicImage::get_pixel(uv));
-        }
+        uint8_t* data() override final;
 
         /*!
         Clears this ManagedImage
@@ -126,7 +77,6 @@ namespace sys {
         void resize(const Info& info);
 
     private:
-        const uint8_t* data() const override final;
         std::vector<uint8_t> mData;
     };
 
