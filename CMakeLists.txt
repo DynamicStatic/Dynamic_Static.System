@@ -52,7 +52,17 @@ DstAddStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include/"
 
     includeFiles
+        "${includePath}/opengl/buffer.hpp"
         "${includePath}/opengl/defines.hpp"
+        "${includePath}/opengl/index-buffer.hpp"
+        "${includePath}/opengl/mesh.hpp"
+        "${includePath}/opengl/object.hpp"
+        "${includePath}/opengl/program.hpp"
+        "${includePath}/opengl/shader.hpp"
+        "${includePath}/opengl/shader.hpp"
+        "${includePath}/opengl/texture.hpp"
+        "${includePath}/opengl/vertex-array.hpp"
+        "${includePath}/opengl/vertex-buffer.hpp"
         "${includePath}/defines.hpp"
         "${includePath}/opengl.hpp"
         "${includePath}/window.hpp"
@@ -105,6 +115,16 @@ DstAddStaticLibrary(
 
 
     sourceFiles
+        "${sourcePath}/opengl/buffer.cpp"
+        "${sourcePath}/opengl/index-buffer.cpp"
+        "${sourcePath}/opengl/mesh.cpp"
+        "${sourcePath}/opengl/object.cpp"
+        "${sourcePath}/opengl/program.cpp"
+        "${sourcePath}/opengl/shader.cpp"
+        "${sourcePath}/opengl/shader.cpp"
+        "${sourcePath}/opengl/texture.cpp"
+        "${sourcePath}/opengl/vertex-array.cpp"
+        "${sourcePath}/opengl/vertex-buffer.cpp"
         "${sourcePath}/window.cpp"
 
 
