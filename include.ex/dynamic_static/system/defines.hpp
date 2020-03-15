@@ -8,6 +8,8 @@
 ==========================================
 */
 
+#pragma once
+
 #include "dynamic_static/core/defines.hpp"
 
 #ifndef DYNAMIC_STATIC_OPENGL_DISABLED
@@ -38,7 +40,7 @@ Specifies system graphics apis.
 */
 enum class GraphicsApi
 {
-    Unknown,
+    Undefined,
     #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
     OpenGL,
     #endif

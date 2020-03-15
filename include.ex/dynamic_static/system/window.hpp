@@ -8,6 +8,8 @@
 ==========================================
 */
 
+#pragma once
+
 #include "dynamic_static/core/math.hpp"
 #include "dynamic_static/core/callback.hpp"
 #include "dynamic_static/system/defines.hpp"
@@ -54,13 +56,13 @@ public:
             Default    = Visible | Resizable //!< TODO : Documentation
         };
 
-        Flags flags { Flags::Default };                   //!< TODO : Documentation
-        const char* pName { "Dynamic_Static" };           //!< TODO : Documentation
-        glm::ivec2 position { 320, 180 };                 //!< TODO : Documentation
-        glm::ivec2 resolution { 1280, 720 };              //!< TODO : Documentation
-        GraphicsApi graphicsApi { GraphicsApi::Unknown }; //!< TODO : Documentation
+        Flags flags { Flags::Default };                     //!< TODO : Documentation
+        const char* pName { "Dynamic_Static" };             //!< TODO : Documentation
+        glm::ivec2 position { 320, 180 };                   //!< TODO : Documentation
+        glm::ivec2 resolution { 1280, 720 };                //!< TODO : Documentation
+        GraphicsApi graphicsApi { GraphicsApi::Undefined }; //!< TODO : Documentation
         #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-        gl::Context::CreateInfo glContextCreateInfo { };  //!< TODO : Documentation
+        gl::Context::Info glContextCreateInfo { };    //!< TODO : Documentation
         #endif
     };
 
@@ -125,10 +127,10 @@ public:
 private:
     std::vector<uint32_t> mTextStream;
     std::string mName { "Dynamic_Static" };
-    GraphicsApi mGraphicsApi { GraphicsApi::Unknown };
+    GraphicsApi mGraphicsApi { GraphicsApi::Undefined };
     void* mWindowHandle { nullptr };
     Window(const Window&) = delete;
-    Window& operator=(Window&&) = delete;
+    Window& operator=(const Window&) = delete;
 };
 
 } // namespace sys
