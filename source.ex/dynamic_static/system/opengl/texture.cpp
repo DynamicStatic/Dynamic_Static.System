@@ -24,7 +24,11 @@ Texture::Texture()
     set_name("GlTexture");
 }
 
-Texture::Texture(const Info& info, const uint8_t* data)
+Texture::Texture(
+    const Info& info,
+    const uint8_t* pData,
+    bool generateMipMaps
+)
     : mInfo { info }
 {
     set_name("GlTexture");
@@ -38,7 +42,7 @@ Texture::Texture(const Info& info, const uint8_t* data)
         }
         mInfo.depth = 1;
     }
-    create_gl_resources(data);
+    create_gl_resources(pData, generateMipMaps);
 }
 
 Texture::Texture(Texture&& other) noexcept
@@ -102,7 +106,35 @@ void Texture::unbind() const
     dst_gl(glBindTexture(mInfo.target, 0));
 }
 
-void Texture::create_gl_resources(const uint8_t* data)
+void Texture::write(const uint8_t* pData, bool generateMipMaps)
+{
+    if (pData) {
+        bind();
+        dst_gl(glPixelStorei(GL_UNPACK_ROW_LENGTH, 0));
+        dst_gl(glTexImage2D(
+            mInfo.target,
+            0,
+            mInfo.internalFormat,
+            mInfo.width,
+            mInfo.height,
+            0,
+            mInfo.format,
+            mInfo.storageType,
+            pData
+        ));
+        auto magFilter = mInfo.filter == GL_LINEAR_MIPMAP_LINEAR ? GL_LINEAR : mInfo.filter;
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MIN_FILTER, mInfo.filter));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MAG_FILTER, magFilter));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_S, mInfo.wrap));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_T, mInfo.wrap));
+        if (generateMipMaps) {
+            generate_mip_maps();
+        }
+        unbind();
+    }
+}
+
+void Texture::create_gl_resources(const uint8_t* pData, bool generateMipMaps)
 {
     // TODO : Handle GL_TEXTURE_1D and GL_TEXTURE_3D
     if (!mHandle) {
@@ -111,26 +143,7 @@ void Texture::create_gl_resources(const uint8_t* data)
     if (!mInfo.internalFormat) {
         mInfo.internalFormat = mInfo.format;
     }
-    bind();
-    dst_gl(glPixelStorei(GL_UNPACK_ROW_LENGTH, 0));
-    dst_gl(glTexImage2D(
-        mInfo.target,
-        0,
-        mInfo.internalFormat,
-        mInfo.width,
-        mInfo.height,
-        0,
-        mInfo.format,
-        mInfo.storageType,
-        data
-    ));
-    auto magFilter = mInfo.filter == GL_LINEAR_MIPMAP_LINEAR ? GL_LINEAR : mInfo.filter;
-    dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MIN_FILTER, mInfo.filter));
-    dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MAG_FILTER, magFilter));
-    dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_S, mInfo.wrap));
-    dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_T, mInfo.wrap));
-    generate_mip_maps();
-    unbind();
+    write(pData, generateMipMaps);
 }
 
 void Texture::destroy_gl_resources()

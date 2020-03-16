@@ -120,7 +120,7 @@ struct Mouse final
         glm::vec2 position { };                             //!< This Mouse::State object's position
         std::bitset<(int)Mouse::Button::Count> buttons { }; //!< This Mouse::State object's Mouse::Button state
 
-        /*!
+        /**
         Resets this Mouse::State
         */
         void reset();

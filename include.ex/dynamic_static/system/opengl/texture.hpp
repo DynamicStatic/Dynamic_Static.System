@@ -14,6 +14,7 @@
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
+#include "dynamic_static/core/span.hpp"
 #include "dynamic_static/system/opengl/object.hpp"
 
 namespace dst {
@@ -52,7 +53,11 @@ public:
     Constructs an instance of Texture
     TODO : Documentation
     */
-    Texture(const Info& info, const uint8_t* data);
+    Texture(
+        const Info& info,
+        const uint8_t* pData = nullptr,
+        bool generateMipMaps = false
+    );
 
     /**
     Moves an instance of Texture
@@ -102,8 +107,13 @@ public:
     */
     void unbind() const;
 
+    /**
+    TODO : Documentation
+    */
+    void write(const uint8_t* pData, bool generateMipMaps = false);
+
 private:
-    void create_gl_resources(const uint8_t* data);
+    void create_gl_resources(const uint8_t* pData, bool generateMipMaps);
     void destroy_gl_resources();
     Info mInfo { };
 };

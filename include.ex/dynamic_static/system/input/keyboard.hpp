@@ -243,48 +243,48 @@ struct Keyboard final
         Any,
     };
 
-    /*!
+    /**
     Gets a value indicating whether or not a given Keyboard::Key is up
     @param [in] key The Keyboard::Key to check
     @return Whether or not the given Keyboard::Key is up
     */
     bool up(Keyboard::Key key) const;
 
-    /*!
+    /**
     Gets a value indicating whether or not a given Keyboard::Key is down
     @param [in] key The Keyboard::Key to check
     @return Whether or not the given Keyboard::Key is down
     */
     bool down(Keyboard::Key key) const;
 
-    /*!
+    /**
     Gets a value indicating whether or not a given Keyboard::Key has been held
     @param [in] key The Keyboard::Key to check
     @return Whether or not the given Keyboard::Key has been held
     */
     bool held(Keyboard::Key key) const;
 
-    /*!
+    /**
     Gets a value indicating whether or not a given Keyboard::Key has been pressed
     @param [in] key The Keyboard::Key to check
     @return Whether or not the given Keyboard::Key has been pressed
     */
     bool pressed(Keyboard::Key key) const;
 
-    /*!
+    /**
     Gets a value indicating whether or not a given Keyboard::Key has been released
     @param [in] key The Keyboard::Key to check
     @return Whether or not the given Keyboard::Key has been released
     */
     bool released(Keyboard::Key key) const;
 
-    /*!
+    /**
     Updates this Keyboard with its staged state
         @note This method must be called periodically to keep this Keyboard up to date
     */
     void update();
 
-    /*!
+    /**
     Resets this Keyboard
     */
     void reset();
