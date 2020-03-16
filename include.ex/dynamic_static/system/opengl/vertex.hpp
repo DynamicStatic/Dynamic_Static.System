@@ -34,19 +34,17 @@ struct VertexAttribute final
 TODO : Documentation
 */
 template <typename VertexType, size_t VertexAttributeCount>
-inline void enable_vertex_attributes(
-    const std::array<VertexAttribute, VertexAttributeCount>& vertexAttributes
-)
+inline void enable_vertex_attributes(const std::array<VertexAttribute, VertexAttributeCount>& vertexAttributes)
 {
     GLuint index = 0;
     size_t offset = 0;
-    for (const auto& vertexAttriute : vertexAttributes) {
+    for (const auto& vertexAttribute : vertexAttributes) {
         dst_gl(glEnableVertexAttribArray(index));
         dst_gl(glVertexAttribPointer(
             index,
             vertexAttribute.count,
             vertexAttribute.type,
-            vertexAttriute.normalized,
+            vertexAttribute.normalized,
             sizeof(VertexType),
             (GLvoid*)offset
         ));
@@ -61,7 +59,7 @@ inline void enable_vertex_attributes(
         case GL_FLOAT:          elementSize = sizeof(float);    break;
         case GL_DOUBLE:         elementSize = sizeof(double);   break;
         }
-        offset += elementSize * VertexAttribute.count;
+        offset += elementSize * vertexAttribute.count;
         ++index;
     }
 }

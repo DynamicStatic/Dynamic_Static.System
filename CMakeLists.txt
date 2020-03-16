@@ -55,8 +55,9 @@ set(includePath "${includeDirectory}/dynamic_static/system/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
 DstAddStaticLibrary(
     target Dynamic_Static.System
+    folder Dynamic_Static.System/
     linkLibraries "${linkLibraries}"
-    compilieDefinitions "${externalCompileDefinitions}"
+    compileDefinitions "${externalCompileDefinitions}"
     includeDirectories
         "${externalIncludeDirectories}"
         "${includeDirectory}"
@@ -65,6 +66,8 @@ DstAddStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include/"
 
     includeFiles
+        "${includePath}/input/keyboard.hpp"
+        "${includePath}/input/mouse.hpp"
         "${includePath}/opengl/buffer.hpp"
         "${includePath}/opengl/defines.hpp"
         "${includePath}/opengl/index-buffer.hpp"
@@ -78,8 +81,10 @@ DstAddStaticLibrary(
         "${includePath}/opengl/vertex-array.hpp"
         "${includePath}/opengl/vertex-buffer.hpp"
         "${includePath}/defines.hpp"
+        "${includePath}/input.hpp"
         "${includePath}/opengl.hpp"
         "${includePath}/window.hpp"
+        "${includeDirectory}/dynamic_static.system.hpp"
 
 
 
@@ -130,6 +135,8 @@ DstAddStaticLibrary(
 
     sourceFiles
         "${externalSourceFiles}"
+        "${sourcePath}/input/keyboard.cpp"
+        "${sourcePath}/input/mouse.cpp"
         "${sourcePath}/opengl/buffer.cpp"
         "${sourcePath}/opengl/index-buffer.cpp"
         "${sourcePath}/opengl/mesh.cpp"
@@ -140,6 +147,8 @@ DstAddStaticLibrary(
         "${sourcePath}/opengl/texture.cpp"
         "${sourcePath}/opengl/vertex-array.cpp"
         "${sourcePath}/opengl/vertex-buffer.cpp"
+        "${sourcePath}/glfw-window.hpp"
+        "${sourcePath}/input.cpp"
         "${sourcePath}/window.cpp"
 
 
@@ -165,5 +174,5 @@ DstAddStaticLibrary(
 
 # Examples
 if(DST_SYS_BUILD_EXAMPLES)
-    # add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
+    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
 endif()

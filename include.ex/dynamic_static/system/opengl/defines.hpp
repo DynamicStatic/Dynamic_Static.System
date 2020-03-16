@@ -14,6 +14,7 @@
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
+#include "dynamic_static/core/enum.hpp"
 #include "dynamic_static/core/version.hpp"
 
 #ifdef DYNAMIC_STATIC_WINDOWS
@@ -21,6 +22,9 @@
 #include "GL/glew.h"
 #pragma warning(pop)
 #endif
+
+#include <iostream>
+#include <mutex>
 
 #define DYNAMIC_STATIC_VALIDATE_GL_CALLS
 #ifdef DYNAMIC_STATIC_VALIDATE_GL_CALLS
@@ -71,18 +75,15 @@ inline GLenum validate_call(const char* message, const char* glCall)
 {
     GLenum glError = glGetError();
     if (glError != GL_NO_ERROR) {
-        #if 0
         char const* errorStr = nullptr;
         #ifdef DYNAMIC_STATIC_WINDOWS
-        auto errorStr = (const char*)gluErrorString(glError);
-        #endif // DYNAMIC_STATIC_WINDOWS
-        errorStr = errorStr ? errorStr : "Unknown";
-        std::cerr
-            << "OpenGL Error [" << glError << ":" << errorStr << "]" << std::endl
-            << "    " << message << std::endl
-            << "    " << glCall << std::endl
-            << std::endl;
+        errorStr = (const char*)gluErrorString(glError);
         #endif
+        errorStr = errorStr ? errorStr : "Unknown";
+        std::cerr << "OpenGL Error [" << glError << ":" << errorStr << "]" << std::endl;
+        std::cerr << "    " << message << std::endl;
+        std::cerr << "    " << glCall << std::endl;
+        std::cerr << std::endl;
     }
     return glError;
 }
@@ -107,9 +108,28 @@ inline std::string get_info_log(
     return infoLog;
 }
 
+#ifdef DYNAMIC_STATIC_WINDOWS
+/**
+TODO : Documentation
+*/
+inline bool initialize_glew()
+{
+    static std::mutex sMutex;
+    static bool sGlewInitialized;
+    std::lock_guard<std::mutex> lock(sMutex);
+    if (!sGlewInitialized) {
+        glewExperimental = true;
+        sGlewInitialized = !glewInit();
+    }
+    return sGlewInitialized;
+}
+#endif // DYNAMIC_STATIC_WINDOWS
+
 } // namespace gl
 } // namespace sys
 namespace gl = sys::gl;
 } // namespace dst
+
+DYNAMIC_STATIC_ENABLE_BITWISE_OPERATORS(dst::gl::Context::Info::Flags);
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

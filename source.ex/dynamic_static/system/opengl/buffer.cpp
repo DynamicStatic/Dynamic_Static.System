@@ -23,7 +23,8 @@ Buffer::Buffer()
     set_name("GlBuffer");
 }
 
-Buffer::Buffer(GLenum type)
+Buffer::Buffer(GLenum target)
+    : mTarget { target }
 {
     set_name("GlBuffer");
     dst_gl(glGenBuffers(1, &mHandle));

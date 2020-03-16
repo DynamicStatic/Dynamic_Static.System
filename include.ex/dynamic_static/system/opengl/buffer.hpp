@@ -36,7 +36,7 @@ public:
     /**
     TODO : Documentation
     */
-    Buffer(GLenum type);
+    Buffer(GLenum target);
 
     /**
     TODO : Documentation
