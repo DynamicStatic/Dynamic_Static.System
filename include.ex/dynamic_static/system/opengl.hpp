@@ -14,6 +14,7 @@
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 #include "dynamic_static/system/opengl/buffer.hpp"
 #include "dynamic_static/system/opengl/defines.hpp"
+#include "dynamic_static/system/opengl/gui.hpp"
 #include "dynamic_static/system/opengl/index-buffer.hpp"
 #include "dynamic_static/system/opengl/mesh.hpp"
 #include "dynamic_static/system/opengl/object.hpp"

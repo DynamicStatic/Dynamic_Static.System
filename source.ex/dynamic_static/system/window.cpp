@@ -61,6 +61,11 @@ const Input& Window::input() const
     return mInput;
 }
 
+dst::Span<const uint32_t> Window::text_stream() const
+{
+    return mTextStream;
+}
+
 #ifdef DYNAMIC_STATIC_WINDOWS
 void* Window::hwnd() const
 {

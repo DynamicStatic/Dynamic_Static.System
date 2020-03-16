@@ -6,25 +6,25 @@
 #     http://opensource.org/licenses/MIT
 # ==========================================
 
-set(imgui.includeDirectories "${CMAKE_CURRENT_LIST_DIR}/imgui/")
-file(GLOB imgui.clutter "${imgui.includeDirectories}/*")
+set(imgui_includeDirectories "${externalDirectory}/imgui/")
+file(GLOB imgui_clutter "${imgui_includeDirectories}/*")
 list(
-    REMOVE_ITEM imgui.clutter
-        "${imgui.includeDirectories}/imconfig.h"
-        "${imgui.includeDirectories}/imgui.cpp"
-        "${imgui.includeDirectories}/imgui.h"
-        "${imgui.includeDirectories}/imgui_demo.cpp"
-        "${imgui.includeDirectories}/imgui_draw.cpp"
-        "${imgui.includeDirectories}/imgui_internal.h"
-        "${imgui.includeDirectories}/stb_rect_pack.h"
-        "${imgui.includeDirectories}/stb_textedit.h"
-        "${imgui.includeDirectories}/stb_truetype.h"
+    REMOVE_ITEM imgui_clutter
+        "${imgui_includeDirectories}/imconfig.h"
+        "${imgui_includeDirectories}/imgui.cpp"
+        "${imgui_includeDirectories}/imgui.h"
+        "${imgui_includeDirectories}/imgui_demo.cpp"
+        "${imgui_includeDirectories}/imgui_draw.cpp"
+        "${imgui_includeDirectories}/imgui_internal.h"
+        "${imgui_includeDirectories}/stb_rect_pack.h"
+        "${imgui_includeDirectories}/stb_textedit.h"
+        "${imgui_includeDirectories}/stb_truetype.h"
 )
-set(imgui.sourceFiles
-    "${imgui.includeDirectories}/imgui.cpp"
-    "${imgui.includeDirectories}/imgui_demo.cpp"
-    "${imgui.includeDirectories}/imgui_draw.cpp"
+set(imgui_sourceFiles
+    "${imgui_includeDirectories}/imgui.cpp"
+    "${imgui_includeDirectories}/imgui_demo.cpp"
+    "${imgui_includeDirectories}/imgui_draw.cpp"
 )
-if(imgui.clutter)
-    file(REMOVE_RECURSE ${imgui.clutter})
+if(imgui_clutter)
+    file(REMOVE_RECURSE ${imgui_clutter})
 endif()

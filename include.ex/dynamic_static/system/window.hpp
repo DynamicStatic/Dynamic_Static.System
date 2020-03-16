@@ -13,6 +13,7 @@
 #include "dynamic_static/core/callback.hpp"
 #include "dynamic_static/core/enum.hpp"
 #include "dynamic_static/core/math.hpp"
+#include "dynamic_static/core/span.hpp"
 #include "dynamic_static/system/defines.hpp"
 #include "dynamic_static/system/input.hpp"
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
@@ -116,6 +117,11 @@ public:
     TODO : Documentation
     */
     const Input& input() const;
+
+    /**
+    TODO : Documentation
+    */
+    dst::Span<const uint32_t> text_stream() const;
 
     #ifdef DYNAMIC_STATIC_WINDOWS
     /**

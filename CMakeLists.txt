@@ -18,20 +18,17 @@ option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
 
 # External dependencies
 add_subdirectory("${externalDirectory}/Dynamic_Static.Core/")
-list(APPEND linkLibraries Dynamic_Static.Core)
 include(glfw)
+include(imgui)
+list(APPEND linkLibraries Dynamic_Static.Core)
 list(APPEND linkLibraries glfw)
+list(APPEND externalIncludeDirectories "${imgui_includeDirectories}")
+list(APPEND externalSourceFiles "${imgui_sourceFiles}")
 if (MSVC)
     include(glew)
-    list(APPEND externalIncludeDirectories
-        "${glew_includeDirectories}"
-    )
-    list(APPEND externalSourceFiles
-        "${glew_sourceFiles}"
-    )
-    list(APPEND externalCompileDefinitions
-        "${glew_compileDefinitions}"
-    )
+    list(APPEND externalIncludeDirectories "${glew_includeDirectories}")
+    list(APPEND externalSourceFiles "${glew_sourceFiles}")
+    list(APPEND externalCompileDefinitions "${glew_compileDefinitions}")
     list(APPEND linkLibraries
         glu32
         opengl32
@@ -70,6 +67,7 @@ DstAddStaticLibrary(
         "${includePath}/input/mouse.hpp"
         "${includePath}/opengl/buffer.hpp"
         "${includePath}/opengl/defines.hpp"
+        "${includePath}/opengl/gui.hpp"
         "${includePath}/opengl/index-buffer.hpp"
         "${includePath}/opengl/mesh.hpp"
         "${includePath}/opengl/object.hpp"
@@ -81,6 +79,7 @@ DstAddStaticLibrary(
         "${includePath}/opengl/vertex-array.hpp"
         "${includePath}/opengl/vertex-buffer.hpp"
         "${includePath}/defines.hpp"
+        "${includePath}/gui.hpp"
         "${includePath}/input.hpp"
         "${includePath}/opengl.hpp"
         "${includePath}/window.hpp"
@@ -138,6 +137,7 @@ DstAddStaticLibrary(
         "${sourcePath}/input/keyboard.cpp"
         "${sourcePath}/input/mouse.cpp"
         "${sourcePath}/opengl/buffer.cpp"
+        "${sourcePath}/opengl/gui.cpp"
         "${sourcePath}/opengl/index-buffer.cpp"
         "${sourcePath}/opengl/mesh.cpp"
         "${sourcePath}/opengl/object.cpp"
@@ -148,6 +148,7 @@ DstAddStaticLibrary(
         "${sourcePath}/opengl/vertex-array.cpp"
         "${sourcePath}/opengl/vertex-buffer.cpp"
         "${sourcePath}/glfw-window.hpp"
+        "${sourcePath}/gui.cpp"
         "${sourcePath}/input.cpp"
         "${sourcePath}/window.cpp"
 
