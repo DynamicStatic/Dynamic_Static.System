@@ -121,6 +121,11 @@ public:
     /**
     TODO : Documentation
     */
+    Input& input();
+
+    /**
+    TODO : Documentation
+    */
     dst::Span<const uint32_t> text_stream() const;
 
     #ifdef DYNAMIC_STATIC_WINDOWS

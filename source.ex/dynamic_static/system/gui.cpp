@@ -42,6 +42,7 @@ Gui::Gui()
 
 Gui::~Gui()
 {
+    ImGui::DestroyContext();
 }
 
 void Gui::begin_frame(const Clock& clock, Window& window)

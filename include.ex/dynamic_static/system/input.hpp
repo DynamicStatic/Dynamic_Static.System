@@ -22,10 +22,7 @@ Provides high level control over input device queries
 */
 struct Input final
 {
-    Keyboard keyboard { }; //!< This Input object's Keyboard
-    Mouse mouse { };       //!< This Input object's Mouse
-
-    /*!
+    /**
     Updates this Input with its staged state
         @note This method must be called periodically to keep this Input up to date
     */
@@ -35,6 +32,18 @@ struct Input final
     Resets this Input
     */
     void reset();
+
+    /**
+    Reverts this Input to its previous state
+    */
+    void revert();
+
+    Keyboard keyboard { }; //!< This Input object's Keyboard
+    Mouse mouse { };       //!< This Input object's Mouse
+
+private:
+    Keyboard mPreviousKeyboard;
+    Mouse mPreviousMouse;
 };
 
 } // namespace sys

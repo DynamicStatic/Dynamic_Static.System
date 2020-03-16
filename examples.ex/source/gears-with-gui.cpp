@@ -24,7 +24,7 @@
 
 /*
 ==========================================
-  Copyright (c) 2017-2020 Dynamic_Static
+  Copyright (c) 2020 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
@@ -382,14 +382,24 @@ int main()
         closeRequested = true;
     };
 
+    gl::Gui gui;
     Gear::Renderer renderer;
     dst::Clock clock;
     while (!closeRequested && !window.input().keyboard.down(Keyboard::Key::Escape)) {
         clock.update();
         Window::poll_events();
         auto deltaTime = clock.elapsed<dst::Seconds<float>>();
+        gui.begin_frame(clock, window);
+        ImGui::Checkbox("Animation", &renderer.animation);
+        ImGui::Checkbox("Wireframe", &renderer.wireFrame);
+        auto& input = window.input();
+        if (ImGui::GetIO().WantCaptureMouse) {
+            input.revert();
+        }
         renderer.update(deltaTime, window.input());
         renderer.draw(deltaTime, window.info().extent);
+        gui.end_frame();
+        gui.draw();
         window.swap();
     }
     return 0;

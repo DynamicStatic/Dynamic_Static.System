@@ -14,5 +14,6 @@ macro(AddExample target)
         sourceFiles "${CMAKE_CURRENT_LIST_DIR}/source/${target}.cpp"
     )
 endmacro()
+AddExample(gears-with-gui)
 AddExample(gl-gears)
 AddExample(im-gui)
