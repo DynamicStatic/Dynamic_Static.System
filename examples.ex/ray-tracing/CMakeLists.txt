@@ -15,6 +15,10 @@ DstAddExecutable(
     includeDirectories "${includeDirectory}"
     includeFiles
         "${includeDirectory}/defines.hpp"
+        "${includeDirectory}/hitable.hpp"
+        "${includeDirectory}/ray.hpp"
+        "${includeDirectory}/ray-tracer.hpp"
+        "${includeDirectory}/sphere.hpp"
     sourceFiles
         "${sourceDirectory}/main.cpp"
 )

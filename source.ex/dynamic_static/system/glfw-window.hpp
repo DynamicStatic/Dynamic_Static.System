@@ -162,7 +162,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
             #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
             if (info.graphicsApi == GraphicsApi::OpenGL) {
                 glfwMakeContextCurrent(pGlfwWindow);
-                glfwSwapInterval(1); // (int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync));
+                glfwSwapInterval(0); // (int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync));
                 #ifdef DYNAMIC_STATIC_WINDOWS
                 if (!gl::initialize_glew()) {
                     destroy_glfw_window(pGlfwWindow);

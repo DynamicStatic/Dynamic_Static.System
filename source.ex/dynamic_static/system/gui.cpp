@@ -36,8 +36,8 @@ Gui::Gui()
     io.KeyMap[ImGuiKey_X]          = (int)Keyboard::Key::X;
     io.KeyMap[ImGuiKey_Y]          = (int)Keyboard::Key::Y;
     io.KeyMap[ImGuiKey_Z]          = (int)Keyboard::Key::Z;
-    io.GetClipboardTextFn = get_clipboard;
-    io.SetClipboardTextFn = set_clipboard;
+    io.GetClipboardTextFn          = get_clipboard;
+    io.SetClipboardTextFn          = set_clipboard;
 }
 
 Gui::~Gui()
