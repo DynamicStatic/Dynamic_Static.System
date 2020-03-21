@@ -110,14 +110,24 @@ public:
         Uniforms uniforms { };
         uniforms.extent = { mTexture.info().width, mTexture.info().height };
         for (size_t y = 0; y < uniforms.extent.y; ++y) {
-            for (size_t x = 0; x < uniforms.extent.x; ++x) {
-                process_pixel(
-                    uniforms,
-                    glm::vec2 { x, y } / uniforms.extent,
-                    mPixels[y * (size_t)uniforms.extent.x + x]
-                );
-            }
+            #define USE_THREAD_POOL 1
+            #if USE_THREAD_POOL
+            mThreadPool.push(
+            [y, &uniforms, this]()
+            {
+            #endif
+                for (size_t x = 0; x < uniforms.extent.x; ++x) {
+                    process_pixel(
+                        uniforms,
+                        glm::vec2 { x, y } / uniforms.extent,
+                        mPixels[y * (size_t)uniforms.extent.x + x]
+                    );
+                }
+            #if USE_THREAD_POOL
+            });
+            #endif
         }
+        mThreadPool.wait();
     }
 
     inline void draw(const glm::vec2& viewport)
@@ -163,4 +173,5 @@ private:
     std::vector<glm::vec3> mPixels;
     dst::gl::Program mProgram;
     Hitable::Collection hitables;
+    dst::ThreadPool mThreadPool;
 };

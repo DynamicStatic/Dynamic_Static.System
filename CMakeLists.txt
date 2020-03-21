@@ -8,7 +8,7 @@
 
 # Dynamic_Static.System CMake configuration
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
-project(Dynamic_Static.System VERSION 0.2.0)
+project(Dynamic_Static.System VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
 set(externalDirectory "${CMAKE_CURRENT_LIST_DIR}/external/")

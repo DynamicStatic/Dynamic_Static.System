@@ -14,6 +14,7 @@ DstAddExecutable(
     linkLibraries Dynamic_Static.System
     includeDirectories "${includeDirectory}"
     includeFiles
+        "${includeDirectory}/camera.hpp"
         "${includeDirectory}/defines.hpp"
         "${includeDirectory}/hitable.hpp"
         "${includeDirectory}/ray.hpp"
