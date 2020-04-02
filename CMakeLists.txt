@@ -10,17 +10,19 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(Dynamic_Static.System VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
+set(dynamic_static "${CMAKE_CURRENT_LIST_DIR}/../")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
-set(externalDirectory "${CMAKE_CURRENT_LIST_DIR}/external/")
+include("${dynamic_static}/Dynamic_Static.CMake/Dynamic_Static.ex.cmake")
+DstAddSubdirectory("Dynamic_Static.Core")
 
 # Options
 option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
 
 # External dependencies
-add_subdirectory("${externalDirectory}/Dynamic_Static.Core/")
+set(externalDirectory "${CMAKE_CURRENT_LIST_DIR}/external/")
 include(glfw)
 include(imgui)
-list(APPEND linkLibraries Dynamic_Static.Core)
+list(APPEND linkLibraries dynamic_static.core)
 list(APPEND linkLibraries glfw)
 list(APPEND externalIncludeDirectories "${imgui_includeDirectories}")
 list(APPEND externalSourceFiles "${imgui_sourceFiles}")
@@ -51,8 +53,7 @@ set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include.ex/")
 set(includePath "${includeDirectory}/dynamic_static/system/")
 set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
 DstAddStaticLibrary(
-    target Dynamic_Static.System
-    folder Dynamic_Static.System/
+    target dynamic_static.system
     linkLibraries "${linkLibraries}"
     compileDefinitions "${externalCompileDefinitions}"
     includeDirectories

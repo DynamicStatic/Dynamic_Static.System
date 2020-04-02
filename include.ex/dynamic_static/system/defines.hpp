@@ -31,14 +31,20 @@
 namespace dst {
 namespace sys {
 
-static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR }; //!< Dynamic_Static.System major version
-static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; //!< Dynamic_Static.System minor version
-static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH }; //!< Dynamic_Static.System patch version
+static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR }; //!< dynamic_static.system major version
+static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; //!< dynamic_static.system minor version
+static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH }; //!< dynamic_static.system patch version
+
+} // namespace sys
+} // namespace dst
+
+namespace dst {
+namespace gfx {
 
 /*!
-Specifies system graphics apis.
+Specifies graphics apis
 */
-enum class GraphicsApi
+enum class Api
 {
     Undefined,
     #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
@@ -49,5 +55,5 @@ enum class GraphicsApi
     #endif
 };
 
-} // namespace sys
+} // namespace gfx
 } // namespace dst
