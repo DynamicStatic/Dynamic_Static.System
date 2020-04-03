@@ -68,7 +68,7 @@ public:
         glm::ivec2 position { 320, 180 };                   //!< TODO : Documentation
         glm::ivec2 extent { 1280, 720 };                    //!< TODO : Documentation
         CursorMode cursorMode { CursorMode::Visible };      //!< TODo : Documentation
-        GraphicsApi graphicsApi { GraphicsApi::Undefined }; //!< TODO : Documentation
+        gfx::Api graphicsApi { gfx::Api::Undefined };       //!< TODO : Documentation
         #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
         gl::Context::Info glContextInfo { };                //!< TODO : Documentation
         #endif

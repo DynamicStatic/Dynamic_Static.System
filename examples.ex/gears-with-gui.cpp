@@ -372,7 +372,7 @@ int main()
     using namespace dst::sys;
     Window::Info windowInfo { };
     windowInfo.pName = "Dynamic_Static GL Gears";
-    windowInfo.graphicsApi = GraphicsApi::OpenGL;
+    windowInfo.graphicsApi = dst::gfx::Api::OpenGL;
     windowInfo.glContextInfo.version = { 4, 5 };
     Window window(windowInfo);
     bool closeRequested = false;

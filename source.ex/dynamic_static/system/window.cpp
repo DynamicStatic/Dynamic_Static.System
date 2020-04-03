@@ -112,14 +112,14 @@ void Window::set_cursor_mode(CursorMode cursorMode)
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 void Window::make_context_current()
 {
-    if (mInfo.graphicsApi == GraphicsApi::OpenGL) {
+    if (mInfo.graphicsApi == gfx::Api::OpenGL) {
         glfwMakeContextCurrent(mGlfwWindow);
     }
 }
 
 void Window::swap()
 {
-    if (mInfo.graphicsApi == GraphicsApi::OpenGL) {
+    if (mInfo.graphicsApi == gfx::Api::OpenGL) {
         glfwSwapBuffers(mGlfwWindow);
     }
 }

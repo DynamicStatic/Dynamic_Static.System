@@ -131,7 +131,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 }
                 switch (info.graphicsApi) {
                 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-                case GraphicsApi::OpenGL: {
+                case gfx::Api::OpenGL: {
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, info.glContextInfo.version.major);
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, info.glContextInfo.version.minor);
                     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
@@ -160,7 +160,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 throw std::runtime_error("Failed to create GLFW window : " + errorMessage);
             }
             #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-            if (info.graphicsApi == GraphicsApi::OpenGL) {
+            if (info.graphicsApi == gfx::Api::OpenGL) {
                 glfwMakeContextCurrent(pGlfwWindow);
                 glfwSwapInterval(0); // (int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync));
                 #ifdef DYNAMIC_STATIC_WINDOWS

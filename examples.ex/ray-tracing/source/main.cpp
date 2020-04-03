@@ -15,10 +15,11 @@
 
 int main(int argc, char* argv[])
 {
+    using namespace dst;
     using namespace dst::sys;
     Window::Info windowInfo { };
     windowInfo.pName = "Dynamic_Static Ray Tracing";
-    windowInfo.graphicsApi = GraphicsApi::OpenGL;
+    windowInfo.graphicsApi = gfx::Api::OpenGL;
     windowInfo.glContextInfo.version = { 4, 5 };
     windowInfo.extent.x = 1200;
     windowInfo.extent.y = 600;
