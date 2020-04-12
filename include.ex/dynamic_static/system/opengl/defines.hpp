@@ -17,7 +17,7 @@
 #include "dynamic_static/core/enum.hpp"
 #include "dynamic_static/core/version.hpp"
 
-#ifdef DYNAMIC_STATIC_WINDOWS
+#ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
 #pragma warning(push, 0)
 #include "GL/glew.h"
 #pragma warning(pop)
@@ -49,7 +49,7 @@ inline GLenum validate_call(const char* message, const char* glCall)
     GLenum glError = glGetError();
     if (glError != GL_NO_ERROR) {
         char const* errorStr = nullptr;
-        #ifdef DYNAMIC_STATIC_WINDOWS
+        #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
         errorStr = (const char*)gluErrorString(glError);
         #endif
         errorStr = errorStr ? errorStr : "Unknown";
@@ -196,7 +196,7 @@ inline std::string get_info_log(
     return infoLog;
 }
 
-#ifdef DYNAMIC_STATIC_WINDOWS
+#ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
 /**
 TODO : Documentation
 */
@@ -211,7 +211,7 @@ inline bool initialize_glew()
     }
     return sGlewInitialized;
 }
-#endif // DYNAMIC_STATIC_WINDOWS
+#endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
 } // namespace gl
 } // namespace sys

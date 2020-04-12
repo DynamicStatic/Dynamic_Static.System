@@ -46,12 +46,12 @@ Specifies graphics apis
 */
 enum class Api
 {
-    Undefined,
+    Undefined,                           //!< TODO : Documentation
     #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-    OpenGL,
+    OpenGL,                              //!< TODO : Documentation
     #endif
     #ifdef DYNAMIC_STATIC_VULKAN_ENABLED
-    Vulkan,
+    Vulkan,                              //!< TODO : Documentation
     #endif
 };
 

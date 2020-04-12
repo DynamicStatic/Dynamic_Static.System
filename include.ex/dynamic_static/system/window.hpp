@@ -128,12 +128,12 @@ public:
     */
     dst::Span<const uint32_t> text_stream() const;
 
-    #ifdef DYNAMIC_STATIC_WINDOWS
+    #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
     /**
     TODO : Documentation
     */
     void* hwnd() const;
-    #endif // DYNAMIC_STATIC_WINDOWS
+    #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
     /**
     TODO : Documentation

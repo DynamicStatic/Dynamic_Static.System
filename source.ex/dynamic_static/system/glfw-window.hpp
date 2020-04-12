@@ -11,12 +11,12 @@
 #include "dynamic_static/system/window.hpp"
 
 #include "GLFW/glfw3.h"
-#ifdef DYNAMIC_STATIC_WINDOWS
+#ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
 #ifndef GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
 #endif
 #endif
-#ifdef DYNAMIC_STATIC_LINUX
+#ifdef DYNAMIC_STATIC_PLATFORM_LINUX
 #ifndef GLFW_EXPOSE_NATIVE_X11
 #define GLFW_EXPOSE_NATIVE_X11
 #endif
@@ -163,12 +163,12 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
             if (info.graphicsApi == gfx::Api::OpenGL) {
                 glfwMakeContextCurrent(pGlfwWindow);
                 glfwSwapInterval(0); // (int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync));
-                #ifdef DYNAMIC_STATIC_WINDOWS
+                #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
                 if (!gl::initialize_glew()) {
                     destroy_glfw_window(pGlfwWindow);
                     throw std::runtime_error("Failed to initialize GLEW");
                 }
-                #endif // DYNAMIC_STATIC_WINDOWS
+                #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
             }
             #endif // DYNAMIC_STATIC_OPENGL_ENABLED
             glfwSetWindowCloseCallback(pGlfwWindow, glfw_window_close_callback);

@@ -71,12 +71,12 @@ dst::Span<const uint32_t> Window::text_stream() const
     return mTextStream;
 }
 
-#ifdef DYNAMIC_STATIC_WINDOWS
+#ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
 void* Window::hwnd() const
 {
     return glfwGetWin32Window(mGlfwWindow);
 }
-#endif // DYNAMIC_STATIC_WINDOWS
+#endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
 std::string Window::get_clipboard() const
 {

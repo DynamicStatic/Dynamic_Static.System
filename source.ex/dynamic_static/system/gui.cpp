@@ -77,9 +77,9 @@ void Gui::begin_frame(const Clock& clock, Window& window)
         input.keyboard.down(Keyboard::Key::LeftWindow) ||
         input.keyboard.down(Keyboard::Key::RightWindow);
     io.ClipboardUserData = &window;
-    #ifdef DYNAMIC_STATIC_WINDOWS
+    #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
     io.ImeWindowHandle = window.hwnd();
-    #endif
+    #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
     ImGui::NewFrame();
 }
 
