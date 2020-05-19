@@ -12,6 +12,7 @@
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
+#include <cassert>
 #include <utility>
 
 namespace dst {

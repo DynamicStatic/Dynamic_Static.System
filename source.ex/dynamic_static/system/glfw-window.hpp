@@ -142,14 +142,14 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 } break;
                 }
             }
-            glfwWindowHint(GLFW_VISIBLE, 1); // (int)(info.flags & Window::Info::Flags::Visible));
-            glfwWindowHint(GLFW_DECORATED, 1); // (int)(info.flags & Window::Info::Flags::Decorated));
-            glfwWindowHint(GLFW_RESIZABLE, 1); // (int)(info.flags & Window::Info::Flags::Resizable));
+            glfwWindowHint(GLFW_VISIBLE, (int)(info.flags & Window::Info::Flags::Visible) ? 1 : 0);
+            glfwWindowHint(GLFW_DECORATED, (int)(info.flags & Window::Info::Flags::Decorated) ? 1 : 0);
+            glfwWindowHint(GLFW_RESIZABLE, (int)(info.flags & Window::Info::Flags::Resizable) ? 1 : 0);
             pGlfwWindow = glfwCreateWindow(
                 info.extent.x,
                 info.extent.y,
                 info.pName,
-                nullptr, // (int)(info.flags & Window::Info::Flags::Fullscreen) ? glfwGetPrimaryMonitor() : nullptr,
+                (int)(info.flags & Window::Info::Flags::Fullscreen) ? glfwGetPrimaryMonitor() : nullptr,
                 nullptr
             );
             if (!pGlfwWindow) {
@@ -162,7 +162,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
             #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
             if (info.graphicsApi == gfx::Api::OpenGL) {
                 glfwMakeContextCurrent(pGlfwWindow);
-                glfwSwapInterval(0); // (int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync));
+                glfwSwapInterval((int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync) ? 1 : 0);
                 #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
                 if (!gl::initialize_glew()) {
                     destroy_glfw_window(pGlfwWindow);

@@ -132,6 +132,20 @@ struct Context final
         dst_gl(glScissor(scissor[0], scissor[1], (GLsizei)scissor[2], (GLsizei)scissor[3]));
         dst_gl(glBlendEquationSeparate(blendEquationRgb, blendEquationAlpha));
         dst_gl(glBlendFuncSeparate(blendSrcRgb, blendDstRgb, blendSrcAlpha, blendDstAlpha));
+        auto setGlBool =
+        [](GLboolean glBool, GLenum glValue)
+        {
+            if (glBool) {
+                dst_gl(glEnable(glValue));
+            } else {
+                dst_gl(glDisable(glValue));
+            }
+        };
+        setGlBool(blendEnabled, GL_BLEND);
+        setGlBool(cullFaceEnabled, GL_CULL_FACE);
+        setGlBool(depthTestEnabled, GL_DEPTH_TEST);
+        setGlBool(scissorTestEnabled, GL_SCISSOR_TEST);
+        #if 0
         if (blendEnabled) {
             dst_gl(glEnable(GL_BLEND));
         } else {
@@ -152,6 +166,7 @@ struct Context final
         } else {
             dst_gl(glDisable(GL_SCISSOR_TEST));
         }
+        #endif
     }
 
     GLenum activeTexture { };         //!< This Context object's active texture
@@ -216,8 +231,13 @@ inline bool initialize_glew()
 } // namespace gl
 } // namespace sys
 namespace gl = sys::gl;
-} // namespace dst
 
-DYNAMIC_STATIC_ENABLE_BITWISE_OPERATORS(dst::gl::Context::Info::Flags);
+template <>
+struct EnumClassOperators<gl::Context::Info::Flags>
+{
+    static constexpr bool enabled { true };
+};
+
+} // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

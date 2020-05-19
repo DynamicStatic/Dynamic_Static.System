@@ -13,6 +13,7 @@
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
 #include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <utility>
 

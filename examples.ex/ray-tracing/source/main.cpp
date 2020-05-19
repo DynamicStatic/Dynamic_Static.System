@@ -24,12 +24,14 @@ int main(int argc, char* argv[])
     windowInfo.extent.x = 1200;
     windowInfo.extent.y = 600;
     Window window(windowInfo);
+    Delegate<const Window&> window_close_requested_handler;
+    window.on_close_requested += window_close_requested_handler;
     bool closeRequested = false;
-    window.on_close_requested =
-    [&](const Window&)
-    {
-        closeRequested = true;
-    };
+    window_close_requested_handler =
+        [&](const Window&)
+        {
+            closeRequested = true;
+        };
 
     gl::Gui gui;
     ImGui::GetIO().IniFilename = nullptr;

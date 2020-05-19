@@ -17,8 +17,8 @@
 namespace dst {
 namespace sys {
 
-static constexpr bool KeyUp { false };  // TODO : Documentation
-static constexpr bool KeyDown { true }; // TODO : Documentation
+static constexpr bool KeyUp { false };  // Value indicating that a Keyboard::Key is up
+static constexpr bool KeyDown { true }; // Value indicating that a Keyboard::Key is down
 
 /**
 Provides high level control over keyboard queries
@@ -26,14 +26,16 @@ Provides high level control over keyboard queries
 struct Keyboard final
 {
     /**
-    TODO : Documentation
+    Enumerates keyboard keys
     */
     enum class Key
     {
-        // NOTE : The following table shows the symbolic constant names, hexadecimal
-        //  values, and mouse or keyboard equivalents for the virtual key codes used by
-        //  Windows.  The codes are listed in numeric order.
+        // NOTE : This enum contains the symbolic constant names, hexadecimal values,
+        //  and mouse or keyboard equivalent for the virtual key codes used by Windows.
+        //  The codes are listed in numeric order.
         //  http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+        Unknown              = 0,
 
         #if 0
         // NOTE : These virtual key codes are used by dst::sys::Mouse
@@ -238,7 +240,6 @@ struct Keyboard final
 
         OEM_Clear            = 0xfe,
 
-        Unknown,
         Count,
         Any,
     };

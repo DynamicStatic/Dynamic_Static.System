@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "dynamic_static/core/callback.hpp"
 #include "dynamic_static/core/enum.hpp"
+#include "dynamic_static/core/event.hpp"
 #include "dynamic_static/core/math.hpp"
 #include "dynamic_static/core/span.hpp"
 #include "dynamic_static/system/defines.hpp"
@@ -31,7 +31,7 @@ namespace dst {
 namespace sys {
 
 /**
-TODO : Documentation
+Provides high level control over a system window
 */
 class Window final
 {
@@ -56,21 +56,21 @@ public:
         */
         enum class Flags
         {
-            Decorated  = 1,                  //!< TODO : Documentation
-            Resizable  = 1 << 1,             //!< TODO : Documentation
-            Visible    = 1 << 2,             //!< TODO : Documentation
-            Fullscreen = 1 << 3,             //!< TODO : Documentation
-            Default    = Visible | Resizable //!< TODO : Documentation
+            Decorated  = 1,                              //!< TODO : Documentation
+            Resizable  = 1 << 1,                         //!< TODO : Documentation
+            Visible    = 1 << 2,                         //!< TODO : Documentation
+            Fullscreen = 1 << 3,                         //!< TODO : Documentation
+            Default    = Decorated | Visible | Resizable //!< TODO : Documentation
         };
 
-        Flags flags { Flags::Default };                     //!< TODO : Documentation
-        const char* pName { "Dynamic_Static" };             //!< TODO : Documentation
-        glm::ivec2 position { 320, 180 };                   //!< TODO : Documentation
-        glm::ivec2 extent { 1280, 720 };                    //!< TODO : Documentation
-        CursorMode cursorMode { CursorMode::Visible };      //!< TODo : Documentation
-        gfx::Api graphicsApi { gfx::Api::Undefined };       //!< TODO : Documentation
+        Flags flags { Flags::Default };
+        const char* pName { "Dynamic_Static" };
+        glm::ivec2 position { 320, 180 };
+        glm::ivec2 extent { 1280, 720 };
+        CursorMode cursorMode { CursorMode::Visible };
+        gfx::Api graphicsApi { gfx::Api::Undefined };
         #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-        gl::Context::Info glContextInfo { };                //!< TODO : Documentation
+        gl::Context::Info glContextInfo { };
         #endif
     };
 
@@ -80,18 +80,18 @@ public:
     */
     Window(const Info& info);
 
-    /*!
+    /**
     Moves this instance of Window
     @param [in] other The Window to move from
     */
     Window(Window&& other) noexcept;
 
-    /*!
+    /**
     Destroys this instance of Winodw
     */
     ~Window();
 
-    /*!
+    /**
     Moves this instance of Window
     @param [in] other The Window to move from
     @return A reference to this Window
@@ -101,12 +101,12 @@ public:
     /**
     TODO : Documentation
     */
-    Callback<Window, const Window&> on_resize;
+    Event<Window, const Window&> on_resize;
 
     /**
     TODO : Documentation
     */
-    Callback<Window, const Window&> on_close_requested;
+    Event<Window, const Window&> on_close_requested;
 
     /**
     TODO : Documentation
@@ -207,6 +207,11 @@ private:
 };
 
 } // namespace sys
-} // namespace dst
 
-DYNAMIC_STATIC_ENABLE_BITWISE_OPERATORS(dst::sys::Window::Info::Flags);
+template <>
+struct EnumClassOperators<sys::Window::Info::Flags>
+{
+    static constexpr bool enabled { true };
+};
+
+} // namespace dst

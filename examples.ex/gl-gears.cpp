@@ -372,16 +372,19 @@ int main()
     using namespace dst;
     using namespace dst::sys;
     Window::Info windowInfo { };
+    windowInfo.flags |= Window::Info::Flags::Fullscreen;
     windowInfo.pName = "Dynamic_Static GL Gears";
     windowInfo.graphicsApi = dst::gfx::Api::OpenGL;
     windowInfo.glContextInfo.version = { 4, 5 };
     Window window(windowInfo);
+    Delegate<const Window&> window_close_requested_handler;
+    window.on_close_requested += window_close_requested_handler;
     bool closeRequested = false;
-    window.on_close_requested =
-    [&](const Window&)
-    {
-        closeRequested = true;
-    };
+    window_close_requested_handler =
+        [&](const Window&)
+        {
+            closeRequested = true;
+        };
 
     Gear::Renderer renderer;
     dst::Clock clock;

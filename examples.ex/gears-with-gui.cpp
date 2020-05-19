@@ -24,13 +24,14 @@
 
 /*
 ==========================================
-  Copyright (c) 2020 Dynamic_Static
+  Copyright (c) 2017-2020 Dynamic_Static
     Patrick Purcell
       Licensed under the MIT license
     http://opensource.org/licenses/MIT
 ==========================================
 */
 
+#include "gl-gears.hpp"
 #include "dynamic_static.core.hpp"
 #include "dynamic_static.system.hpp"
 
@@ -214,7 +215,7 @@ public:
     {
         gears[0].position = { -3.f, -2.f, 0.0f };
         gears[0].color = { 0.8f, 0.1f, 0.0f, 1.0f };
-        gears[1].rotation = 0;
+        gears[0].rotation = 0;
         gears[0].speed = 70;
 
         gears[1].position = { 3.1f, -2.0f, 0.0f };
@@ -369,18 +370,21 @@ int main()
     std::cout << "[Right Mouse]  - Move model horizontally and vertically" << std::endl;
     std::cout << std::endl;
 
+    using namespace dst;
     using namespace dst::sys;
     Window::Info windowInfo { };
     windowInfo.pName = "Dynamic_Static GL Gears";
     windowInfo.graphicsApi = dst::gfx::Api::OpenGL;
     windowInfo.glContextInfo.version = { 4, 5 };
     Window window(windowInfo);
+    Delegate<const Window&> window_close_requested_handler;
+    window.on_close_requested += window_close_requested_handler;
     bool closeRequested = false;
-    window.on_close_requested =
-    [&](const Window&)
-    {
-        closeRequested = true;
-    };
+    window_close_requested_handler =
+        [&](const Window&)
+        {
+            closeRequested = true;
+        };
 
     gl::Gui gui;
     Gear::Renderer renderer;

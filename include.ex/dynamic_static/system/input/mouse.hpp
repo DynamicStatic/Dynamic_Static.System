@@ -18,8 +18,8 @@
 namespace dst {
 namespace sys {
 
-static constexpr bool ButtonUp { false };  // TODO : Documentation
-static constexpr bool ButtonDown { true }; // TODO : Documentation
+static constexpr bool ButtonUp { false };  // Value indicating that a Mouse::Button is up
+static constexpr bool ButtonDown { true }; // Value indicating that a Mouse::Button is down
 
 /**
 Provides high level control over mouse queries
@@ -31,10 +31,12 @@ struct Mouse final
     */
     enum class Button
     {
-        // NOTE : The following table shows the symbolic constant names, hexadecimal
-        //  values, and mouse or keyboard equivalents for the virtual key codes used by
-        //  Windows.  The codes are listed in numeric order.
+        // NOTE : This enum contains the symbolic constant names, hexadecimal values,
+        //  and mouse or keyboard equivalent for the virtual key codes used by Windows.
+        //  The codes are listed in numeric order.
         //  http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
+        Unknown      = 0,
 
         Left         = 0x01,
         Right        = 0x02,
@@ -48,7 +50,6 @@ struct Mouse final
         X1           = 0x05,
         X2           = 0x06,
 
-        Unknown,
         Count,
         Any,
     };
