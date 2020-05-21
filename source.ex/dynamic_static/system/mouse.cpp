@@ -8,7 +8,7 @@
 ==========================================
 */
 
-#include "dynamic_static/system/input/mouse.hpp"
+#include "dynamic_static/system/mouse.hpp"
 
 namespace dst {
 namespace sys {

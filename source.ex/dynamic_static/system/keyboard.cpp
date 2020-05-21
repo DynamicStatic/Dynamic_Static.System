@@ -8,7 +8,7 @@
 ==========================================
 */
 
-#include "dynamic_static/system/input/keyboard.hpp"
+#include "dynamic_static/system/keyboard.hpp"
 
 namespace dst {
 namespace sys {
