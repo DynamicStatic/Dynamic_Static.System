@@ -50,8 +50,10 @@ endif()
 
 # Dynamic_Static.System library
 set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include.ex/")
-set(includePath "${includeDirectory}/dynamic_static/system/")
-set(sourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
+set(graphicsIncludePath "${includeDirectory}/dynamic_static/graphics/")
+set(systemIncludePath "${includeDirectory}/dynamic_static/system/")
+set(graphicsSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/graphics/")
+set(systemSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
 DstAddStaticLibrary(
     target dynamic_static.system
     linkLibraries "${linkLibraries}"
@@ -64,26 +66,25 @@ DstAddStaticLibrary(
         "${CMAKE_CURRENT_LIST_DIR}/include/"
 
     includeFiles
-        "${includePath}/input/keyboard.hpp"
-        "${includePath}/input/mouse.hpp"
-        "${includePath}/opengl/buffer.hpp"
-        "${includePath}/opengl/defines.hpp"
-        "${includePath}/opengl/gui.hpp"
-        "${includePath}/opengl/index-buffer.hpp"
-        "${includePath}/opengl/mesh.hpp"
-        "${includePath}/opengl/object.hpp"
-        "${includePath}/opengl/program.hpp"
-        "${includePath}/opengl/shader.hpp"
-        "${includePath}/opengl/shader.hpp"
-        "${includePath}/opengl/texture.hpp"
-        "${includePath}/opengl/vertex.hpp"
-        "${includePath}/opengl/vertex-array.hpp"
-        "${includePath}/opengl/vertex-buffer.hpp"
-        "${includePath}/defines.hpp"
-        "${includePath}/gui.hpp"
-        "${includePath}/input.hpp"
-        "${includePath}/opengl.hpp"
-        "${includePath}/window.hpp"
+        "${graphicsIncludePath}/opengl/buffer.hpp"
+        "${graphicsIncludePath}/opengl/defines.hpp"
+        "${graphicsIncludePath}/opengl/gui.hpp"
+        "${graphicsIncludePath}/opengl/index-buffer.hpp"
+        "${graphicsIncludePath}/opengl/mesh.hpp"
+        "${graphicsIncludePath}/opengl/object.hpp"
+        "${graphicsIncludePath}/opengl/program.hpp"
+        "${graphicsIncludePath}/opengl/shader.hpp"
+        "${graphicsIncludePath}/opengl/texture.hpp"
+        "${graphicsIncludePath}/opengl/vertex-array.hpp"
+        "${graphicsIncludePath}/opengl/vertex-buffer.hpp"
+        "${graphicsIncludePath}/opengl/vertex.hpp"
+        "${systemIncludePath}/input/keyboard.hpp"
+        "${systemIncludePath}/input/mouse.hpp"
+        "${systemIncludePath}/defines.hpp"
+        "${systemIncludePath}/gui.hpp"
+        "${systemIncludePath}/input.hpp"
+        "${systemIncludePath}/window.hpp"
+        "${includeDirectory}/dynamic_static.graphics.opengl.hpp"
         "${includeDirectory}/dynamic_static.system.hpp"
 
 
@@ -135,23 +136,23 @@ DstAddStaticLibrary(
 
     sourceFiles
         "${externalSourceFiles}"
-        "${sourcePath}/input/keyboard.cpp"
-        "${sourcePath}/input/mouse.cpp"
-        "${sourcePath}/opengl/buffer.cpp"
-        "${sourcePath}/opengl/gui.cpp"
-        "${sourcePath}/opengl/index-buffer.cpp"
-        "${sourcePath}/opengl/mesh.cpp"
-        "${sourcePath}/opengl/object.cpp"
-        "${sourcePath}/opengl/program.cpp"
-        "${sourcePath}/opengl/shader.cpp"
-        "${sourcePath}/opengl/shader.cpp"
-        "${sourcePath}/opengl/texture.cpp"
-        "${sourcePath}/opengl/vertex-array.cpp"
-        "${sourcePath}/opengl/vertex-buffer.cpp"
-        "${sourcePath}/glfw-window.hpp"
-        "${sourcePath}/gui.cpp"
-        "${sourcePath}/input.cpp"
-        "${sourcePath}/window.cpp"
+        "${graphicsSourcePath}/opengl/buffer.cpp"
+        "${graphicsSourcePath}/opengl/gui.cpp"
+        "${graphicsSourcePath}/opengl/index-buffer.cpp"
+        "${graphicsSourcePath}/opengl/mesh.cpp"
+        "${graphicsSourcePath}/opengl/object.cpp"
+        "${graphicsSourcePath}/opengl/program.cpp"
+        "${graphicsSourcePath}/opengl/shader.cpp"
+        "${graphicsSourcePath}/opengl/shader.cpp"
+        "${graphicsSourcePath}/opengl/texture.cpp"
+        "${graphicsSourcePath}/opengl/vertex-array.cpp"
+        "${graphicsSourcePath}/opengl/vertex-buffer.cpp"
+        "${systemSourcePath}/input/keyboard.cpp"
+        "${systemSourcePath}/input/mouse.cpp"
+        "${systemSourcePath}/glfw-window.hpp"
+        "${systemSourcePath}/gui.cpp"
+        "${systemSourcePath}/input.cpp"
+        "${systemSourcePath}/window.cpp"
 
 
 

@@ -10,17 +10,17 @@
 
 #pragma once
 
-#include "dynamic_static/system/opengl/defines.hpp"
+#include "dynamic_static/graphics/opengl/defines.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
 #include "dynamic_static/core/span.hpp"
-#include "dynamic_static/system/opengl/object.hpp"
+#include "dynamic_static/graphics/opengl/object.hpp"
 
 #include <string>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 class Shader;
@@ -83,7 +83,7 @@ public:
 };
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

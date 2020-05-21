@@ -15,6 +15,7 @@
 #include "sphere.hpp"
 
 #include "dynamic_static.core.hpp"
+#include "dynamic_static.graphics.opengl.hpp"
 #include "dynamic_static.system.hpp"
 
 #include <array>
@@ -22,19 +23,19 @@
 #include <vector>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 template <>
 inline void enable_vertex_attributes<glm::vec4>()
 {
-    enable_vertex_attributes<glm::vec4, 3>({{
+    enable_vertex_attributes<glm::vec4, 3>({ {
         { GL_FLOAT, 4 },
-    }});
+    } });
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 class RayTracer final

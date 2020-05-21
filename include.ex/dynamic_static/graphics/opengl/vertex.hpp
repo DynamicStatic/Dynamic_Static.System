@@ -10,14 +10,14 @@
 
 #pragma once
 
-#include "dynamic_static/system/opengl/defines.hpp"
+#include "dynamic_static/graphics/opengl/defines.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
 #include <array>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 /**
@@ -102,7 +102,7 @@ inline void enable_vertex_attributes()
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

@@ -8,7 +8,7 @@
 ==========================================
 */
 
-#include "dynamic_static/system/opengl/shader.hpp"
+#include "dynamic_static/graphics/opengl/shader.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
@@ -18,7 +18,7 @@
 #include <utility>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 Shader::Shader()
@@ -93,7 +93,7 @@ std::string Shader::info_log()
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

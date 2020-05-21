@@ -8,6 +8,8 @@
 ==========================================
 */
 
+#pragma once
+
 #include "dynamic_static/system/window.hpp"
 
 #include "GLFW/glfw3.h"
@@ -129,22 +131,24 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 if (glfwInit() == GLFW_FALSE) {
                     throw std::runtime_error("Failed to initialize GLFW : " + get_last_glfw_error_message());
                 }
-                switch (info.graphicsApi) {
+                bool createGlContext = false;
                 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-                case gfx::Api::OpenGL: {
-                    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, info.glContextInfo.version.major);
-                    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, info.glContextInfo.version.minor);
-                    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
-                } break;
+                if (info.pGlInfo) {
+                    createGlContext = true;
+                }
                 #endif // DYNAMIC_STATIC_OPENGL_ENABLED
-                default: {
+                if (createGlContext) {
+                    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, info.pGlInfo->version.major);
+                    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, info.pGlInfo->version.minor);
+                    glfwWindowHint(GLFW_DOUBLEBUFFER, (int)(info.pGlInfo->flags & Window::GlInfo::Flags::DoubleBuffer) ? 1 : 0);
+                    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+                } else {
                     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-                } break;
                 }
             }
-            glfwWindowHint(GLFW_VISIBLE, (int)(info.flags & Window::Info::Flags::Visible) ? 1 : 0);
             glfwWindowHint(GLFW_DECORATED, (int)(info.flags & Window::Info::Flags::Decorated) ? 1 : 0);
             glfwWindowHint(GLFW_RESIZABLE, (int)(info.flags & Window::Info::Flags::Resizable) ? 1 : 0);
+            glfwWindowHint(GLFW_VISIBLE, (int)(info.flags & Window::Info::Flags::Visible) ? 1 : 0);
             pGlfwWindow = glfwCreateWindow(
                 info.extent.x,
                 info.extent.y,
@@ -160,9 +164,9 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 throw std::runtime_error("Failed to create GLFW window : " + errorMessage);
             }
             #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-            if (info.graphicsApi == gfx::Api::OpenGL) {
+            if (info.pGlInfo) {
                 glfwMakeContextCurrent(pGlfwWindow);
-                glfwSwapInterval((int)(info.glContextInfo.flags & gl::Context::Info::Flags::VSync) ? 1 : 0);
+                // glfwSwapInterval((int)(info.pGlInfo->flags & gl::Context::Info::Flags::VSync) ? 1 : 0);
                 #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
                 if (!gl::initialize_glew()) {
                     destroy_glfw_window(pGlfwWindow);

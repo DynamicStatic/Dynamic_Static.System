@@ -9,6 +9,7 @@
 */
 
 #include "dynamic_static.core.hpp"
+#include "dynamic_static.graphics.opengl.hpp"
 #include "dynamic_static.system.hpp"
 
 #include <iostream>
@@ -17,10 +18,10 @@ int main(int argc, char* argv[])
 {
     using namespace dst;
     using namespace dst::sys;
+    Window::GlInfo glInfo { };
     Window::Info windowInfo { };
     windowInfo.pName = "Dynamic_Static ImGui";
-    windowInfo.graphicsApi = gfx::Api::OpenGL;
-    windowInfo.glContextInfo.version = { 4, 5 };
+    windowInfo.pGlInfo = &glInfo;
     Window window(windowInfo);
     Delegate<const Window&> window_close_requested_handler;
     window.on_close_requested += window_close_requested_handler;

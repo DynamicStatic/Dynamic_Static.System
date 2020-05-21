@@ -17,7 +17,7 @@
 #include "dynamic_static/system/defines.hpp"
 #include "dynamic_static/system/input.hpp"
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-#include "dynamic_static/system/opengl/defines.hpp"
+#include "dynamic_static/graphics/opengl/defines.hpp"
 #endif
 
 #include <mutex>
@@ -46,6 +46,29 @@ public:
         Disabled, // TOOD : Documentation
     };
 
+    #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+    /**
+    TODO : Documentation
+    */
+    struct GlInfo final
+    {
+        /**
+        TODO : Documentation
+        */
+        enum class Flags
+        {
+            DoubleBuffer = 1,                   //!< TODO : Documentation
+            VSync        = 1 << 1,              //!< TODO : Documentation
+            Default      = DoubleBuffer | VSync //!< TODO : Documentation
+        };
+
+        Flags flags { Flags::Default }; //!< TODO : Documentation
+        Version version { 4, 5, 0 };    //!< TODO : Documentation
+        int depthBits { 24 };           //!< TODO : Documentation
+        int stencilBits { 8 };          //!< TODO : Documentation
+    };
+    #endif // DYNAMIC_STATIC_OPENGL_ENABLED
+
     /**
     TODO : Documentation
     */
@@ -56,11 +79,11 @@ public:
         */
         enum class Flags
         {
-            Decorated  = 1,                              //!< TODO : Documentation
-            Resizable  = 1 << 1,                         //!< TODO : Documentation
-            Visible    = 1 << 2,                         //!< TODO : Documentation
-            Fullscreen = 1 << 3,                         //!< TODO : Documentation
-            Default    = Decorated | Visible | Resizable //!< TODO : Documentation
+            Decorated    = 1,                               //!< TODO : Documentation
+            Fullscreen   = 1 << 1,                          //!< TODO : Documentation
+            Resizable    = 1 << 2,                          //!< TODO : Documentation
+            Visible      = 1 << 3,                          //!< TODO : Documentation
+            Default      = Decorated | Visible | Resizable, //!< TODO : Documentation
         };
 
         Flags flags { Flags::Default };
@@ -68,9 +91,8 @@ public:
         glm::ivec2 position { 320, 180 };
         glm::ivec2 extent { 1280, 720 };
         CursorMode cursorMode { CursorMode::Visible };
-        gfx::Api graphicsApi { gfx::Api::Undefined };
         #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-        gl::Context::Info glContextInfo { };
+        GlInfo* pGlInfo { };
         #endif
     };
 
@@ -207,6 +229,14 @@ private:
 };
 
 } // namespace sys
+
+#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+template <>
+struct EnumClassOperators<sys::Window::GlInfo::Flags>
+{
+    static constexpr bool enabled { true };
+};
+#endif // DYNAMIC_STATIC_OPENGL_ENABLED
 
 template <>
 struct EnumClassOperators<sys::Window::Info::Flags>

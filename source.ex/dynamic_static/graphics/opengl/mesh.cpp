@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "dynamic_static/system/opengl/mesh.hpp"
+#include "dynamic_static/graphics/opengl/mesh.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 void Mesh::draw_indexed() const
@@ -33,7 +33,7 @@ void Mesh::draw_indexed(GLsizei count, const void* pIndices) const
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

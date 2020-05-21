@@ -10,17 +10,17 @@
 
 #pragma once
 
-#include "dynamic_static/system/opengl/program.hpp"
+#include "dynamic_static/graphics/opengl/program.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
-#include "dynamic_static/system/opengl/shader.hpp"
+#include "dynamic_static/graphics/opengl/shader.hpp"
 
 #include <iostream>
 #include <utility>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 Program::Program()
@@ -87,7 +87,7 @@ void Program::unbind() const
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

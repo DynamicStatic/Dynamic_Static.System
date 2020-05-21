@@ -8,14 +8,14 @@
 ==========================================
 */
 
-#include "dynamic_static/system/opengl/gui.hpp"
+#include "dynamic_static/graphics/opengl/gui.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
-#include "dynamic_static/system/opengl/shader.hpp"
+#include "dynamic_static/graphics/opengl/shader.hpp"
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 template <>
@@ -142,7 +142,7 @@ void Gui::draw()
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

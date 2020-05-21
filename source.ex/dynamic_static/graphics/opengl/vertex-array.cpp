@@ -8,7 +8,7 @@
 ==========================================
 */
 
-#include "dynamic_static/system/opengl/vertex-array.hpp"
+#include "dynamic_static/graphics/opengl/vertex-array.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
@@ -16,7 +16,7 @@
 #include <utility>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 VertexArray::VertexArray()
@@ -53,7 +53,7 @@ void VertexArray::unbind() const
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

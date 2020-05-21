@@ -32,6 +32,7 @@
 */
 
 #include "dynamic_static.core.hpp"
+#include "dynamic_static.graphics.opengl.hpp"
 #include "dynamic_static.system.hpp"
 
 #include <array>
@@ -46,7 +47,7 @@ struct Vertex final
 };
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 template <>
@@ -59,7 +60,7 @@ void enable_vertex_attributes<Vertex>()
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 class Gear final
@@ -371,11 +372,11 @@ int main()
 
     using namespace dst;
     using namespace dst::sys;
+    Window::GlInfo glInfo { };
     Window::Info windowInfo { };
     windowInfo.flags |= Window::Info::Flags::Fullscreen;
     windowInfo.pName = "Dynamic_Static GL Gears";
-    windowInfo.graphicsApi = dst::gfx::Api::OpenGL;
-    windowInfo.glContextInfo.version = { 4, 5 };
+    windowInfo.pGlInfo = &glInfo;
     Window window(windowInfo);
     Delegate<const Window&> window_close_requested_handler;
     window.on_close_requested += window_close_requested_handler;

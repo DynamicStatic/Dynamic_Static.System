@@ -8,7 +8,7 @@
 ==========================================
 */
 
-#include "dynamic_static/system/opengl/texture.hpp"
+#include "dynamic_static/graphics/opengl/texture.hpp"
 
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 
@@ -16,7 +16,7 @@
 #include <utility>
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 Texture::Texture()
@@ -169,7 +169,7 @@ GLsizei get_format_bytes_per_pixel(GLint format)
 }
 
 } // namespace gl
-} // namespace sys
+} // namespace gfx
 } // namespace dst
 
 #endif // DYNAMIC_STATIC_OPENGL_ENABLED

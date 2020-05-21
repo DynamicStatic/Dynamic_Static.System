@@ -31,14 +31,14 @@
 #define dst_gl(GL_CALL)                                   \
 {                                                         \
     GL_CALL;                                              \
-    dst::sys::gl::validate_call(dst_file_line, #GL_CALL); \
+    dst::gfx::gl::validate_call(dst_file_line, #GL_CALL); \
 }
 #else
 #define dst_gl(GL_CALL) { GL_CALL; }
 #endif
 
 namespace dst {
-namespace sys {
+namespace gfx {
 namespace gl {
 
 /**
@@ -229,8 +229,8 @@ inline bool initialize_glew()
 #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
 } // namespace gl
-} // namespace sys
-namespace gl = sys::gl;
+} // namespace gfx
+namespace gl = gfx::gl;
 
 template <>
 struct EnumClassOperators<gl::Context::Info::Flags>
