@@ -14,6 +14,7 @@
 
 #include "dynamic_static.core.hpp"
 
+#if 0
 class Camera final
 {
 public:
@@ -27,3 +28,4 @@ public:
     glm::vec3 horizontal { 4, 0, 0 };
     glm::vec3 vertical { 0, 2, 0 };
 };
+#endif

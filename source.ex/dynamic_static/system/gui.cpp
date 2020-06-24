@@ -47,9 +47,9 @@ Gui::~Gui()
 
 void Gui::begin_frame(const Clock& clock, Window& window)
 {
-    const auto& input = window.input();
+    const auto& input = window.get_input();
     auto& io = ImGui::GetIO();
-    auto resolution = window.info().extent;
+    auto resolution = window.get_info().extent;
     io.DisplaySize.x = (float)resolution.x;
     io.DisplaySize.y = (float)resolution.y;
     io.DisplayFramebufferScale = { 1, 1 };
@@ -63,7 +63,7 @@ void Gui::begin_frame(const Clock& clock, Window& window)
     for (int i = 0; i < (int)Keyboard::Key::Count; ++i) {
         io.KeysDown[i] = input.keyboard.down((Keyboard::Key)i);
     }
-    for (auto codepoint : window.text_stream()) {
+    for (auto codepoint : window.get_text_stream()) {
         io.AddInputCharacter((ImWchar)codepoint);
     }
     io.KeyAlt = input.keyboard.down(Keyboard::Key::Alt);
@@ -78,7 +78,7 @@ void Gui::begin_frame(const Clock& clock, Window& window)
         input.keyboard.down(Keyboard::Key::RightWindow);
     io.ClipboardUserData = &window;
     #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
-    io.ImeWindowHandle = window.hwnd();
+    io.ImeWindowHandle = window.get_hwnd();
     #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
     ImGui::NewFrame();
 }

@@ -34,12 +34,12 @@ int main(int argc, char* argv[])
 
     gl::Gui gui;
     dst::Clock clock;
-    while (!closeRequested && !window.input().keyboard.down(Keyboard::Key::Escape)) {
+    while (!closeRequested && !window.get_input().keyboard.down(Keyboard::Key::Escape)) {
         clock.update();
         Window::poll_events();
         gui.begin_frame(clock, window);
         ImGui::ShowDemoWindow();
-        auto viewport = window.info().extent;
+        auto viewport = window.get_info().extent;
         dst_gl(glViewport(0, 0, viewport.x, viewport.y));
         dst_gl(glClearColor(0, 0, 0, 0));
         dst_gl(glClear(GL_COLOR_BUFFER_BIT));

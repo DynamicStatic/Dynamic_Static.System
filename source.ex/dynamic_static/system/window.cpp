@@ -22,11 +22,14 @@ std::set<GLFWwindow*> Window::sGlfwWindows;
 
 Window::Window(const Info& info)
     : mInfo { info }
+    , mName { info.pName ? info.pName : "Dynamic_Static" }
 {
-    mGlfwWindow = create_glfw_window(info);
-    glfwSetWindowUserPointer(mGlfwWindow, this);
-    mName = info.pName ? info.pName : "Dynamic_Static";
     mInfo.pName = mName.c_str();
+    mGlfwWindow = create_glfw_window(info);
+    if (mGlfwWindow) {
+        glfwSetWindowUserPointer(mGlfwWindow, this);
+        glfwGetFramebufferSize(mGlfwWindow, &mInfo.extent.x, &mInfo.extent.y);
+    }
 }
 
 Window::Window(Window&& other) noexcept
@@ -47,32 +50,54 @@ Window& Window::operator=(Window&& other) noexcept
     mTextStream = std::move(other.mTextStream);
     mName = std::move(other.mName);
     mGlfwWindow = std::move(other.mGlfwWindow);
+    mChildren = std::move(other.mChildren);
     other.mGlfwWindow = nullptr;
+    glfwSetWindowUserPointer(mGlfwWindow, this);
     return *this;
 }
 
-const Window::Info& Window::info() const
+const Window::Info& Window::get_info() const
 {
     return mInfo;
 }
 
-const Input& Window::input() const
+const Window* Window::get_parent() const
+{
+    return (const Window*)glfwGetWindowUserPointer(mParentGlfwWindow);
+}
+
+Window* Window::get_parent()
+{
+    return (Window*)glfwGetWindowUserPointer(mParentGlfwWindow);
+}
+
+dst::Span<const Window> Window::get_children() const
+{
+    return mChildren;
+}
+
+dst::Span<Window> Window::get_children()
+{
+    return mChildren;
+}
+
+const Input& Window::get_input() const
 {
     return mInput;
 }
 
-Input& Window::input()
+Input& Window::get_input()
 {
     return mInput;
 }
 
-dst::Span<const uint32_t> Window::text_stream() const
+dst::Span<const uint32_t> Window::get_text_stream() const
 {
     return mTextStream;
 }
 
 #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
-void* Window::hwnd() const
+void* Window::get_hwnd() const
 {
     return glfwGetWin32Window(mGlfwWindow);
 }
@@ -109,6 +134,17 @@ void Window::set_cursor_mode(CursorMode cursorMode)
     glfwSetInputMode(mGlfwWindow, GLFW_CURSOR, glfwCursorMode);
 }
 
+Window* Window::create_child(const Info& info)
+{
+    assert(false && "Not yet implemented");
+    return nullptr;
+}
+
+void Window::focus() const
+{
+    glfwFocusWindow(mGlfwWindow);
+}
+
 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
 void Window::make_context_current()
 {
@@ -131,15 +167,19 @@ void Window::poll_events()
         [](const auto& glfwWindows)
         {
             for (auto pGlfwWindow : glfwWindows) {
-                auto pDstWindow = (Window*)glfwGetWindowUserPointer(pGlfwWindow);
-                assert(pDstWindow);
-                pDstWindow->mTextStream.clear();
+                auto pWindow = (Window*)glfwGetWindowUserPointer(pGlfwWindow);
+                assert(pWindow);
+                if (pWindow) {
+                    pWindow->mTextStream.clear();
+                }
             }
             glfwPollEvents();
             for (auto pGlfwWindow : glfwWindows) {
-                auto pDstWindow = (Window*)glfwGetWindowUserPointer(pGlfwWindow);
-                assert(pDstWindow);
-                pDstWindow->mInput.update();
+                auto pWindow = (Window*)glfwGetWindowUserPointer(pGlfwWindow);
+                assert(pWindow);
+                if (pWindow) {
+                    pWindow->mInput.update();
+                }
             }
         }
     );

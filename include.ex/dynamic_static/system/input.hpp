@@ -11,7 +11,7 @@
 #pragma once
 
 #include "dynamic_static/system/defines.hpp"
-#include "dynamic_static/system/game-pad.hpp"
+#include "dynamic_static/system/gamepad.hpp"
 #include "dynamic_static/system/keyboard.hpp"
 #include "dynamic_static/system/mouse.hpp"
 

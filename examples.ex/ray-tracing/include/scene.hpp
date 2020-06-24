@@ -13,19 +13,14 @@
 
 #pragma once
 
-#include "dynamic_static/core/math.hpp"
+#include "hittable.hpp"
 
 namespace rtow {
 
-struct Ray final
+class Scene final
 {
-    glm::vec3 at(float t) const
-    {
-        return origin + direction * t;
-    }
-
-    glm::vec3 origin { };
-    glm::vec3 direction { };
+public:
+    Hittable::Collection hittables;
 };
 
 } // namespace rtow

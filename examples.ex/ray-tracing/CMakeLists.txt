@@ -16,9 +16,12 @@ DstAddExecutable(
     includeFiles
         "${includeDirectory}/camera.hpp"
         "${includeDirectory}/defines.hpp"
-        "${includeDirectory}/hitable.hpp"
+        "${includeDirectory}/hittable.hpp"
+        "${includeDirectory}/rasterizer.hpp"
         "${includeDirectory}/ray.hpp"
         "${includeDirectory}/ray-tracer.hpp"
+        "${includeDirectory}/renderer.hpp"
+        "${includeDirectory}/scene.hpp"
         "${includeDirectory}/sphere.hpp"
     sourceFiles
         "${sourceDirectory}/main.cpp"

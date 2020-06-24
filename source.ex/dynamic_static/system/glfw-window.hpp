@@ -57,6 +57,7 @@ void Window::glfw_window_close_callback(GLFWwindow* pGlfwWindow)
 
 void Window::glfw_framebuffer_size_callback(GLFWwindow* pGlfwWindow, int width, int height)
 {
+    // TODO : Sort out client size vs window size
     (void)width;
     (void)height;
     auto pDstWindow = (Window*)glfwGetWindowUserPointer(pGlfwWindow);
@@ -131,20 +132,15 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 if (glfwInit() == GLFW_FALSE) {
                     throw std::runtime_error("Failed to initialize GLFW : " + get_last_glfw_error_message());
                 }
-                bool createGlContext = false;
                 #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
                 if (info.pGlInfo) {
-                    createGlContext = true;
-                }
-                #endif // DYNAMIC_STATIC_OPENGL_ENABLED
-                if (createGlContext) {
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, info.pGlInfo->version.major);
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, info.pGlInfo->version.minor);
                     glfwWindowHint(GLFW_DOUBLEBUFFER, (int)(info.pGlInfo->flags & Window::GlInfo::Flags::DoubleBuffer) ? 1 : 0);
                     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
-                } else {
+                } else
+                #endif // DYNAMIC_STATIC_OPENGL_ENABLED
                     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-                }
             }
             glfwWindowHint(GLFW_DECORATED, (int)(info.flags & Window::Info::Flags::Decorated) ? 1 : 0);
             glfwWindowHint(GLFW_RESIZABLE, (int)(info.flags & Window::Info::Flags::Resizable) ? 1 : 0);

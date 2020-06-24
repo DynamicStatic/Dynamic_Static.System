@@ -391,19 +391,19 @@ int main()
     gl::Gui gui;
     Gear::Renderer renderer;
     dst::Clock clock;
-    while (!closeRequested && !window.input().keyboard.down(Keyboard::Key::Escape)) {
+    while (!closeRequested && !window.get_input().keyboard.down(Keyboard::Key::Escape)) {
         clock.update();
         Window::poll_events();
         auto deltaTime = clock.elapsed<dst::Seconds<float>>();
         gui.begin_frame(clock, window);
         ImGui::Checkbox("Animation", &renderer.animation);
         ImGui::Checkbox("Wireframe", &renderer.wireFrame);
-        auto& input = window.input();
+        auto& input = window.get_input();
         if (ImGui::GetIO().WantCaptureMouse) {
             input.revert();
         }
-        renderer.update(deltaTime, window.input());
-        renderer.draw(deltaTime, window.info().extent);
+        renderer.update(deltaTime, window.get_input());
+        renderer.draw(deltaTime, window.get_info().extent);
         gui.end_frame();
         gui.draw();
         window.swap();

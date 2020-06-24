@@ -13,19 +13,27 @@
 
 #pragma once
 
-#include "dynamic_static/core/math.hpp"
+#include "renderer.hpp"
+#include "scene.hpp"
 
 namespace rtow {
 
-struct Ray final
+class Rasterizer final
+    : public Renderer
 {
-    glm::vec3 at(float t) const
+public:
+    inline Rasterizer(dst::sys::Window& window)
+        : Renderer(window)
     {
-        return origin + direction * t;
     }
 
-    glm::vec3 origin { };
-    glm::vec3 direction { };
+    inline void update(const Scene& scene) override final
+    {
+    }
+
+    inline void on_draw() override final
+    {
+    }
 };
 
 } // namespace rtow

@@ -133,28 +133,48 @@ public:
     /**
     TODO : Documentation
     */
-    const Info& info() const;
+    const Info& get_info() const;
 
     /**
     TODO : Documentation
     */
-    const Input& input() const;
+    const Window* get_parent() const;
 
     /**
     TODO : Documentation
     */
-    Input& input();
+    Window* get_parent();
 
     /**
     TODO : Documentation
     */
-    dst::Span<const uint32_t> text_stream() const;
+    dst::Span<const Window> get_children() const;
+
+    /**
+    TODO : Documentation
+    */
+    dst::Span<Window> get_children();
+
+    /**
+    TODO : Documentation
+    */
+    const Input& get_input() const;
+
+    /**
+    TODO : Documentation
+    */
+    Input& get_input();
+
+    /**
+    TODO : Documentation
+    */
+    dst::Span<const uint32_t> get_text_stream() const;
 
     #ifdef DYNAMIC_STATIC_PLATFORM_WINDOWS
     /**
     TODO : Documentation
     */
-    void* hwnd() const;
+    void* get_hwnd() const;
     #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
     /**
@@ -176,6 +196,16 @@ public:
     TODO : Documentation
     */
     void set_cursor_mode(CursorMode cursorMode);
+
+    /**
+    TODO : Documentation
+    */
+    Window* create_child(const Info& info);
+
+    /**
+    TODO : Documentation
+    */
+    void focus() const;
 
     #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
     /**
@@ -223,7 +253,8 @@ private:
     std::vector<uint32_t> mTextStream;
     std::string mName { "Dynamic_Static" };
     GLFWwindow* mGlfwWindow { nullptr };
-
+    GLFWwindow* mParentGlfwWindow { nullptr };
+    std::vector<Window> mChildren;
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
 };

@@ -10,46 +10,53 @@
 
 #pragma once
 
-#include "hitable.hpp"
+#include "hittable.hpp"
 #include "ray.hpp"
 
-#include "dynamic_static.core.hpp"
+namespace rtow {
 
-struct Sphere final
-    : public Hitable
+class Sphere final
+    : public Hittable
 {
-    Sphere(const glm::vec3& position, float radius)
+public:
+    Sphere() = default;
+    inline Sphere(const glm::vec3& position, float radius)
         : position { position }
         , radius { radius }
     {
     }
 
+private:
     inline bool hit(const Ray& ray, float tMin, float tMax, Record& record) const override final
     {
-        glm::vec3 oc = ray.origin - position;
-        float a = glm::dot(ray.direction, ray.direction);
-        float b = glm::dot(oc, ray.direction);
-        float c = glm::dot(oc, oc) - radius * radius;
-        float discriminant = b * b - a * c;
-        if (discriminant > 0) {
-            float temp = (-b - glm::sqrt(b * b - a * c)) / a;
+        glm::vec3 op = ray.origin - position;
+        auto a = glm::length2(ray.direction);
+        auto halfB = glm::dot(op, ray.direction);
+        auto c = glm::length2(op) - radius * radius;
+        auto discriminant = halfB * halfB - a * c;
+        if (0 < discriminant) {
+            auto root = glm::sqrt(discriminant);
+            auto temp = (-halfB - root) / a;
             if (tMin < temp && temp < tMax) {
                 record.t = temp;
-                record.p = ray.point_at_parameter(record.t);
-                record.normal = (record.p - position) / radius;
+                record.point = ray.at(record.t);
+                record.set_face_normal(ray, (record.point - position) / radius);
                 return true;
             }
-            temp = (-b + glm::sqrt(b * b - a * c)) / a;
+            temp = (-halfB + root) / a;
             if (tMin < temp && temp < tMax) {
                 record.t = temp;
-                record.p = ray.point_at_parameter(record.t);
-                record.normal = (record.p - position) / radius;
+                record.point = ray.at(record.t);
+                record.set_face_normal(ray, (record.point - position) / radius);
                 return true;
             }
         }
         return false;
     }
 
+public:
     glm::vec3 position { };
     float radius { };
 };
+
+} // namespace rtow
