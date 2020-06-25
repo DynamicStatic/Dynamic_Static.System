@@ -14,6 +14,10 @@ DstAddExecutable(
     linkLibraries dynamic_static.system
     includeDirectories "${includeDirectory}"
     includeFiles
+        "${includeDirectory}/materials/dialectric.hpp"
+        "${includeDirectory}/materials/lambert.hpp"
+        "${includeDirectory}/materials/material.hpp"
+        "${includeDirectory}/materials/metal.hpp"
         "${includeDirectory}/camera.hpp"
         "${includeDirectory}/defines.hpp"
         "${includeDirectory}/hittable.hpp"
@@ -23,6 +27,7 @@ DstAddExecutable(
         "${includeDirectory}/renderer.hpp"
         "${includeDirectory}/scene.hpp"
         "${includeDirectory}/sphere.hpp"
+        "${includeDirectory}/utilities.hpp"
     sourceFiles
         "${sourceDirectory}/main.cpp"
 )

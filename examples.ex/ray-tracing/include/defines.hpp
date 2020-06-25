@@ -8,3 +8,7 @@
 ==========================================
 */
 
+// FROM : Based on Peter Shirley's "Ray Tracing in One Weekend" series
+//  https://raytracing.github.io/
+
+#pragma once

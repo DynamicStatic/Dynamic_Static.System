@@ -13,28 +13,22 @@
 
 #pragma once
 
-#include "camera.hpp"
-#include "renderer.hpp"
-#include "scene.hpp"
+#include "hittable.hpp"
+#include "ray.hpp"
+
+#include "dynamic_static/core/math.hpp"
 
 namespace rtow {
 
-class Rasterizer final
-    : public Renderer
+class Material
 {
 public:
-    inline Rasterizer(dst::sys::Window& window)
-        : Renderer(window)
-    {
-    }
-
-    inline void update(const Scene& scene, const Camera& camera) override final
-    {
-    }
-
-    inline void on_draw() override final
-    {
-    }
+    virtual bool scatter(
+        const Ray& ray,
+        const Hittable::Record& record,
+        glm::vec3& attenuation,
+        Ray& scatteredRay
+    ) const = 0;
 };
 
 } // namespace rtow

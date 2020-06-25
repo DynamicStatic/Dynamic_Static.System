@@ -8,16 +8,22 @@
 ==========================================
 */
 
+// FROM : Based on Peter Shirley's "Ray Tracing in One Weekend" series
+//  https://raytracing.github.io/
+
 #pragma once
 
 #include "ray.hpp"
 
 #include "dynamic_static/core/math.hpp"
+#include "dynamic_static/graphics/opengl/mesh.hpp"
 
 #include <memory>
 #include <vector>
 
 namespace rtow {
+
+class Material;
 
 class Hittable
 {
@@ -34,12 +40,17 @@ public:
 
         glm::vec3 point { };
         glm::vec3 normal { };
-        bool frontFace { false };
-        float t { 0 };
+        const Material* pMaterial { };
+        bool frontFace { };
+        float t { };
     };
 
     virtual ~Hittable() = 0;
     virtual bool hit(const Ray& ray, float tMin, float tMax, Record& record) const = 0;
+    virtual void draw() const = 0;
+
+protected:
+    dst::gl::Mesh mMesh;
 };
 
 inline Hittable::~Hittable()
@@ -64,6 +75,13 @@ public:
             }
         }
         return hitAnything;
+    }
+
+    inline void draw() const override final
+    {
+        for (const auto& hittable : *this) {
+            hittable->draw();
+        }
     }
 };
 

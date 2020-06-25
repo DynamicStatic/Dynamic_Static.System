@@ -8,24 +8,44 @@
 ==========================================
 */
 
+// FROM : Based on Peter Shirley's "Ray Tracing in One Weekend" series
+//  https://raytracing.github.io/
+
 #pragma once
 
 #include "ray.hpp"
 
-#include "dynamic_static.core.hpp"
+#include "dynamic_static/core/math.hpp"
+#include "dynamic_static/core/transform.hpp"
 
-#if 0
+namespace rtow {
+
 class Camera final
 {
 public:
-    inline Ray ray(const glm::vec2& texCoord) const
+    inline void update()
     {
-        return { origin, lowerLeftCorner + texCoord.x * horizontal + texCoord.y * vertical - origin };
+        mViewport.y = 2.0f;
+        mViewport.x = mViewport.y * dst::aspect_ratio(extent);
+        mHorizontal = glm::vec3(mViewport.x, 0.0f, 0.0f);
+        mVertical = glm::vec3(0.0f, mViewport.y, 0.0f);
+        mLowerLeftCorner = transform.translation - mHorizontal * 0.5f - mVertical * 0.5f - glm::vec3(0.0f, 0.0f, focalLength);
     }
 
-    glm::vec3 origin { };
-    glm::vec3 lowerLeftCorner { -2, -1, -1 };
-    glm::vec3 horizontal { 4, 0, 0 };
-    glm::vec3 vertical { 0, 2, 0 };
+    inline Ray get_ray(const glm::vec2& texCoord) const
+    {
+        return Ray { transform.translation, mLowerLeftCorner + texCoord.x * mHorizontal + texCoord.y * mVertical - transform.translation };
+    }
+
+    glm::uvec2 extent { };
+    float focalLength { 1.0f };
+    dst::Transform transform { };
+
+private:
+    glm::vec2 mViewport { };
+    glm::vec3 mHorizontal { };
+    glm::vec3 mVertical { };
+    glm::vec3 mLowerLeftCorner { };
 };
-#endif
+
+} // namespace rtow

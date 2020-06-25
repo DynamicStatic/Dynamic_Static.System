@@ -8,10 +8,16 @@
 ==========================================
 */
 
+// FROM : Based on Peter Shirley's "Ray Tracing in One Weekend" series
+//  https://raytracing.github.io/
+
 #pragma once
 
+#include "materials/material.hpp"
 #include "hittable.hpp"
 #include "ray.hpp"
+
+#include <memory>
 
 namespace rtow {
 
@@ -20,13 +26,13 @@ class Sphere final
 {
 public:
     Sphere() = default;
-    inline Sphere(const glm::vec3& position, float radius)
+    inline Sphere(const glm::vec3& position, float radius, std::unique_ptr<Material>&& material)
         : position { position }
         , radius { radius }
+        , material { std::move(material) }
     {
     }
 
-private:
     inline bool hit(const Ray& ray, float tMin, float tMax, Record& record) const override final
     {
         glm::vec3 op = ray.origin - position;
@@ -41,6 +47,7 @@ private:
                 record.t = temp;
                 record.point = ray.at(record.t);
                 record.set_face_normal(ray, (record.point - position) / radius);
+                record.pMaterial = material.get();
                 return true;
             }
             temp = (-halfB + root) / a;
@@ -48,15 +55,20 @@ private:
                 record.t = temp;
                 record.point = ray.at(record.t);
                 record.set_face_normal(ray, (record.point - position) / radius);
+                record.pMaterial = material.get();
                 return true;
             }
         }
         return false;
     }
 
-public:
+    inline void draw() const override final
+    {
+    }
+
     glm::vec3 position { };
     float radius { };
+    std::unique_ptr<Material> material;
 };
 
 } // namespace rtow

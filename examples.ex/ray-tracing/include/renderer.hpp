@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "camera.hpp"
 #include "scene.hpp"
 
 #include "dynamic_static/graphics/opengl/defines.hpp"
@@ -32,7 +33,7 @@ public:
     }
 
     virtual ~Renderer() = 0;
-    virtual void update(const Scene& scene) = 0;
+    virtual void update(const Scene& scene, const Camera& camera) = 0;
     inline void draw(
         const std::function<void()>& preDrawFunction = nullptr,
         const std::function<void()>& postDrawFunction = nullptr
