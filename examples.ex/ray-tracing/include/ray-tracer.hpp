@@ -84,7 +84,7 @@ public:
         return dst::duration_cast<DurationType>(mEndUpdateTimePoint - mBeginUpdateTimePoint).count();
     }
 
-    inline void update(const Scene& scene, const Camera& camera) override final
+    inline void update(const Camera& camera, const Scene& scene) override final
     {
         std::fill(mPixels.begin(), mPixels.end(), glm::vec3 { });
         mBeginUpdateTimePoint = dst::HighResolutionClock::now();
@@ -107,12 +107,6 @@ public:
                             auto u = (float)x / (float)windowExtent.x;
                             auto v = (float)y / (float)windowExtent.y;
                             auto pixel = process_pixel(scene, uniforms, { x, y }, { u, v });
-                            #if 0
-                            auto scale = 1.0f / uniforms.msaaSampleCount;
-                            pixel.r = glm::sqrt(pixel.r * scale);
-                            pixel.g = glm::sqrt(pixel.g * scale);
-                            pixel.b = glm::sqrt(pixel.b * scale);
-                            #endif
                             mPixels[(size_t)(x + windowExtent.x * y)] = pixel;
                         }
                         mProcessedPixelCount += windowExtent.x;
@@ -122,9 +116,15 @@ public:
         }
     }
 
-    inline void on_draw() override final
+    inline void on_draw(const Camera& camera, const Scene& scene) override final
     {
         mVisualizer.draw(mPixels);
+    }
+
+    inline void stop()
+    {
+        mStop = true;
+        mThreadPool.wait();
     }
 
     int maxRecursionDepth { 32 };
@@ -184,9 +184,9 @@ private:
         inline Visualizer(const glm::ivec2& extent)
         {
             std::array<glm::vec4, 3> vertices {
-                glm::vec4 { -1, -1, 0, 0 },
-                glm::vec4 { -1,  3, 0, 2 },
-                glm::vec4 {  3, -1, 2, 0 },
+                glm::vec4 { -1.0f, -1.0f, 0.0f, 0.0f },
+                glm::vec4 { -1.0f,  3.0f, 0.0f, 2.0f },
+                glm::vec4 {  3.0f, -1.0f, 2.0f, 0.0f },
             };
             std::array<GLushort, 3> indices { 0, 1, 2 };
             mMesh.write<glm::vec4, GLushort>(vertices, indices);
@@ -248,9 +248,10 @@ private:
         dst::gl::Program mProgram;
     } mVisualizer;
 
+    std::atomic_bool mStop { };
     dst::ThreadPool mThreadPool;
     std::vector<glm::vec3> mPixels;
-    std::atomic_size_t mProcessedPixelCount { 0 };
+    std::atomic_size_t mProcessedPixelCount { };
     dst::TimePoint<> mBeginUpdateTimePoint;
     mutable dst::TimePoint<> mEndUpdateTimePoint;
 };

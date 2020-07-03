@@ -13,9 +13,11 @@
 
 #pragma once
 
+#include "camera.hpp"
 #include "ray.hpp"
 
 #include "dynamic_static/core/math.hpp"
+#include "dynamic_static/core/transform.hpp"
 #include "dynamic_static/graphics/opengl/mesh.hpp"
 
 #include <memory>
@@ -32,12 +34,7 @@ public:
 
     struct Record final
     {
-        inline void set_face_normal(const Ray& ray, const glm::vec3& outwardNormal)
-        {
-            frontFace = glm::dot(ray.direction, outwardNormal) < 0.0f;
-            normal = frontFace ? outwardNormal : -outwardNormal;
-        }
-
+        void set_face_normal(const Ray& ray, const glm::vec3& outwardNormal);
         glm::vec3 point { };
         glm::vec3 normal { };
         const Material* pMaterial { };
@@ -47,42 +44,22 @@ public:
 
     virtual ~Hittable() = 0;
     virtual bool hit(const Ray& ray, float tMin, float tMax, Record& record) const = 0;
-    virtual void draw() const = 0;
+    virtual void gui();
+    virtual void draw(const Camera& camera);
+    dst::Transform transform;
 
 protected:
     dst::gl::Mesh mMesh;
+    std::unique_ptr<Material> mpMaterial;
 };
-
-inline Hittable::~Hittable()
-{
-}
 
 class Hittable::Collection final
     : public std::vector<std::unique_ptr<Hittable>>
     , public Hittable
 {
 public:
-    bool hit(const Ray& ray, float tMin, float tMax, Record& record) const override final
-    {
-        Record tempRecord { };
-        bool hitAnything = false;
-        auto closestHit = tMax;
-        for (const auto& hittable : *this) {
-            if (hittable->hit(ray, tMin, closestHit, tempRecord)) {
-                hitAnything = true;
-                closestHit = tempRecord.t;
-                record = tempRecord;
-            }
-        }
-        return hitAnything;
-    }
-
-    inline void draw() const override final
-    {
-        for (const auto& hittable : *this) {
-            hittable->draw();
-        }
-    }
+    bool hit(const Ray& ray, float tMin, float tMax, Record& record) const override final;
+    void draw(const Camera& camera) override final;
 };
 
 } // namespace rtow

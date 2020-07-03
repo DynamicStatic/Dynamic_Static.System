@@ -18,6 +18,15 @@ namespace dst {
 namespace gfx {
 namespace gl {
 
+void Mesh::draw(GLint offset, GLsizei count) const
+{
+    vertexArray.bind();
+    offset = std::min(std::max(0, offset), vertexBuffer.element_count());
+    count = std::min(count, vertexBuffer.element_count() - offset);
+    dst_gl(glDrawArrays(primitiveType, 0, count));
+    vertexArray.unbind();
+}
+
 void Mesh::draw_indexed() const
 {
     draw_indexed(indexBuffer.element_count(), nullptr);

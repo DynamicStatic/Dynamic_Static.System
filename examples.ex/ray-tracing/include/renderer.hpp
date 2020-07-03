@@ -33,18 +33,26 @@ public:
     }
 
     virtual ~Renderer() = 0;
-    virtual void update(const Scene& scene, const Camera& camera) = 0;
+    virtual void update(const Camera& camera, const Scene& scene) = 0;
     inline void draw(
+        const Camera& camera,
+        const Scene& scene,
         const std::function<void()>& preDrawFunction = nullptr,
         const std::function<void()>& postDrawFunction = nullptr
     )
     {
         mpWindow->make_context_current();
-        dst_gl(glClear(GL_COLOR_BUFFER_BIT));
+        //dst_gl(glEnable(GL_CULL_FACE));
+        //dst_gl(glCullFace(GL_BACK));
+        //dst_gl(glEnable(GL_DEPTH_TEST));
+        // dst_gl(glViewport(0, 0, viewport.x, viewport.y));
+        dst_gl(glViewport(0, 0, camera.extent.x, camera.extent.y));
+        dst_gl(glClearColor(0.1f, 0.1f, 0.1f, 0));
+        dst_gl(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         if (preDrawFunction) {
             preDrawFunction();
         }
-        on_draw();
+        on_draw(camera, scene);
         if (postDrawFunction) {
             postDrawFunction();
         }
@@ -52,7 +60,7 @@ public:
     }
 
 protected:
-    virtual void on_draw() = 0;
+    virtual void on_draw(const Camera& camera, const Scene& scene) = 0;
     dst::sys::Window* mpWindow;
 };
 

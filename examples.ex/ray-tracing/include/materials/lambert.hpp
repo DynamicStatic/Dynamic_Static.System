@@ -19,6 +19,7 @@
 #include "utilities.hpp"
 
 #include "dynamic_static/core/math.hpp"
+#include "dynamic_static/system/gui.hpp"
 
 namespace rtow {
 
@@ -42,6 +43,20 @@ public:
         scatteredRay.direction = record.normal + random_unit_vector();
         attenuation = albedo;
         return true;
+    }
+
+    void gui() override final
+    {
+        ImGui::Text("Lambert");
+        ImGui::Indent();
+        ImGui::ColorPicker3("Albedo", &albedo[0]);
+        ImGui::Unindent();
+    }
+
+    inline void bind() const override final
+    {
+        Material::bind();
+        dst_gl(glUniform3f(get_uniform_location("albedo"), albedo.r, albedo.g, albedo.b));
     }
 
     glm::vec3 albedo { };

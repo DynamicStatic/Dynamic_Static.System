@@ -27,7 +27,10 @@ DstAddExecutable(
         "${includeDirectory}/renderer.hpp"
         "${includeDirectory}/scene.hpp"
         "${includeDirectory}/sphere.hpp"
+        "${includeDirectory}/sphere-vertices.hpp"
+        "${includeDirectory}/sphere-indices.hpp"
         "${includeDirectory}/utilities.hpp"
     sourceFiles
+        "${sourceDirectory}/hittable.cpp"
         "${sourceDirectory}/main.cpp"
 )

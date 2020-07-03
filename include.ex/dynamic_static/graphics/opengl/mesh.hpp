@@ -20,6 +20,7 @@
 #include "dynamic_static/graphics/opengl/vertex-array.hpp"
 #include "dynamic_static/graphics/opengl/vertex-buffer.hpp"
 
+#include <limits>
 #include <string>
 
 namespace dst {
@@ -32,6 +33,11 @@ Provides high level control over an OpenGL mesh
 class Mesh final
 {
 public:
+    /**
+    TODO : Documentation
+    */
+    void draw(GLint offset = 0, GLsizei count = std::numeric_limits<GLsizei>::max()) const;
+
     /**
     TODO : Documentation
     */

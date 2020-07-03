@@ -28,12 +28,15 @@ public:
     {
     }
 
-    inline void update(const Scene& scene, const Camera& camera) override final
+    inline void update(const Camera& camera, const Scene& scene) override final
     {
     }
 
-    inline void on_draw() override final
+    inline void on_draw(const Camera& camera, const Scene& scene) override final
     {
+        for (auto const& object : scene.hittables) {
+            object->draw(camera);
+        }
     }
 };
 

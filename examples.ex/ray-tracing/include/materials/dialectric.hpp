@@ -19,6 +19,7 @@
 #include "utilities.hpp"
 
 #include "dynamic_static/core/math.hpp"
+#include "dynamic_static/system/gui.hpp"
 
 #include <algorithm>
 
@@ -56,6 +57,20 @@ public:
             }
         }
         return true;
+    }
+
+    void gui() override final
+    {
+        ImGui::Text("Dialectric");
+        ImGui::Indent();
+        ImGui::DragFloat("Refractive Index", &refractiveIndex, 0.01f, 0.0f, 1.0f);
+        ImGui::Unindent();
+    }
+
+    inline void bind() const override final
+    {
+        Material::bind();
+        dst_gl(glUniform3f(get_uniform_location("albedo"), 1.0f, 1.0f, 1.0f));
     }
 
     float refractiveIndex { };
