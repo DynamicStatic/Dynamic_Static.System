@@ -8,7 +8,7 @@
 
 set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include/")
 set(sourceDirectory "${CMAKE_CURRENT_LIST_DIR}/source/")
-DstAddExecutable(
+dst_add_executable(
     target ray-tracing
     folder dynamic_static.system/examples/
     linkLibraries dynamic_static.system

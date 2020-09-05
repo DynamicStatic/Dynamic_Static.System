@@ -1,19 +1,25 @@
 
 # ==========================================
-#   Copyright (c) 2016-2020 Dynamic_Static
+#   Copyright (c) 2016-2020 dynamic_static
 #     Patrick Purcell
 #       Licensed under the MIT license
 #     http://opensource.org/licenses/MIT
 # ==========================================
 
-# Dynamic_Static.System CMake configuration
+# dynamic_static.system CMake configuration
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
-project(Dynamic_Static.System VERSION 2.0.0)
+project(dynamic_static.system VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(dynamic_static "${CMAKE_CURRENT_LIST_DIR}/../")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
-include("${dynamic_static}/Dynamic_Static.CMake/Dynamic_Static.ex.cmake")
-DstAddSubdirectory("Dynamic_Static.Core")
+
+################################################################################
+#### include("${dynamic_static}/dynamic_static.CMake/dynamic_static.ex.cmake")
+#### DstAddSubdirectory("dynamic_static.Core")
+include("${CMAKE_CURRENT_LIST_DIR}/../cmake/dynamic_static.cmake")
+dst_add_subdirectory(core)
+# add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../core/" "${CMAKE_CURRENT_BINARY_DIR}/dynamic_static/core/")
+################################################################################
 
 # Options
 option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
@@ -48,13 +54,13 @@ else()
     )
 endif()
 
-# Dynamic_Static.System library
+# dynamic_static.system library
 set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include.ex/")
 set(graphicsIncludePath "${includeDirectory}/dynamic_static/graphics/")
 set(systemIncludePath "${includeDirectory}/dynamic_static/system/")
 set(graphicsSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/graphics/")
 set(systemSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
-DstAddStaticLibrary(
+dst_add_static_library(
     target dynamic_static.system
     linkLibraries "${linkLibraries}"
     compileDefinitions "${externalCompileDefinitions}"
