@@ -60,6 +60,16 @@ public:
     );
 
     /**
+    Constructs an instance of Texture
+    TODO : Documentation
+    */
+    Texture(
+        const Info& info,
+        size_t dataSize,
+        const uint8_t* pData
+    );
+
+    /**
     Moves an instance of Texture
     @param [in] other The Texture to move from
     */
@@ -112,8 +122,13 @@ public:
     */
     void write(const uint8_t* pData, bool generateMipMaps = false);
 
+    /**
+    TODO : Documentation
+    */
+    void write(size_t dataSize, const uint8_t* pData, bool generateMipMaps = false);
+
 private:
-    void create_gl_resources(const uint8_t* pData, bool generateMipMaps);
+    void create_gl_resources(size_t dataSize, const uint8_t* pData, bool generateMipMaps);
     void destroy_gl_resources();
     Info mInfo { };
 };

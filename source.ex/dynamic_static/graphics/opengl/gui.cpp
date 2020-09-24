@@ -34,9 +34,9 @@ Gui::Gui()
     int fontHeight = 0;
     unsigned char* pFontData = nullptr;
     auto& io = ImGui::GetIO();
-    io.Fonts->GetTexDataAsAlpha8(&pFontData, &fontWidth, &fontHeight);
+    io.Fonts->GetTexDataAsRGBA32(&pFontData, &fontWidth, &fontHeight);
     Texture::Info textureInfo { };
-    textureInfo.format = GL_RED;
+    textureInfo.format = GL_RGBA;
     textureInfo.width = fontWidth;
     textureInfo.height = fontHeight;
     mTexture = Texture(textureInfo, pFontData);
@@ -72,7 +72,7 @@ Gui::Gui()
                 out vec4 fragColor;
                 void main()
                 {
-                    fragColor = texture(image, fsTexCoord).rrrr * fsColor;
+                    fragColor = texture(image, fsTexCoord) * fsColor;
                 }
             )"
         }
@@ -127,6 +127,7 @@ void Gui::draw()
             const auto& cmd = cmdList->CmdBuffer[cmd_i];
             dst_gl(glActiveTexture(GL_TEXTURE0));
             ((Texture*)cmd.TextureId)->bind();
+            auto t = ((Texture*)cmd.TextureId);
             dst_gl(glScissor(
                 (GLint)cmd.ClipRect.x,
                 (GLint)(io.DisplaySize.y - cmd.ClipRect.w),

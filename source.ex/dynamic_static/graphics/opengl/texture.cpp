@@ -42,7 +42,28 @@ Texture::Texture(
         }
         mInfo.depth = 1;
     }
-    create_gl_resources(pData, generateMipMaps);
+    create_gl_resources(0, pData, generateMipMaps);
+}
+
+Texture::Texture(
+    const Info& info,
+    size_t dataSize,
+    const uint8_t* pData
+)
+    : mInfo { info }
+{
+    set_name("GlTexture");
+    // TODO : More detailed support for Texture::Info fields
+    mInfo.width = std::max(1, mInfo.width);
+    mInfo.height = std::max(1, mInfo.height);
+    mInfo.depth = std::max(1, mInfo.depth);
+    if (mInfo.target == GL_TEXTURE_1D || mInfo.target == GL_TEXTURE_2D) {
+        if (mInfo.target == GL_TEXTURE_1D) {
+            mInfo.height = 1;
+        }
+        mInfo.depth = 1;
+    }
+    create_gl_resources(dataSize, pData, false);
 }
 
 Texture::Texture(Texture&& other) noexcept
@@ -134,7 +155,34 @@ void Texture::write(const uint8_t* pData, bool generateMipMaps)
     }
 }
 
-void Texture::create_gl_resources(const uint8_t* pData, bool generateMipMaps)
+void Texture::write(size_t dataSize, const uint8_t* pData, bool generateMipMaps)
+{
+    if (pData) {
+        bind();
+        // dst_gl(glPixelStorei(GL_UNPACK_ROW_LENGTH, 0));
+        dst_gl(glCompressedTexImage2D(
+            mInfo.target,
+            0,
+            mInfo.format,
+            mInfo.width,
+            mInfo.height,
+            0,
+            dataSize,
+            pData
+        ));
+        auto magFilter = mInfo.filter == GL_LINEAR_MIPMAP_LINEAR ? GL_LINEAR : mInfo.filter;
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MIN_FILTER, mInfo.filter));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_MAG_FILTER, magFilter));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_S, mInfo.wrap));
+        dst_gl(glTexParameteri(mInfo.target, GL_TEXTURE_WRAP_T, mInfo.wrap));
+        if (generateMipMaps) {
+            generate_mip_maps();
+        }
+        unbind();
+    }
+}
+
+void Texture::create_gl_resources(size_t dataSize, const uint8_t* pData, bool generateMipMaps)
 {
     // TODO : Handle GL_TEXTURE_1D and GL_TEXTURE_3D
     if (!mHandle) {
@@ -143,7 +191,11 @@ void Texture::create_gl_resources(const uint8_t* pData, bool generateMipMaps)
     if (!mInfo.internalFormat) {
         mInfo.internalFormat = mInfo.format;
     }
-    write(pData, generateMipMaps);
+    if (!dataSize) {
+        write(pData, generateMipMaps);
+    } else {
+        write(dataSize, pData, generateMipMaps);
+    }
 }
 
 void Texture::destroy_gl_resources()
