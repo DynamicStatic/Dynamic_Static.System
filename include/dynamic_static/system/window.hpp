@@ -16,9 +16,9 @@
 #include "dynamic_static/core/span.hpp"
 #include "dynamic_static/system/defines.hpp"
 #include "dynamic_static/system/input.hpp"
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-#include "dynamic_static/graphics/opengl/defines.hpp"
-#endif
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+#include "dynamic_static/system/opengl/defines.hpp"
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include <mutex>
 #include <set>
@@ -46,7 +46,7 @@ public:
         Disabled, // TOOD : Documentation
     };
 
-    #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+    #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
     /**
     TODO : Documentation
     */
@@ -67,7 +67,7 @@ public:
         int depthBits { 24 };           //!< TODO : Documentation
         int stencilBits { 8 };          //!< TODO : Documentation
     };
-    #endif // DYNAMIC_STATIC_OPENGL_ENABLED
+    #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
     /**
     TODO : Documentation
@@ -91,9 +91,9 @@ public:
         glm::ivec2 position { 320, 180 };
         glm::ivec2 extent { 1280, 720 };
         CursorMode cursorMode { CursorMode::Visible };
-        #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+        #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
         GlInfo* pGlInfo { };
-        #endif
+        #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
     };
 
     /**
@@ -207,7 +207,7 @@ public:
     */
     void focus() const;
 
-    #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+    #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
     /**
     TODO : Documentation
     */
@@ -217,7 +217,7 @@ public:
     TODO : Documentation
     */
     void swap();
-    #endif // DYNAMIC_STATIC_OPENGL_ENABLED
+    #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
     /**
     TODO : Documentation
@@ -261,13 +261,13 @@ private:
 
 } // namespace sys
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 template <>
 struct EnumClassOperators<sys::Window::GlInfo::Flags>
 {
     static constexpr bool enabled { true };
 };
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 template <>
 struct EnumClassOperators<sys::Window::Info::Flags>

@@ -10,17 +10,17 @@
 
 #pragma once
 
-#include "dynamic_static/graphics/opengl/defines.hpp"
+#include "dynamic_static/system/opengl/defines.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
-#include "dynamic_static/graphics/opengl/mesh.hpp"
-#include "dynamic_static/graphics/opengl/program.hpp"
-#include "dynamic_static/graphics/opengl/texture.hpp"
+#include "dynamic_static/system/opengl/mesh.hpp"
+#include "dynamic_static/system/opengl/program.hpp"
+#include "dynamic_static/system/opengl/texture.hpp"
 #include "dynamic_static/system/gui.hpp"
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 /**
@@ -53,7 +53,7 @@ private:
 };
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

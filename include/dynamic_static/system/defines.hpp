@@ -12,15 +12,9 @@
 
 #include "dynamic_static/core/defines.hpp"
 
-#ifndef DYNAMIC_STATIC_OPENGL_DISABLED
-#ifndef DYNAMIC_STATIC_OPENGL_ENABLED
-#define DYNAMIC_STATIC_OPENGL_ENABLED
-#endif
-#endif
-
-#ifndef DYNAMIC_STATIC_VULKAN_DISABLED
-#ifndef DYNAMIC_STATIC_VULKAN_ENABLED
-#define DYNAMIC_STATIC_VULKAN_ENABLED
+#ifndef DYNAMIC_STATIC_SYSTEM_OPENGL_DISABLED
+#ifndef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
+#define DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 #endif
 #endif
 
@@ -31,29 +25,9 @@
 namespace dst {
 namespace sys {
 
-static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR }; //!< dynamic_static.system major version
-static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR }; //!< dynamic_static.system minor version
-static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH }; //!< dynamic_static.system patch version
+static constexpr int VersionMajor { DYNAMIC_STATIC_SYSTEM_VERSION_MAJOR };
+static constexpr int VersionMinor { DYNAMIC_STATIC_SYSTEM_VERSION_MINOR };
+static constexpr int VersionPatch { DYNAMIC_STATIC_SYSTEM_VERSION_PATCH };
 
 } // namespace sys
-} // namespace dst
-
-namespace dst {
-namespace gfx {
-
-/*!
-Specifies graphics apis
-*/
-enum class Api
-{
-    Undefined,                           //!< TODO : Documentation
-    #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
-    OpenGL,                              //!< TODO : Documentation
-    #endif
-    #ifdef DYNAMIC_STATIC_VULKAN_ENABLED
-    Vulkan,                              //!< TODO : Documentation
-    #endif
-};
-
-} // namespace gfx
 } // namespace dst

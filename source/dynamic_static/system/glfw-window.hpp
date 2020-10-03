@@ -132,14 +132,14 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 if (glfwInit() == GLFW_FALSE) {
                     throw std::runtime_error("Failed to initialize GLFW : " + get_last_glfw_error_message());
                 }
-                #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+                #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
                 if (info.pGlInfo) {
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, info.pGlInfo->version.major);
                     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, info.pGlInfo->version.minor);
                     glfwWindowHint(GLFW_DOUBLEBUFFER, (int)(info.pGlInfo->flags & Window::GlInfo::Flags::DoubleBuffer) ? 1 : 0);
                     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
                 } else
-                #endif // DYNAMIC_STATIC_OPENGL_ENABLED
+                #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
                     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
             }
             glfwWindowHint(GLFW_DECORATED, (int)(info.flags & Window::Info::Flags::Decorated) ? 1 : 0);
@@ -159,7 +159,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 }
                 throw std::runtime_error("Failed to create GLFW window : " + errorMessage);
             }
-            #ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+            #ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
             if (info.pGlInfo) {
                 glfwMakeContextCurrent(pGlfwWindow);
                 // glfwSwapInterval((int)(info.pGlInfo->flags & gl::Context::Info::Flags::VSync) ? 1 : 0);
@@ -170,7 +170,7 @@ GLFWwindow* Window::create_glfw_window(const Info& info)
                 }
                 #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
             }
-            #endif // DYNAMIC_STATIC_OPENGL_ENABLED
+            #endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
             glfwSetWindowCloseCallback(pGlfwWindow, glfw_window_close_callback);
             glfwSetFramebufferSizeCallback(pGlfwWindow, glfw_framebuffer_size_callback);
             glfwSetKeyCallback(pGlfwWindow, glfw_keyboard_callback);

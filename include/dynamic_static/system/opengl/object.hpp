@@ -10,14 +10,14 @@
 
 #pragma once
 
-#include "dynamic_static/graphics/opengl/defines.hpp"
+#include "dynamic_static/system/opengl/defines.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include <string>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 /**
@@ -81,7 +81,7 @@ private:
 };
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

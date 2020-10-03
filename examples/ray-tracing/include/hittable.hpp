@@ -16,9 +16,8 @@
 #include "camera.hpp"
 #include "ray.hpp"
 
-#include "dynamic_static/core/math.hpp"
-#include "dynamic_static/core/transform.hpp"
-#include "dynamic_static/graphics/opengl/mesh.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 #include <memory>
 #include <vector>
@@ -49,7 +48,7 @@ public:
     dst::Transform transform;
 
 protected:
-    dst::gl::Mesh mMesh;
+    dst::sys::gl::Mesh mMesh;
     std::unique_ptr<Material> mpMaterial;
 };
 

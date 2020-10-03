@@ -16,8 +16,8 @@
 #include "camera.hpp"
 #include "scene.hpp"
 
-#include "dynamic_static/graphics/opengl/defines.hpp"
-#include "dynamic_static/system/window.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 #include <functional>
 

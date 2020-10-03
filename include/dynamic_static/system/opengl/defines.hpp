@@ -12,7 +12,7 @@
 
 #include "dynamic_static/system/defines.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include "dynamic_static/core/enum.hpp"
 #include "dynamic_static/core/version.hpp"
@@ -31,14 +31,14 @@
 #define dst_gl(GL_CALL)                                   \
 {                                                         \
     GL_CALL;                                              \
-    dst::gfx::gl::validate_call(dst_file_line, #GL_CALL); \
+    dst::sys::gl::validate_call(dst_file_line, #GL_CALL); \
 }
 #else
 #define dst_gl(GL_CALL) { GL_CALL; }
 #endif
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 /**
@@ -229,15 +229,14 @@ inline bool initialize_glew()
 #endif // DYNAMIC_STATIC_PLATFORM_WINDOWS
 
 } // namespace gl
-} // namespace gfx
-namespace gl = gfx::gl;
+} // namespace sys
 
 template <>
-struct EnumClassOperators<gl::Context::Info::Flags>
+struct EnumClassOperators<dst::sys::gl::Context::Info::Flags>
 {
     static constexpr bool enabled { true };
 };
 
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

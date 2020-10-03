@@ -8,14 +8,14 @@
 ==========================================
 */
 
-#include "dynamic_static/graphics/opengl/buffer.hpp"
+#include "dynamic_static/system/opengl/buffer.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include <utility>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 Buffer::Buffer()
@@ -122,7 +122,7 @@ void Buffer::unmap()
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

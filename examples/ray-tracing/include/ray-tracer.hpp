@@ -20,14 +20,8 @@
 #include "scene.hpp"
 #include "utilities.hpp"
 
-#include "dynamic_static/core/math.hpp"
-#include "dynamic_static/core/random.hpp"
-#include "dynamic_static/core/thread-pool.hpp"
-#include "dynamic_static/core/time.hpp"
-#include "dynamic_static/graphics/opengl/mesh.hpp"
-#include "dynamic_static/graphics/opengl/program.hpp"
-#include "dynamic_static/graphics/opengl/shader.hpp"
-#include "dynamic_static/graphics/opengl/texture.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 #include <algorithm>
 #include <array>
@@ -37,7 +31,7 @@
 #include <vector>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 template <>
@@ -49,7 +43,7 @@ inline void enable_vertex_attributes<glm::vec4>()
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
 namespace rtow {
@@ -190,13 +184,13 @@ private:
             };
             std::array<GLushort, 3> indices { 0, 1, 2 };
             mMesh.write<glm::vec4, GLushort>(vertices, indices);
-            dst::gl::Texture::Info textureInfo { };
+            dst::sys::gl::Texture::Info textureInfo { };
             textureInfo.format = GL_RGB;
             textureInfo.width = (GLsizei)extent.x;
             textureInfo.height = (GLsizei)extent.y;
             textureInfo.storageType = GL_FLOAT;
-            mTexture = dst::gl::Texture(textureInfo);
-            std::array<dst::gl::Shader, 2> shaders {{
+            mTexture = dst::sys::gl::Texture(textureInfo);
+            std::array<dst::sys::gl::Shader, 2> shaders {{
                 {
                     GL_VERTEX_SHADER,
                     __LINE__,
@@ -227,7 +221,7 @@ private:
                     )"
                 }
             }};
-            mProgram = dst::gl::Program(shaders);
+            mProgram = dst::sys::gl::Program(shaders);
         }
 
         inline void draw(const std::vector<glm::vec3>& pixels)
@@ -243,9 +237,9 @@ private:
         }
 
     private:
-        dst::gl::Mesh mMesh;
-        dst::gl::Texture mTexture;
-        dst::gl::Program mProgram;
+        dst::sys::gl::Mesh mMesh;
+        dst::sys::gl::Texture mTexture;
+        dst::sys::gl::Program mProgram;
     } mVisualizer;
 
     std::atomic_bool mStop { };

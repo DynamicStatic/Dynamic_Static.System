@@ -10,14 +10,14 @@
 
 #pragma once
 
-#include "dynamic_static/graphics/opengl/defines.hpp"
+#include "dynamic_static/system/opengl/defines.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include <array>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 /**
@@ -65,7 +65,7 @@ inline void enable_vertex_attributes(const std::array<VertexAttribute, VertexAtt
 }
 
 /*!
-Specializations of this function must call dst::gl::enable_vertex_attributes<> to describe vertex attributes
+Specializations of this function must call dst::sys::gl::enable_vertex_attributes<> to describe vertex attributes
 @param <VertexType> The type of vertex to enable attributes for
 @example
 
@@ -102,7 +102,7 @@ inline void enable_vertex_attributes()
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

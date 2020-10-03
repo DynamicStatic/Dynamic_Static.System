@@ -20,10 +20,8 @@
 #include "scene.hpp"
 #include "sphere.hpp"
 
-#include "dynamic_static/core/time.hpp"
-#include "dynamic_static/graphics/opengl/gui.hpp"
-#include "dynamic_static/system/gui.hpp"
-#include "dynamic_static/system/window.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -49,7 +47,7 @@ int main(int argc, char* argv[])
     rtow::RayTracer rayTracer(rayTracingWindow);
 
     rasterizerWindow.make_context_current();
-    dst::gl::Gui gui;
+    dst::sys::gl::Gui gui;
     rtow::Scene scene;
     rtow::Camera camera;
 

@@ -16,9 +16,8 @@
 #include "hittable.hpp"
 #include "ray.hpp"
 
-#include "dynamic_static/core/math.hpp"
-#include "dynamic_static/graphics/opengl/program.hpp"
-#include "dynamic_static/graphics/opengl/shader.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 #include <string>
 
@@ -29,7 +28,7 @@ class Material
 public:
     inline Material()
     {
-        std::array<dst::gl::Shader, 2> shaders {{
+        std::array<dst::sys::gl::Shader, 2> shaders {{
             {
                 GL_VERTEX_SHADER,
                 __LINE__,
@@ -60,7 +59,7 @@ public:
                 )"
             }
         }};
-        mProgram = dst::gl::Program(shaders);
+        mProgram = dst::sys::gl::Program(shaders);
     }
 
     virtual ~Material() = 0;
@@ -91,7 +90,7 @@ public:
     }
 
 protected:
-    dst::gl::Program mProgram;
+    dst::sys::gl::Program mProgram;
 };
 
 inline Material::~Material()

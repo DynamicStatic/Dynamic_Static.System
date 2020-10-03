@@ -9,7 +9,6 @@
 */
 
 #include "dynamic_static.core.hpp"
-#include "dynamic_static.graphics.opengl.hpp"
 #include "dynamic_static.system.hpp"
 
 #include <iostream>

@@ -20,14 +20,14 @@
 #include "sphere-indices.hpp"
 #include "sphere-vertices.hpp"
 
-#include "dynamic_static/core/math.hpp"
-#include "dynamic_static/graphics/opengl/defines.hpp"
+#include "dynamic_static.core.hpp"
+#include "dynamic_static.system.hpp"
 
 #include <map>
 #include <set>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 template <>
@@ -39,7 +39,7 @@ inline void enable_vertex_attributes<glm::vec3>()
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
 namespace rtow {

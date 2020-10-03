@@ -145,7 +145,7 @@ void Window::focus() const
     glfwFocusWindow(mGlfwWindow);
 }
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 void Window::make_context_current()
 {
     if (mInfo.pGlInfo) {
@@ -159,7 +159,7 @@ void Window::swap()
         glfwSwapBuffers(mGlfwWindow);
     }
 }
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 void Window::poll_events()
 {

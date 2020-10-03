@@ -10,21 +10,21 @@
 
 #pragma once
 
-#include "dynamic_static/graphics/opengl/defines.hpp"
+#include "dynamic_static/system/opengl/defines.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include "dynamic_static/core/span.hpp"
-#include "dynamic_static/graphics/opengl/index-buffer.hpp"
-#include "dynamic_static/graphics/opengl/vertex.hpp"
-#include "dynamic_static/graphics/opengl/vertex-array.hpp"
-#include "dynamic_static/graphics/opengl/vertex-buffer.hpp"
+#include "dynamic_static/system/opengl/index-buffer.hpp"
+#include "dynamic_static/system/opengl/vertex.hpp"
+#include "dynamic_static/system/opengl/vertex-array.hpp"
+#include "dynamic_static/system/opengl/vertex-buffer.hpp"
 
 #include <limits>
 #include <string>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 /**
@@ -77,7 +77,7 @@ public:
 };
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED

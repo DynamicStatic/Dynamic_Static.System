@@ -34,7 +34,6 @@
 #include "gl-gears.hpp"
 
 #include "dynamic_static.core.hpp"
-#include "dynamic_static.graphics.opengl.hpp"
 #include "dynamic_static.system.hpp"
 
 #include <array>
@@ -49,7 +48,7 @@ struct Vertex final
 };
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 template <>
@@ -62,7 +61,7 @@ void enable_vertex_attributes<Vertex>()
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
 class Gear final
@@ -207,7 +206,7 @@ public:
     glm::vec4 color { };
     float rotation { };
     float speed { };
-    dst::gl::Mesh mesh;
+    dst::sys::gl::Mesh mesh;
 };
 
 class Gear::Renderer final
@@ -305,7 +304,7 @@ public:
             glm::angleAxis(glm::radians(30.0f), glm::vec3 { 0, 1, 0 })
         )
     };
-    std::array<dst::gl::Shader, 2> shaders {{
+    std::array<dst::sys::gl::Shader, 2> shaders {{
         {
             GL_VERTEX_SHADER,
             __LINE__,
@@ -348,7 +347,7 @@ public:
             )"
         }
     }};
-    dst::gl::Program program { shaders };
+    dst::sys::gl::Program program { shaders };
     GLint modelViewLocation { program.uniform_location("modelView") };
     GLint projectionLocation { program.uniform_location("projection") };
     GLint colorLocation { program.uniform_location("color") };

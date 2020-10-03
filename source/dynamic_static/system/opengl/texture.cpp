@@ -8,15 +8,15 @@
 ==========================================
 */
 
-#include "dynamic_static/graphics/opengl/texture.hpp"
+#include "dynamic_static/system/opengl/texture.hpp"
 
-#ifdef DYNAMIC_STATIC_OPENGL_ENABLED
+#ifdef DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
 
 #include <algorithm>
 #include <utility>
 
 namespace dst {
-namespace gfx {
+namespace sys {
 namespace gl {
 
 Texture::Texture()
@@ -169,7 +169,7 @@ GLsizei get_format_bytes_per_pixel(GLint format)
 }
 
 } // namespace gl
-} // namespace gfx
+} // namespace sys
 } // namespace dst
 
-#endif // DYNAMIC_STATIC_OPENGL_ENABLED
+#endif // DYNAMIC_STATIC_SYSTEM_OPENGL_ENABLED
