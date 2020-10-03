@@ -1,28 +1,20 @@
 
 # ==========================================
-#   Copyright (c) 2018-2018 Dynamic_Static
+#   Copyright (c) 2018-2020 Dynamic_Static
 #     Patrick Purcell
 #       Licensed under the MIT license
 #     http://opensource.org/licenses/MIT
 # ==========================================
 
-macro(CreateExample target)
-    list(APPEND external.sharedLibraries)
-    if(BUILD_DST_SYS_AUDIO)
-        list(APPEND external.sharedLibraries "${FMOD.sharedLibraries}")
-    endif()
-    DstCreateExecutable(
+macro(dst_add_example target)
+    dst_add_executable(
         target ${target}
-        folder Dynamic_Static.System/examples/
-        sharedLibraries "${external.sharedLibraries}"
-        staticLibraries Dynamic_Static.System
+        folder dynamic_static.system/examples/
+        linkLibraries dynamic_static.system
         sourceFiles "${CMAKE_CURRENT_LIST_DIR}/${target}.cpp"
     )
 endmacro()
-
-if(BUILD_DST_SYS_AUDIO)
-    CreateExample(BasicAudio)
-endif()
-CreateExample(BasicGui)
-CreateExample(GLGears)
-CreateExample(TextRendering)
+dst_add_example(gears-with-gui)
+dst_add_example(gl-gears)
+dst_add_example(im-gui)
+add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ray-tracing/")

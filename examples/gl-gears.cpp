@@ -374,7 +374,6 @@ int main()
     using namespace dst::sys;
     Window::GlInfo glInfo { };
     Window::Info windowInfo { };
-    windowInfo.flags |= Window::Info::Flags::Fullscreen;
     windowInfo.pName = "Dynamic_Static GL Gears";
     windowInfo.pGlInfo = &glInfo;
     Window window(windowInfo);

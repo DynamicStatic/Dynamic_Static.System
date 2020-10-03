@@ -12,13 +12,9 @@ project(dynamic_static.system VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(dynamic_static "${CMAKE_CURRENT_LIST_DIR}/../")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
-
 ################################################################################
-#### include("${dynamic_static}/dynamic_static.CMake/dynamic_static.ex.cmake")
-#### DstAddSubdirectory("dynamic_static.Core")
-include("${CMAKE_CURRENT_LIST_DIR}/../cmake/dynamic_static.cmake")
-dst_add_subdirectory(core)
-# add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../core/" "${CMAKE_CURRENT_BINARY_DIR}/dynamic_static/core/")
+include("${CMAKE_CURRENT_LIST_DIR}/../dynamic_static.build/dynamic_static.cmake")
+dst_add_subdirectory(dynamic_static.core)
 ################################################################################
 
 # Options
@@ -37,10 +33,7 @@ if (MSVC)
     list(APPEND externalIncludeDirectories "${glew_includeDirectories}")
     list(APPEND externalSourceFiles "${glew_sourceFiles}")
     list(APPEND externalCompileDefinitions "${glew_compileDefinitions}")
-    list(APPEND linkLibraries
-        glu32
-        opengl32
-    )
+    list(APPEND linkLibraries glu32 opengl32)
 else()
     list(APPEND linkLibraries
         EGL
@@ -55,11 +48,11 @@ else()
 endif()
 
 # dynamic_static.system library
-set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include.ex/")
+set(includeDirectory "${CMAKE_CURRENT_LIST_DIR}/include/")
 set(graphicsIncludePath "${includeDirectory}/dynamic_static/graphics/")
 set(systemIncludePath "${includeDirectory}/dynamic_static/system/")
-set(graphicsSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/graphics/")
-set(systemSourcePath "${CMAKE_CURRENT_LIST_DIR}/source.ex/dynamic_static/system/")
+set(graphicsSourcePath "${CMAKE_CURRENT_LIST_DIR}/source/dynamic_static/graphics/")
+set(systemSourcePath "${CMAKE_CURRENT_LIST_DIR}/source/dynamic_static/system/")
 dst_add_static_library(
     target dynamic_static.system
     linkLibraries "${linkLibraries}"
@@ -67,10 +60,6 @@ dst_add_static_library(
     includeDirectories
         "${externalIncludeDirectories}"
         "${includeDirectory}"
-
-
-        "${CMAKE_CURRENT_LIST_DIR}/include/"
-
     includeFiles
         "${graphicsIncludePath}/opengl/buffer.hpp"
         "${graphicsIncludePath}/opengl/defines.hpp"
@@ -93,54 +82,6 @@ dst_add_static_library(
         "${systemIncludePath}/window.hpp"
         "${includeDirectory}/dynamic_static.graphics.opengl.hpp"
         "${includeDirectory}/dynamic_static.system.hpp"
-
-
-
-
-
-
-
-
-
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image/Image.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image/ManagedImage.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image/UnmanagedImage.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image/WriteableImage.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image/WriteableUnmanagedImage.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Input/Keyboard.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Input/Mouse.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Buffer.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Defines.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Gui.Renderer.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/IndexBuffer.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Mesh.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Object.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Program.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Shader.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/State.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Texture.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/Vertex.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/VertexArray.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL/VertexBuffer.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Text/Font.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Text/Font.Atlas.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Text/Glyph.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Text/Layout.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Audio.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Defines.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Format.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Gui.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Image.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Input.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/OpenGL.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Text.ex.hpp"
-        "${CMAKE_CURRENT_LIST_DIR}/include/Dynamic_Static/System/Window.ex.hpp"
-
-
-
-
-
-
     sourceFiles
         "${externalSourceFiles}"
         "${graphicsSourcePath}/opengl/buffer.cpp"
@@ -161,29 +102,9 @@ dst_add_static_library(
         "${systemSourcePath}/keyboard.cpp"
         "${systemSourcePath}/mouse.cpp"
         "${systemSourcePath}/window.cpp"
-
-
-
-
-
-
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Image/Image.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Image/ManagedImage.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Image/UnmanagedImage.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Image/WriteableUnmanagedImage.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Input/Keyboard.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Input/Mouse.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Text/Font.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Text/Font.Atlas.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Text/Glyph.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Format.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/GlfwWindow.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Gui.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Image.ex.cpp"
-        "${CMAKE_CURRENT_LIST_DIR}/source/Dynamic_Static/System/Input.ex.cpp"
 )
 
 # Examples
 if(DST_SYS_BUILD_EXAMPLES)
-    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples.ex/")
+    add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/examples/")
 endif()
