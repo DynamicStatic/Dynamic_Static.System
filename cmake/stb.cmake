@@ -6,19 +6,19 @@
 #    http://opensource.org/licenses/MIT
 #==========================================
 
-set(stb.includeDirectories "${CMAKE_CURRENT_LIST_DIR}/stb/")
+set(stb_includeDirectory "${externalDirectory}/stb/")
 file(
     DOWNLOAD
     https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
-    "${stb.includeDirectories}/stb_image.h"
+    "${stb_includeDirectory}/stb_image.h"
 )
 file(
     DOWNLOAD
     https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
-    "${stb.includeDirectories}/stb_image_write.h"
+    "${stb_includeDirectory}/stb_image_write.h"
 )
 file(
     DOWNLOAD
     https://raw.githubusercontent.com/nothings/stb/master/stb_truetype.h
-    "${stb.includeDirectories}/stb_truetype.h"
+    "${stb_includeDirectory}/stb_truetype.h"
 )

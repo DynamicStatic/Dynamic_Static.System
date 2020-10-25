@@ -24,9 +24,14 @@ option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
 set(externalDirectory "${CMAKE_CURRENT_LIST_DIR}/external/")
 include(glfw)
 include(imgui)
+include(stb)
 list(APPEND linkLibraries dynamic_static.core)
 list(APPEND linkLibraries glfw)
-list(APPEND externalIncludeDirectories "${imgui_includeDirectories}")
+list(
+    APPEND externalIncludeDirectories
+    "${imgui_includeDirectories}"
+    "${stb_includeDirectory}"
+)
 list(APPEND externalSourceFiles "${imgui_sourceFiles}")
 if (MSVC)
     include(glew)
@@ -74,6 +79,7 @@ dst_add_static_library(
         "${includePath}/defines.hpp"
         "${includePath}/gamepad.hpp"
         "${includePath}/gui.hpp"
+        "${includePath}/image.hpp"
         "${includePath}/input.hpp"
         "${includePath}/keyboard.hpp"
         "${includePath}/mouse.hpp"
@@ -96,6 +102,7 @@ dst_add_static_library(
         "${sourcePath}/gamepad.cpp"
         "${sourcePath}/glfw-window.hpp"
         "${sourcePath}/gui.cpp"
+        "${sourcePath}/image.cpp"
         "${sourcePath}/input.cpp"
         "${sourcePath}/keyboard.cpp"
         "${sourcePath}/mouse.cpp"
