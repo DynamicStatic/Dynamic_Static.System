@@ -16,6 +16,7 @@ FetchContent_Declare(
     "https://github.com/glfw/glfw.git"
     GIT_TAG 3.3.2
     GIT_PROGRESS TRUE
+    FETCHCONTENT_UPDATES_DISCONNECTED
 )
 FetchContent_MakeAvailable(glfw)
 set_target_properties(glfw PROPERTIES FOLDER "external/")

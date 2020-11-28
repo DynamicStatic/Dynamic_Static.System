@@ -12,6 +12,7 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
     GIT_TAG v1.79
     GIT_PROGRESS TRUE
+    FETCHCONTENT_UPDATES_DISCONNECTED
 )
 FetchContent_MakeAvailable(imgui)
 add_library(
