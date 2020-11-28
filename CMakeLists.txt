@@ -10,7 +10,6 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(dynamic_static.system VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
 
 # Options
 option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
