@@ -6,7 +6,6 @@
 #     http://opensource.org/licenses/MIT
 # ==========================================
 
-# dynamic_static.system CMake configuration
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(dynamic_static.system VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
@@ -14,6 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Options
 option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
 
+# Dependencies
 set(external "${CMAKE_CURRENT_LIST_DIR}/external/")
 include("${external}/dynamic_static.build.cmake")
 include("${external}/dynamic_static.core.cmake")
