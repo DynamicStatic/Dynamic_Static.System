@@ -1,4 +1,4 @@
 
-# Dynamic_Static.System documentation
+# dynamic_static.system documentation
 
 TODO : More README...

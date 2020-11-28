@@ -6,7 +6,7 @@
 #    http://opensource.org/licenses/MIT
 #==========================================
 
-set(stb_includeDirectory "${externalDirectory}/stb/")
+set(stb_includeDirectory "${CMAKE_BINARY_DIR}/stb/")
 file(
     DOWNLOAD
     https://raw.githubusercontent.com/nothings/stb/master/stb_image.h

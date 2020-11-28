@@ -10,35 +10,29 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(dynamic_static.system VERSION 2.0.0)
 set(CMAKE_CXX_STANDARD 17)
-set(dynamic_static "${CMAKE_CURRENT_LIST_DIR}/../")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
-################################################################################
-include("${CMAKE_CURRENT_LIST_DIR}/../dynamic_static.build/dynamic_static.cmake")
-dst_add_subdirectory(dynamic_static.core)
-################################################################################
 
 # Options
 option(DST_SYS_BUILD_EXAMPLES "TODO : Documentation" ON)
 
-# External dependencies
-set(externalDirectory "${CMAKE_CURRENT_LIST_DIR}/external/")
-include(glfw)
-include(imgui)
-include(stb)
-list(APPEND linkLibraries dynamic_static.core)
-list(APPEND linkLibraries glfw)
-list(
-    APPEND externalIncludeDirectories
-    "${imgui_includeDirectories}"
-    "${stb_includeDirectory}"
+set(external "${CMAKE_CURRENT_LIST_DIR}/external/")
+include("${external}/dynamic_static.build.cmake")
+include("${external}/dynamic_static.core.cmake")
+include("${external}/glfw.cmake")
+include("${external}/imgui.cmake")
+include("${external}/stb.cmake")
+
+list(APPEND linkLibraries
+    dynamic_static.core
+    glfw
+    imgui
 )
-list(APPEND externalSourceFiles "${imgui_sourceFiles}")
 if (MSVC)
-    include(glew)
-    list(APPEND externalIncludeDirectories "${glew_includeDirectories}")
-    list(APPEND externalSourceFiles "${glew_sourceFiles}")
-    list(APPEND externalCompileDefinitions "${glew_compileDefinitions}")
-    list(APPEND linkLibraries glu32 opengl32)
+    include("${external}/glew.cmake")
+    list(APPEND linkLibraries
+        glew
+        glu32
+        opengl32
+    )
 else()
     list(APPEND linkLibraries
         EGL
@@ -61,8 +55,8 @@ dst_add_static_library(
     linkLibraries "${linkLibraries}"
     compileDefinitions "${externalCompileDefinitions}"
     includeDirectories
-        "${externalIncludeDirectories}"
         "${includeDirectory}"
+        "${stb_includeDirectory}"
     includeFiles
         "${includePath}/opengl/buffer.hpp"
         "${includePath}/opengl/defines.hpp"
