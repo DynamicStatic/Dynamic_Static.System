@@ -6,6 +6,16 @@
 #     http://opensource.org/licenses/MIT
 # ==========================================
 
+#### [submodule "external/glfw"]
+####     path = external/glfw
+####     url = https://github.com/glfw/glfw.git
+#### [submodule "external/imgui"]
+####     path = external/imgui
+####     url = https://github.com/ocornut/imgui.git
+#### [submodule "external/tclap"]
+####     path = external/tclap
+####     url = https://github.com/mirror/tclap.git
+
 # dynamic_static.system CMake configuration
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(dynamic_static.system VERSION 2.0.0)
@@ -14,7 +24,8 @@ set(dynamic_static "${CMAKE_CURRENT_LIST_DIR}/../")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/")
 ################################################################################
 include("${CMAKE_CURRENT_LIST_DIR}/../dynamic_static.build/dynamic_static.cmake")
-dst_add_subdirectory(dynamic_static.core)
+# dst_add_subdirectory(dynamic_static.core)
+include("${CMAKE_CURRENT_LIST_DIR}/external/dynamic_static.core.cmake")
 ################################################################################
 
 # Options
