@@ -1,5 +1,5 @@
 
-# dynamic_static.System
+# dynamic_static.system
 Dynamic_Static.System provides easy to use C++ RAII objects for interacting with various input and ouptut systems.  
 [FMOD](https://www.fmod.com/) is used for audio support.  
 [GLFW](https://www.glfw.org/) is used for window management and input handling.  
