@@ -8,9 +8,10 @@
 
 include(FetchContent)
 FetchContent_Declare(
-    dynamic_static.core
-    GIT_REPOSITORY "https://github.com/dynamic-static/dynamic_static.core.git"
+    dynamic_static.build
+    GIT_REPOSITORY "https://github.com/dynamic-static/dynamic_static.build.git"
     GIT_TAG dependency-management
     GIT_PROGRESS TRUE
 )
-FetchContent_MakeAvailable(dynamic_static.core)
+FetchContent_MakeAvailable(dynamic_static.build)
+include("${dynamic_static.build_SOURCE_DIR}/dynamic_static.cmake")
